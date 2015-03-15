@@ -24,6 +24,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	-->
 	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
 	<script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="js/easyui-lang-zh_CN.js"></script>
 	<script type="text/javascript" src="./js/uploadify/jquery.uploadify.min.js"></script>
 	
 	
@@ -36,7 +37,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					return $(this).form('validate');
 				},
 				success:function(data){
-					$.messager.alert('Info', "操作成功", 'info');
+					$.messager.alert('消息', "操作成功", 'info',function(){
+					
+					
+					$(".panel-tool-close").click();
+				    window.location.href="listPic.jsp";
+					});
 				}
 			});
 			
@@ -94,7 +100,10 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 		
 		
-		
+		function formatEffective(value)
+		{
+		 return value!=0?"是":"否";
+		}
 
 		
 		
@@ -120,32 +129,29 @@ border:1px   solid   #C0C0C0;
 </head>
 <body>
 
-	<table id="tt" class="easyui-datagrid" style="width:800px;height:250px"
-			url="getPicList"
-			title="轮播图列表" iconCls="icon-save"
-			toolbar="#tb">
+	<table id="tt" class="easyui-datagrid" style="width:800px;height:400px"
+			url="getPageList"
+			title="轮播图列表" iconCls="icon-save"  pagination="true"  pageList="[5,10,15]"
+			toolbar="#tb"  >
 		<thead>
 			<tr>
 <th field="id" width="50">编号</th>
 <th field="name" width="100">名字</th>
 <th field="info" width="300">备注</th>
 <th field="urls" width="200">图片</th>
-<th field="effective" width="100">是否有效</th>
+<th field="effective"   formatter="formatEffective"  width="100">是否有效</th>
 			</tr>
 		</thead>
 	</table>
 	<div id="tb">
 	    
 		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:$('#dd').dialog('open')">添加</a>
-		<!--  
-		<a href="#" class="easyui-linkbutton" iconCls="icon-cut" plain="true" onclick="javascript:alert('Cut')">Cut</a>
-		<a href="#" class="easyui-linkbutton" iconCls="icon-save" plain="true" onclick="javascript:alert('Save')">Save</a>
-		-->
+	
 	</div>
 	
 
 
-		<div id="dd" class="easyui-dialog" style="padding:5px;width:600px;height:300px;"
+		<div id="dd" class="easyui-dialog" style="top:100px;padding:5px;width:600px;height:300px;"
 			title="添加轮播图" iconCls="icon-ok"
 			 closed="true" modal="true">
 		

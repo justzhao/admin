@@ -33,6 +33,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 				},
 				success:function(data){
 					$.messager.alert('Info', "操作成功", 'info');
+					
+					
 				}
 			});
 			
@@ -144,7 +146,7 @@ border:1px   solid   #C0C0C0;
 	
 
 
-		<div id="dd" class="easyui-dialog" style="padding:5px;width:600px;height:300px;"
+		<div id="dd" class="easyui-dialog" style="top:200px;padding:5px;width:600px;height:300px;"
 			title="添加模型" iconCls="icon-ok"
 			 closed="true" modal="true">
 		

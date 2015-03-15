@@ -259,5 +259,14 @@ public class DaoImpl<T,ID extends Serializable> implements IDao<T, ID> {
 	        return retValue;
 	}
 	
+	@Override
+		public List getPageHql(String hql, int start, int number) {
+			// TODO Auto-generated method stub
+		Query query = this.getSession().createQuery(hql);
+		query.setFirstResult(start);   
+		query.setMaxResults(number);
+		return query.list();
+		}
+	
 
 }

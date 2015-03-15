@@ -174,4 +174,12 @@ public interface IDao<T, ID extends Serializable> {
      */
     public abstract PageResults<T> findPageByFetchedHql(String hql, String countHql, int pageNo, int pageSize, Object... values);
 
+    /**
+     * 根据hql 查询某行到某行之间的数据
+     * @param hql
+     * @param start  开始行
+     * @param end  结束行
+     * @return
+     */
+    public abstract List getPageHql(String hql,int start,int number);
 }

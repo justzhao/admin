@@ -2,6 +2,7 @@
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 <struts>
 <constant name="struts.multipart.maxSize" value="209715200000" />
+
 <constant name="struts.multipart.saveDir" value="d:/tmp"/>
 <package name="Home" extends="struts-default" >
 
@@ -46,15 +47,23 @@
  <param name="root">pics</param>
  </result>
   </action>
-    <action name="getModelList"  class="modelAction"  method="getModelList">
+  
+    <action name="getPageList"  class="scrollPicAction"  method="getPageList">
     <result type="json">
- <param name="root">models</param>
+ <param name="root">pics</param>
  </result>
   </action>
+
   
       <action name="getCodeList"  class="codeAction"  method="getCodeList">
     <result type="json">
  <param name="root">codes</param>
+ </result>
+ </action>
+       <action name="getModelList"  class="modelAction"  method="getModelList">
+    <result type="json">
+ <param name="root">models</param>
+ 
  </result>
   </action>
   

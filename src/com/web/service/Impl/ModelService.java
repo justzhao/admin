@@ -1,9 +1,12 @@
 package com.web.service.Impl;
 
+import java.util.List;
+
 import org.apache.struts2.ServletActionContext;
 
 import com.web.dao.IDao;
 import com.web.entity.Model;
+
 import com.web.util.Qiniu;
 import com.web.util.Tools;
 
@@ -29,6 +32,11 @@ public class ModelService implements com.web.service.ModelService {
 		  modelDao.save(m);
 		return false;
 	}
+  @Override
+public List getModelList() {
+	// TODO Auto-generated method stub
+	return modelDao.getListByHQL("from Model");											
+}
 	  
 	
 	

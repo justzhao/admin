@@ -19,6 +19,18 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/icon.css">
 	<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
 	<script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
+		<script type="text/javascript">
+
+		$(function(){
+			$('#cc').combobox({
+	        onLoadSuccess: function (data) {
+				            if (data) {
+				               $('#cc').combobox('setValue',data[0].id);
+				            }
+				            }
+			});
+		});
+	</script>
 </head>
 <body>
 	<table id="tt" class="easyui-datagrid" style="width:800px;height:250px"
@@ -55,25 +67,16 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   <td  class="td1" > 名字:</td><td style="width:70%"><input  class=""   type="text"   name ="pic.name"  required="true"></td>
 	   </tr>
 	   	  
-	   	  
-
-	   	   <tr> 
-	   	   <td class="td1">   备注  </td> <td><input type="text"   name="pic.info" style="width:200px;height:40px"></td>
-	   </tr>
-	   	   
-	   	   <tr>
-	   <td class="td1">
-	   是否立即生效
-	   </td>
-	   <td>
-	   
-	 是   <input type="radio"  value="1" name="pic.effective">
-	 否   <input type="radio"  value="0" name="pic.effective">
-	 
-	   
-	   </td>
-	   </tr>
-	   
+  <tr>
+  <td class="td1">曾多次:</td>
+  
+  <td>
+  <form name="ff" id="ff"  method="post" action="saveModel">
+  	<input id="cc" style="width:100px"  name ="model.code.id"  url="getCodeList" valueField="id" textField="name">
+  <input type="submit"  value="submit">
+  </form>
+  </td>
+  </tr>
 	 
 	   	  
 	

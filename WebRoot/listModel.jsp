@@ -29,17 +29,27 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<script type="text/javascript">
 		$(function(){
 
+
+                
+                $('#cc').combobox({
+	        onLoadSuccess: function (data) {
+				            if (data) {
+				               $('#cc').combobox('setValue',data[0].id);
+				            }
+				            }
+			});
 				$('#code').combobox({
 				
 		
 				        onLoadSuccess: function (data) {
-            if (data) {
-                $('#code').combobox('setValue',data[0].id);
-            }
-   }
+				            if (data) {
+				             //   $('#code').combobox('setValue',data[0].id);
+				            }
+				            }
+
 			
 		
-			});
+			}); 
       
 
 			$('#ff').form({
@@ -48,26 +58,33 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 					return $(this).form('validate');
 				},
 				success:function(data){
-					$.messager.alert('Info', "操作成功", 'info');
+			
+			    
+					$.messager.alert('消息', "操作成功", 'info',function(){
+					
+					$(".panel-tool-close").click();
+				    window.location.href="listModel.jsp";
+					});
+	
+					
+		
+			
+										
 				}
 			});
 			
-
-			
-
-
-            
-
-  
-  
- 
 		});
 
 		
 		
 		
 
-		
+		   function formatCode(value){
+	        return value.name;
+ 	    };
+	   function  formatAnimation (value){
+	        return value!=0?"是":"否";
+	    };
 		
 	</script>
 
@@ -91,19 +108,19 @@ border:1px   solid   #C0C0C0;
 </head>
 <body>
 
-	<table id="tt" class="easyui-datagrid" style="width:100%;height:250px"
-			url=""
-			title="模型列表" iconCls="icon-save"
+	<table id="tt" class="easyui-datagrid" style="width:100%;height:400px"
+			url="getModelList"
+			title="模型列表" iconCls="icon-save"  total="total" rows="rows"
 			toolbar="#tb">
 		<thead>
 			<tr>
 <th field="id" width="50">编号</th>
 <th field="name" width="100">名字</th>
-<th field="code" width="50">识别码</th>
+<th field="code"  formatter="formatCode"  width="100">识别码</th>
 
 <th field="info" width="300">备注</th>
-<th field="url" width="200">图片</th>
-<th field="animation" width="100">是否有动画</th>
+<th field="url" width="200">文件</th>
+<th field="animation"   formatter="formatAnimation"  width="100">是否有动画</th>
 <th field="size" width="100">模型尺寸</th>
 <th field="offset" width="100">模型位移</th>
 <th field="rotate" width="100">模型旋转</th>
@@ -122,36 +139,31 @@ border:1px   solid   #C0C0C0;
 	
 
 
-		<div id="dd" class="easyui-dialog" style="padding:5px;width:600px;height:300px;"
+		<div id="dd" class="easyui-dialog" style="top:100px;padding:5px;width:600px;height:300px;"
 			title="添加模型" iconCls="icon-ok"
 			 closed="true" modal="true">
 			 
-		
+	 		<form id="ff"  name="ff"  enctype= "multipart/form-data"  method="post">	
 	   <table   style="width:100%; font-size: 12px;font-weight: normal">
-	   		<form id="ff"  name="ff"  enctype= "multipart/form-data"  method="post">
+	  
 	   <tr>
-	     <td  class="td1" >名字:</td>
-	   
-	   
-	    <td style="width:70%">
-	    
-	    <input  class="easyui-validatebox textbox"   type="text"   name ="model.name"  required="true">
+	     <td  class="td1" >名字:</td><td style="width:70%"><input  class="easyui-validatebox textbox"   type="text"   name ="model.name"  required="true">
 	    
 	    </td>
 	   </tr>
 	   	  
 	   	   
 
-	   	   <tr><td class="td1">  识别码：</td>
+	   	   <tr>
+	   	   <td class="td1">  识别码：</td>
 	   <td>
-  
-	    <input id="code"  style="width:150px"   url="getCodeList"    name="model.code.id"  valueField="id" textField="name" />
-<!--
-	   <input id="code" style="width:100px" url="data/combobox_data.json" valueField="id" textField="text">
-	</input>-->
+
+  	<input id="code" style="width:100px"  name ="model.code.id"  url="getCodeList" valueField="id" textField="name">
 	   </td>
 	   </tr>
-	   	   	   <tr>
+
+	   
+	   <tr>
 	   <td class="td1">
 	    备注：
 	   </td>
@@ -186,7 +198,7 @@ border:1px   solid   #C0C0C0;
 	   </td>
 	   </tr>
 	   
-	   	   	   	   <tr>
+	  <tr>
 	   <td class="td1">
 	   位移：
 	   </td>
@@ -202,8 +214,8 @@ border:1px   solid   #C0C0C0;
 	   	
 	   <tr><td style="text-align:right" colspan=2> <input   type="submit" value="提交"></td> 
 	   </tr>  
-	   </form>
-	   </table>
+	  
+	   </table> </form>
 </div>
 
 

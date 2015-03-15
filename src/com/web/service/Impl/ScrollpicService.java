@@ -30,27 +30,7 @@ public void setSpicDao(IDao spicDao) {
 	this.spicDao = spicDao;
 }
 
-	@Override
-	public String savePic(File file, String fileName, String fileContentType,String realPath) throws IOException {
-		// TODO Auto-generated method stub
-        
-        if(file==null)
-        {
-        	System.out.println("nulllllllllll");
-        }
-        if (file != null) {
-        	System.out.println(" no nulllllllllll");
-        	fileName=getFileName(fileName)+"_"+this.getRandomFileName()+getExtention(fileName);
-        	
-            File savefile = new File(new File(realPath), fileName);
-            if (!savefile.getParentFile().exists())
-                savefile.getParentFile().mkdirs();
-            FileUtils.copyFile(file, savefile);
-    
-        }
-	
-		return fileName;
-	}
+
 	
 	@Override
 	public boolean saveScrollPic(ScrollPic pic) throws Exception {
@@ -94,34 +74,22 @@ public void setSpicDao(IDao spicDao) {
 			return spicDao.getListByHQL("from ScrollPic");
 		}
 	
-	
-	
-	public   String getRandomFileName() {  
-		  
-        SimpleDateFormat simpleDateFormat;  
-  
-        simpleDateFormat = new SimpleDateFormat("yyyyMMddHHmmss");  
-  
-        Date date = new Date();  
-  
-        String str = simpleDateFormat.format(date);  
+	@Override
+		public List getPageList(int start, int number) {
+			// TODO Auto-generated method stub
 
-        Random random = new Random();  
-  
-        int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数  
-  
-        return   str+rannum;// 当前时间  
-    } 
+			
+			
+	         return spicDao.getPageHql("from ScrollPic ", start, number);
+		}
+	@Override
+		public int getCount() {
+			// TODO Auto-generated method stub
+			return spicDao.countByHql("select count(*) from ScrollPic").intValue();
+		}
+
 	
 	
-	 private static String getExtention(String fileName)  {   
-         int pos = fileName.lastIndexOf( "." );   
-        return fileName.substring(pos);   
-} 
-	 private static String getFileName(String fileName)  {   
-         int pos = fileName.lastIndexOf( "." );   
-       
-        return fileName.substring(0, pos);   
-} 
+
 
 }

@@ -8,17 +8,7 @@ import com.web.entity.ScrollPic;
 
 public interface ScrollpicService {
 	
-	/**
-	 * 上传图片
-	 * @param file
-	 * @param fileName
-	 * @param fileContentType
-	 * @param realPath
-	 * @return
-	 * @throws IOException
-	 */
-	public String savePic(File file,String fileName,String fileContentType,String realPath)throws IOException;
-	
+
 	/**
 	 * 保存一组轮播图
 	 * @param pic
@@ -32,6 +22,20 @@ public interface ScrollpicService {
 	 * @return
 	 */
 	public List getPicList();
-
+  /**
+   * 获取某页的数据
+   * @param start
+   * @param end
+   * @return
+   */
+   
+	public List getPageList(int start,int number);
+	
+	/**
+	 * 获取数据总数
+	 * @return
+	 */
+	public int getCount();
+	
 
 }

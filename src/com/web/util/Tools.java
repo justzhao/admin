@@ -80,4 +80,9 @@ public class Tools {
        
         return fileName.substring(0, pos);   
 } 
+	 
+	 public static Date getDate()
+	 {
+		 return new Date();
+	 }
 }

@@ -3,16 +3,20 @@ package com.web.action;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JsonConfig;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.web.entity.Model;
 import com.web.service.ModelService;
+
+import com.web.util.JsonDateValueProcessor;
 import com.web.util.Tools;
 
 public class ModelAction extends ActionSupport {
@@ -42,6 +46,12 @@ public class ModelAction extends ActionSupport {
 		this.model = model;
 	}
 
+
+	
+	
+	
+
+
 	public JSONArray getModels() {
 		return models;
 	}
@@ -49,9 +59,7 @@ public class ModelAction extends ActionSupport {
 	public void setModels(JSONArray models) {
 		this.models = models;
 	}
-	
-	
-	
+
 	public File getFile() {
 		return file;
 	}
@@ -87,6 +95,7 @@ public class ModelAction extends ActionSupport {
 	       String url= Tools.saveFile(file, fileFileName, fileContentType, realpath);
 	      
 	       model.setUrl(url);
+	       model.setCreateDate(Tools.getDate());
 	       modelService.saveModel(model);
 	      
 	       response.setContentType("text/html;charset=utf-8"); 
@@ -98,6 +107,13 @@ public class ModelAction extends ActionSupport {
 	public String getModelList()
 	{
 		
+	
+
+
+	  JsonConfig jsonConfig = new JsonConfig();
+	  jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
+
+	 models= JSONArray.fromObject( modelService.getModelList(),jsonConfig);
 		return SUCCESS;
 	}
 	
