@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+
+<class name="com.web.entity.Model" table="tbl_model">
+
+<id name="id" column="id" type="integer">
+<generator class="increment"></generator>
+</id>
+
+<property name="name" column="name" type="string"></property>
+<property name="animation" column="animation" type="integer"></property>
+<property name="info" column="info" type="string"></property>
+<property name="size" column="size" type="integer"></property>
+<property name="rotate" column="rotate" type="string"></property>
+<property name="offset" column="offset" type="string"></property>
+<property name="url" column="url" type="string"></property>
+<property name="createDate" column="createDate" type="date"></property>
+
+<many-to-one name="code"  lazy="false"  class="com.web.entity.IdentifyCode"   outer-join="auto"   access="property" column="code" not-null="true"></many-to-one>
+
+
+
+</class>
+
+
+</hibernate-mapping>

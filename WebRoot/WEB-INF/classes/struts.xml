@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
+<struts>
+<constant name="struts.multipart.maxSize" value="209715200000" />
+<constant name="struts.multipart.saveDir" value="d:/tmp"/>
+<package name="Home" extends="struts-default" >
+
+<action name="arone"  class="mainAction"    method="home">
+<result name="success">/Admin/home.jsp</result>
+
+</action>
+
+
+<action name="userRegister" class="mainAction" method="userRegister">
+<result name="success">/userRegisger.jsp</result>
+</action>
+<action name="registerAction"  class="mainAction" method="registerAction">
+<result name="success">/index.jsp</result>
+</action>
+</package>
+
+<package name="pic" extends="struts-default"  >
+<action name="addPic"  class="scrollPicAction"  method="uploadImg">
+  <interceptor-ref name="fileUpload">
+    <param name="maximumSize">409600000</param>
+    </interceptor-ref>
+    <interceptor-ref name="defaultStack"></interceptor-ref>
+   </action>
+   
+   <action name="saveScroll" class="scrollPicAction"  method=" saveScroll"></action>
+
+
+</package>
+<package name="model"  extends="struts-default">
+
+<action name="saveModel"  class="modelAction"  method="saveModel">
+
+</action>
+</package>
+
+
+<package name="json" extends="json-default">
+
+  <action name="getPicList"  class="scrollPicAction"  method="getPicList">
+    <result type="json">
+ <param name="root">pics</param>
+ </result>
+  </action>
+    <action name="getModelList"  class="modelAction"  method="getModelList">
+    <result type="json">
+ <param name="root">models</param>
+ </result>
+  </action>
+  
+      <action name="getCodeList"  class="codeAction"  method="getCodeList">
+    <result type="json">
+ <param name="root">codes</param>
+ </result>
+  </action>
+  
+</package>
+
+
+
+</struts>    

@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans
+	xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:p="http://www.springframework.org/schema/p"
+	 xmlns:context="http://www.springframework.org/schema/context"
+     xmlns:aop="http://www.springframework.org/schema/aop" 
+     xmlns:tx="http://www.springframework.org/schema/tx" 
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	 http://www.springframework.org/schema/beans/spring-beans-3.1.xsd 
+	  http://www.springframework.org/schema/aop    
+	  
+	   http://www.springframework.org/schema/aop/spring-aop-3.0.xsd 
+	   http://www.springframework.org/schema/context
+	    http://www.springframework.org/schema/context/spring-context-3.1.xsd
+	   http://www.springframework.org/schema/tx 
+	   http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+
+
+<bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource" destroy-method="close">
+     <property name="driverClassName">
+      <value>com.mysql.jdbc.Driver</value>
+     </property>
+     <property name="url">
+     <value>jdbc:mysql://localhost:3306/arone?useUnicode=true&amp;characterEncoding=UTF-8</value>
+     </property>
+     <property name="username">
+     <value>root</value>
+     </property>
+     <property name="password">
+      <value>zhaopeng</value>
+     </property>
+ </bean>
+ 
+ <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean" >
+
+ <property name="dataSource">
+  <ref local="dataSource"/>
+ </property>
+
+ <property name="mappingDirectoryLocations">
+  <value>WEB-INF/hbm</value>
+  </property>
+
+  <property name="hibernateProperties">
+  <props>
+   <prop key="hibernate.dialect">
+     org.hibernate.dialect.MySQLDialect
+   </prop>
+   <prop key="hibernate.show_sql">
+    true
+   </prop>
+    <prop key="javax.persistence.validation.mode">
+    none
+    </prop>
+    <prop key="current_session_context_class">thread</prop>
+   </props>
+ </property>
+
+  </bean>
+  
+  <!-- Dao -->
+  <bean id="userDao" class="com.web.dao.Impl.UserDaoImpl">
+  <property name="sessionFactory" ref="sessionFactory"></property>
+  </bean>
+  <bean id="spicDao" class="com.web.dao.Impl.ScrollPicDao">
+    <property name="sessionFactory" ref="sessionFactory"></property>
+   </bean>
+   <bean id="modelDao"  class="com.web.dao.Impl.ModelDao">
+   <property name="sessionFactory" ref="sessionFactory"></property>
+   </bean>
+   <bean id="codeDao"  class="com.web.dao.Impl.CodeDao">
+   <property name="sessionFactory" ref="sessionFactory"></property>
+   </bean>
+  
+  
+  
+    <!-- Service -->
+  <bean id="userService" class="com.web.service.Impl.UserService">
+  <property name="userDao" ref="userDao"></property>
+  </bean>
+  <bean id="picService" class="com.web.service.Impl.ScrollpicService">
+  <property name="spicDao" ref="spicDao"></property>
+  </bean>
+  <bean  id="modelService"  class="com.web.service.Impl.ModelService">
+  <property name="modelDao" ref="modelDao"></property>
+  </bean>
+  <bean id="codeService" class="com.web.service.Impl.CodeService">
+  <property name="codeDao" ref="codeDao"></property>
+  </bean>
+  <!-- Action -->
+  
+  <bean id="mainAction" class="com.web.action.HomeAction"  scope="prototype">
+  <property name="userService" ref="userService"></property>
+  </bean>
+  <bean id="scrollPicAction" class="com.web.action.ScrollpicAction" scope="prototype">
+<property name="picService" ref="picService"></property>
+  
+  </bean>
+<bean id="modelAction" class="com.web.action.ModelAction"  scope="prototype">
+<property name="modelService"  ref="modelService"></property>
+</bean>
+<bean id="codeAction" class="com.web.action.CodeAction"  scope="prototype">
+<property name="codeService" ref="codeService"></property>
+</bean>
+
+<!-- 事务 -->
+<tx:annotation-driven transaction-manager="transactionManager" />  
+  <bean id="transactionManager"   class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory">
+            <ref bean="sessionFactory" />
+        </property>
+    </bean> 
+<tx:advice id="txAdvice" transaction-manager="transactionManager">  
+        <tx:attributes>
+            <tx:method name="get*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="find*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="count*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="query*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="get*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="load*" propagation="REQUIRED" read-only="true" />
+            <tx:method name="*" propagation="REQUIRED" rollback-for="java.lang.RuntimeException" />   
+        </tx:attributes>  
+     </tx:advice>    
+
+<aop:config>
+             <!--利用aop 增强事务-->
+	<aop:pointcut id="ServiceMethods" expression="execution(* com.web.service..*.*(..))" />  
+	   
+	<aop:advisor pointcut-ref="ServiceMethods" advice-ref="txAdvice" />
+</aop:config>
+</beans>
