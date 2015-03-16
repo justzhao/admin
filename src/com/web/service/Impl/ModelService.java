@@ -37,6 +37,33 @@ public List getModelList() {
 	// TODO Auto-generated method stub
 	return modelDao.getListByHQL("from Model");											
 }
+ @Override
+public List getPageList(int start, int number) {
+	// TODO Auto-generated method stub
+	return modelDao.getPageHql("from Model", start, number);
+}
+  
+  @Override
+public int getCount() {
+	// TODO Auto-generated method stub
+	return modelDao.countByHql("select count(*) from Model").intValue();
+}
+  @Override
+public boolean checkName( String name) {
+	// TODO Auto-generated method stub
+	  
+	  
+	  return  modelDao.countByHql("select count(*) from Model m where m.name=?", name)==0;
+
+}
+  @Override
+public boolean delModel(Model m) {
+	// TODO Auto-generated method stub
+	  //这里当然不仅仅是从数据库里面删除，还需要重新把对应的包删除，删除七牛云上的东西，
+	 modelDao.delete(m);
+	return true;
+}
+  
 	  
 	
 	

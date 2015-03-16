@@ -72,7 +72,13 @@
    <bean id="codeDao"  class="com.web.dao.Impl.CodeDao">
    <property name="sessionFactory" ref="sessionFactory"></property>
    </bean>
-  
+    <bean id="packetDao"  class="com.web.dao.Impl.PacketDao">
+    <property name="sessionFactory" ref="sessionFactory"></property>
+    </bean>
+    
+    <bean id="menuDao" class="com.web.dao.Impl.MenuDao">
+    <property name="sessionFactory"  ref="sessionFactory"></property>
+    </bean>
   
   
     <!-- Service -->
@@ -88,10 +94,17 @@
   <bean id="codeService" class="com.web.service.Impl.CodeService">
   <property name="codeDao" ref="codeDao"></property>
   </bean>
+  <bean id="packetService" class="com.web.service.Impl.PacketService">
+  <property name="packetDao" ref="packetDao"></property>
+  </bean>
+  <bean id="mainService" class="com.web.service.Impl.MainService">
+  <property name="menuDao" ref="menuDao"></property>
+  </bean>
   <!-- Action -->
   
-  <bean id="mainAction" class="com.web.action.HomeAction"  scope="prototype">
+  <bean id="mainAction" class="com.web.action.MainAction"  scope="prototype">
   <property name="userService" ref="userService"></property>
+  <property name="mainService" ref="mainService"></property>
   </bean>
   <bean id="scrollPicAction" class="com.web.action.ScrollpicAction" scope="prototype">
 <property name="picService" ref="picService"></property>
@@ -102,6 +115,10 @@
 </bean>
 <bean id="codeAction" class="com.web.action.CodeAction"  scope="prototype">
 <property name="codeService" ref="codeService"></property>
+</bean>
+
+<bean id="packetAction" class="com.web.action.PacketAction"  scope="prototype">
+<property name="packetService" ref="packetService"></property>
 </bean>
 
 <!-- 事务 -->

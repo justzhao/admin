@@ -21,8 +21,8 @@
 									{"menuname":"报表统计","icon":"icon-nav","url":"demo1.html"},
 									{"menuname":"添加支出","icon":"icon-nav","url":"demo.html"}
 								]
-						},{"menuid":"5","icon":"icon-sys","menuname":"商城管理",
-							"menus":[{"menuname":"商品分","icon":"icon-nav","url":"/shop/productcatagory.aspx"},
+						},{"menuid":"5","icon":"icon-sys","menuname":"数据包管理",
+							"menus":[{"menuname":"查看数据包","icon":"icon-nav","url":"/shop/productcatagory.aspx"},
 									{"menuname":"商品列表","icon":"icon-nav","url":"/shop/product.aspx"},
 									{"menuname":"商品订单","icon":"icon-nav","url":"/shop/orders.aspx"}
 								]

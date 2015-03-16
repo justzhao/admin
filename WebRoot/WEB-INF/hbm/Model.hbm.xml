@@ -9,7 +9,7 @@
 </id>
 
 <property name="name" column="name" type="string"></property>
-<property name="animation" column="animation" type="integer"></property>
+<property name="animation" column="animation" type="boolean"></property>
 <property name="info" column="info" type="string"></property>
 <property name="size" column="size" type="integer"></property>
 <property name="rotate" column="rotate" type="string"></property>

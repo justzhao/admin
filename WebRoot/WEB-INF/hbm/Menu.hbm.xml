@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+
+<class name="com.web.entity.Menu" table="tbl_menu">
+
+<id name="menuid" column="id" type="integer">
+<generator class="increment"></generator>
+</id>
+
+<property name="menuname" column="name" type="string"></property>
+ <property name="pid" column="pid" type="integer"></property>
+<property name="icon" column="icon"  type="string"></property>
+
+<property name="url"  column="url" type="string"></property>
+<set name="menus"  lazy="false">
+<key column="pid"></key>
+<one-to-many class="com.web.entity.Menu"/>
+</set>
+</class>
+
+
+</hibernate-mapping>

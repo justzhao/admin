@@ -12,7 +12,7 @@
 
 <property name="urls" column="urls" type="string"></property>
 <property name="info" column="info" type="string"></property>
-<property name="effective" column="effective" type="integer"></property>
+<property name="effective" column="effective" type="boolean"></property>
 
 </class>
 

@@ -37,5 +37,7 @@ public interface ScrollpicService {
 	 */
 	public int getCount();
 	
+	
+	public boolean delScrollPic(ScrollPic p);
 
 }

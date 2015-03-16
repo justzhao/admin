@@ -2,7 +2,7 @@
 <!DOCTYPE struts PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 2.1//EN" "http://struts.apache.org/dtds/struts-2.1.dtd">
 <struts>
 <constant name="struts.multipart.maxSize" value="209715200000" />
-
+<constant name="struts.ui.theme" value="simple" />
 <constant name="struts.multipart.saveDir" value="d:/tmp"/>
 <package name="Home" extends="struts-default" >
 
@@ -30,6 +30,7 @@
    
    <action name="saveScroll" class="scrollPicAction"  method=" saveScroll"></action>
 
+<action name="deScrollPic"  class="scrollPicAction"  method="deScrollPic"></action>
 
 </package>
 <package name="model"  extends="struts-default">
@@ -37,6 +38,11 @@
 <action name="saveModel"  class="modelAction"  method="saveModel">
 
 </action>
+
+<action name="checkModelName"  class="modelAction" method="checkName">
+
+</action>
+<action name="delModel" class="modelAction" method="delModel"></action>
 </package>
 
 
@@ -48,7 +54,7 @@
  </result>
   </action>
   
-    <action name="getPageList"  class="scrollPicAction"  method="getPageList">
+    <action name="getPagePic"  class="scrollPicAction"  method="getPageList">
     <result type="json">
  <param name="root">pics</param>
  </result>
@@ -63,7 +69,17 @@
        <action name="getModelList"  class="modelAction"  method="getModelList">
     <result type="json">
  <param name="root">models</param>
- 
+ </result>
+  </action>
+  
+         <action name="getPageModel"  class="modelAction"  method="getPageList">
+    <result type="json">
+ <param name="root">models</param>
+ </result>
+  </action>
+<action name="getAllMenu"  class="mainAction"  method="getAllMenu">
+    <result type="json">
+  <param name="includeProperties">menus.*</param> 
  </result>
   </action>
   

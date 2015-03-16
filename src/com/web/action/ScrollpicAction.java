@@ -173,6 +173,12 @@ public class ScrollpicAction extends ActionSupport {
         pics= JSONObject.fromObject(jsonMap);
 		return SUCCESS;
 	}
+	public String deScrollPic() throws IOException{
+		
+		PrintWriter pw=Tools.getPw();
+		pw.print(picService.delScrollPic(pic));
+		return NONE;
+	}
 
 
 }

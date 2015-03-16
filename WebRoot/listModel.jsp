@@ -23,6 +23,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>-->
 		<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
 	<script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
+		<script type="text/javascript" src="js/easyui-lang-zh_CN.js"></script>
 	<script type="text/javascript" src="./js/uploadify/jquery.uploadify.min.js"></script>
 	
 	
@@ -31,19 +32,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 
                 
-                $('#cc').combobox({
-	        onLoadSuccess: function (data) {
-				            if (data) {
-				               $('#cc').combobox('setValue',data[0].id);
-				            }
-				            }
-			});
+     
 				$('#code').combobox({
 				
 		
 				        onLoadSuccess: function (data) {
 				            if (data) {
-				             //   $('#code').combobox('setValue',data[0].id);
+				               $('#code').combobox('setValue',data[0].id);
 				            }
 				            }
 
@@ -85,6 +80,38 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   function  formatAnimation (value){
 	        return value!=0?"是":"否";
 	    };
+	    
+	    	function removeRow(){
+
+         var row = $('#tt').datagrid('getSelected');
+    if (row){
+    
+    
+     $.messager.confirm("操作提示", "您确定要执行操作吗？", function (data) {
+            if (data) {
+               
+                $.post("delModel",{'model.id':row.id},function(d){
+                   if(d)
+                   {
+           
+                      $('#tt').datagrid('reload');
+                   }else{
+                   
+                    alert('删除失败');
+                   }
+                });
+                
+              
+              
+            }
+         
+        });
+
+    }else{
+      alert('没有选择数据');
+    }
+
+}
 		
 	</script>
 
@@ -109,13 +136,13 @@ border:1px   solid   #C0C0C0;
 <body>
 
 	<table id="tt" class="easyui-datagrid" style="width:100%;height:400px"
-			url="getModelList"
-			title="模型列表" iconCls="icon-save"  total="total" rows="rows"
+			url="getPageModel"
+			title="模型列表" iconCls="icon-save"   singleSelect="true" pagination="true"  pageList="[5,10,15]"  
 			toolbar="#tb">
 		<thead>
 			<tr>
 <th field="id" width="50">编号</th>
-<th field="name" width="100">名字</th>
+<th field="name"     width="100">名字</th>
 <th field="code"  formatter="formatCode"  width="100">识别码</th>
 
 <th field="info" width="300">备注</th>
@@ -134,7 +161,7 @@ border:1px   solid   #C0C0C0;
 	<div id="tb">
 	    
 		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:$('#dd').dialog('open')">添加</a>
-
+         <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:removeRow()">删除</a>
 	</div>
 	
 
@@ -147,7 +174,8 @@ border:1px   solid   #C0C0C0;
 	   <table   style="width:100%; font-size: 12px;font-weight: normal">
 	  
 	   <tr>
-	     <td  class="td1" >名字:</td><td style="width:70%"><input  class="easyui-validatebox textbox"   type="text"   name ="model.name"  required="true">
+	     <td  class="td1" >名字:</td><td style="width:70%">
+	     <input  class="easyui-validatebox textbox"   type="text"   name ="model.name"  required="true"   validtype="remote['checkModelName','model.name']" invalidMessage="用户名已存在">
 	    
 	    </td>
 	   </tr>
@@ -158,7 +186,7 @@ border:1px   solid   #C0C0C0;
 	   	   <td class="td1">  识别码：</td>
 	   <td>
 
-  	<input id="code" style="width:100px"  name ="model.code.id"  url="getCodeList" valueField="id" textField="name">
+  	<input id="code" style="width:150px"  name ="model.code.id"  url="getCodeList" valueField="id" textField="name">
 	   </td>
 	   </tr>
 
@@ -185,8 +213,8 @@ border:1px   solid   #C0C0C0;
 	 是否有动画：
 	   </td>
 	   <td>
-	  	 是   <input type="radio"  value="1" name="model.animation">
-	 否   <input type="radio"  value="0" name="model.animation">
+	   <s:checkbox name="model.animation"></s:checkbox>
+
 	   </td>
 	   </tr>
 	   	   	   <tr>

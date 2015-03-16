@@ -4,13 +4,17 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.struts2.ServletActionContext;
 
 import net.sf.json.JSONArray;
+import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
+
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.web.entity.Model;
@@ -23,11 +27,12 @@ public class ModelAction extends ActionSupport {
 
 	private ModelService modelService;
     private Model model;
-	private JSONArray  models;
+	private JSONObject  models;
 	private File file;
 	private String fileFileName; //文件名称
     private String fileContentType;
-	
+    private int rows;
+    private int page;
 	
 	public ModelService getModelService() {
 		return modelService;
@@ -52,12 +57,29 @@ public class ModelAction extends ActionSupport {
 	
 
 
-	public JSONArray getModels() {
+
+	public JSONObject getModels() {
 		return models;
 	}
 
-	public void setModels(JSONArray models) {
+	public void setModels(JSONObject models) {
 		this.models = models;
+	}
+
+	public int getRows() {
+		return rows;
+	}
+
+	public void setRows(int rows) {
+		this.rows = rows;
+	}
+
+	public int getPage() {
+		return page;
+	}
+
+	public void setPage(int page) {
+		this.page = page;
 	}
 
 	public File getFile() {
@@ -86,7 +108,7 @@ public class ModelAction extends ActionSupport {
 
 	public String saveModel() throws Exception
 	{
-		   HttpServletResponse response = ServletActionContext.getResponse();
+		
 			
 		 String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
 	    
@@ -98,8 +120,8 @@ public class ModelAction extends ActionSupport {
 	       model.setCreateDate(Tools.getDate());
 	       modelService.saveModel(model);
 	      
-	       response.setContentType("text/html;charset=utf-8"); 
-	        PrintWriter pw = response.getWriter();  
+	
+	        PrintWriter pw =Tools.getPw();;
 	        pw.print("操作成功"); 
 
 		return NONE;
@@ -113,10 +135,50 @@ public class ModelAction extends ActionSupport {
 	  JsonConfig jsonConfig = new JsonConfig();
 	  jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
 
-	 models= JSONArray.fromObject( modelService.getModelList(),jsonConfig);
+	 models= JSONObject.fromObject( modelService.getModelList(),jsonConfig);
+		
+	//  models=JSONObject.
+	  return SUCCESS;
+	}
+	public String getPageList()
+	{
+		
+		int intPage = page == 0 ? 1:page; 
+        //每页显示条数 
+        int number = rows == 0 ? 10:rows;  
+        int start = (intPage-1)*number;  
+        Map<String, Object> jsonMap = new HashMap<String, Object>();
+       jsonMap.put("total", modelService.getCount());
+       jsonMap.put("rows", modelService.getPageList(start, number));
+
+ 	  JsonConfig jsonConfig = new JsonConfig();
+ 	  jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
+        models= JSONObject.fromObject(jsonMap,jsonConfig);
 		return SUCCESS;
+		
+		
 	}
 	
+	public String checkName() throws IOException
+	{
+
+	        PrintWriter pw =Tools.getPw();
+	        pw.print(modelService.checkName(model.getName())); 
+	     	return NONE;
+	}
+	public String delModel() throws IOException
+	{
+		PrintWriter pw=Tools.getPw();
+		
+		pw.print(modelService.delModel(model));
+		
+		
+		return NONE;
+	}
+	
+	
+	
+
 	
 	
 }

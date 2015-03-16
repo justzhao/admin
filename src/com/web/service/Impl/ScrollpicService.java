@@ -9,6 +9,7 @@ import java.util.Random;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
+import org.hibernate.internal.QueryImpl;
 
 import antlr.build.Tool;
 
@@ -51,14 +52,14 @@ public void setSpicDao(IDao spicDao) {
 	           Tools.delFile(path+"\\"+url[i]);
 	           //上传完之后需要删除本地的，暂时不弄。
 		 }
-		if(pic.getEffective()==1)
+		if(pic.getEffective()==true)
 		{
 			
 	
-			ScrollPic p=   (ScrollPic) spicDao.getByHQL("from ScrollPic where effective=?", 1);
+			ScrollPic p=   (ScrollPic) spicDao.getByHQL("from ScrollPic where effective=?", true);
 			if(p!=null)
 			{
-			p.setEffective(0);
+			p.setEffective(false);
 			spicDao.saveOrUpdate(p);
 			}
 
@@ -80,12 +81,31 @@ public void setSpicDao(IDao spicDao) {
 
 			
 			
-	         return spicDao.getPageHql("from ScrollPic ", start, number);
+	         return spicDao.getPageHql("from ScrollPic  order by id desc", start, number);
 		}
 	@Override
 		public int getCount() {
 			// TODO Auto-generated method stub
 			return spicDao.countByHql("select count(*) from ScrollPic").intValue();
+		}
+	
+	@Override
+		public boolean delScrollPic(ScrollPic p) {
+			// TODO Auto-generated method stub
+		/**
+		 * 删除七牛云上的文件	
+		 */
+	    p=(ScrollPic) spicDao.get(p.getId());
+	    String []urls=p.getUrls().split(",");
+	    
+	    for(int i=0;i<urls.length;i++)
+	    {
+	    	System.out.println("the url is "+urls[i]);
+	    	Qiniu.deleteFile(urls[i]);
+	    }
+	    
+		spicDao.delete(p);
+		return true;
 		}
 
 	

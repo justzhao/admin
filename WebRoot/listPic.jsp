@@ -105,6 +105,37 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		 return value!=0?"是":"否";
 		}
 
+
+	    	function removeRow(){
+
+         var row = $('#tt').datagrid('getSelected');
+    if (row){
+    
+    
+     $.messager.confirm("操作提示", "您确定要执行操作吗？", function (data) {
+            if (data) {
+               
+                $.post("deScrollPic",{'pic.id':row.id},function(d){
+                   if(d)
+                   {
+           
+                      $('#tt').datagrid('reload');
+                   }else{
+                   alert('删除失败');
+                   }
+                });
+                
+              
+              
+            }
+         
+        });
+
+		    }else{
+		      alert('没有选择数据');
+		    }
+
+}
 		
 		
 	</script>
@@ -130,8 +161,8 @@ border:1px   solid   #C0C0C0;
 <body>
 
 	<table id="tt" class="easyui-datagrid" style="width:800px;height:400px"
-			url="getPageList"
-			title="轮播图列表" iconCls="icon-save"  pagination="true"  pageList="[5,10,15]"
+			url="getPagePic"
+			title="轮播图列表" iconCls="icon-save"   singleSelect="true"  pagination="true"  pageList="[5,10,15]"
 			toolbar="#tb"  >
 		<thead>
 			<tr>
@@ -146,7 +177,7 @@ border:1px   solid   #C0C0C0;
 	<div id="tb">
 	    
 		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:$('#dd').dialog('open')">添加</a>
-	
+	         <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:removeRow()">删除</a>
 	</div>
 	
 
@@ -175,8 +206,9 @@ border:1px   solid   #C0C0C0;
 	   </td>
 	   <td>
 	   
-	 是   <input type="radio"  value="1" name="pic.effective">
-	 否   <input type="radio"  value="0" name="pic.effective">
+	   <s:checkbox name="pic.effective"></s:checkbox>
+
+
 	 
 	   
 	   </td>

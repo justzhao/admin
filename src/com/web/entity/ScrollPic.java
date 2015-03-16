@@ -5,7 +5,7 @@ public class ScrollPic {
 	private String name;
 	private String info;
 	private String urls;
-	private int effective;
+	private Boolean effective;
 	public int getId() {
 		return id;
 	}
@@ -31,10 +31,11 @@ public class ScrollPic {
 		this.urls = urls;
 	}
 
-	public int getEffective() {
+
+	public Boolean getEffective() {
 		return effective;
 	}
-	public void setEffective(int effective) {
+	public void setEffective(Boolean effective) {
 		this.effective = effective;
 	}
 	@Override

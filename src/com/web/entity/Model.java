@@ -8,7 +8,7 @@ public class Model {
 	
 	private int id;
 	private  String name;
-	private int animation;
+	private Boolean animation;
 	private String info;
 	private int size;
 	private String rotate;
@@ -29,10 +29,11 @@ public class Model {
 		this.name = name;
 	}
 
-	public int getAnimation() {
+
+	public Boolean getAnimation() {
 		return animation;
 	}
-	public void setAnimation(int animation) {
+	public void setAnimation(Boolean animation) {
 		this.animation = animation;
 	}
 	public String getInfo() {

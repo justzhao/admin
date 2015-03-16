@@ -2,11 +2,15 @@ package com.web.util;
 
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
 
+import javax.servlet.http.HttpServletResponse;
+
 import org.apache.commons.io.FileUtils;
+import org.apache.struts2.ServletActionContext;
 
 public class Tools {
 
@@ -85,4 +89,15 @@ public class Tools {
 	 {
 		 return new Date();
 	 }
+	 
+		/**
+		 * 获取输出流
+		 * @return
+		 * @throws IOException
+		 */
+		public static PrintWriter getPw() throws IOException{
+			   HttpServletResponse response = ServletActionContext.getResponse();
+		       response.setContentType("text/html;charset=utf-8"); 
+		        return  response.getWriter();  
+		}
 }
