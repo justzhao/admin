@@ -12,6 +12,7 @@
 
 <property name="url" column="url" type="string"></property>
 
+<property name="createDate" column="createDate" type="date"></property>
 
 
 </class>

@@ -1,5 +1,8 @@
 ﻿
-	 var _menus = {"menus":[
+	 
+
+
+var _menus = {"menus":[
 						{"menuid":"1","icon":"icon-sys","menuname":"系统管理",
 							"menus":[{"menuname":"菜单管理","icon":"icon-nav","url":"test.jsp"},
 									{"menuname":"添加用户","icon":"icon-add","url":""},

@@ -18,14 +18,14 @@ import net.sf.json.JsonConfig;
 
 import com.opensymphony.xwork2.ActionSupport;
 import com.web.entity.Model;
-import com.web.service.ModelService;
+import com.web.service.IModelService;
 
 import com.web.util.JsonDateValueProcessor;
 import com.web.util.Tools;
 
 public class ModelAction extends ActionSupport {
 
-	private ModelService modelService;
+	private IModelService modelService;
     private Model model;
 	private JSONObject  models;
 	private File file;
@@ -33,15 +33,18 @@ public class ModelAction extends ActionSupport {
     private String fileContentType;
     private int rows;
     private int page;
+    
 	
-	public ModelService getModelService() {
+
+	
+
+	public IModelService getModelService() {
 		return modelService;
 	}
 
-	public void setModelService(ModelService modelService) {
+	public void setModelService(IModelService modelService) {
 		this.modelService = modelService;
 	}
-	
 
 	public Model getModel() {
 		return model;
@@ -117,7 +120,7 @@ public class ModelAction extends ActionSupport {
 	       String url= Tools.saveFile(file, fileFileName, fileContentType, realpath);
 	      
 	       model.setUrl(url);
-	       model.setCreateDate(Tools.getDate());
+	  
 	       modelService.saveModel(model);
 	      
 	
@@ -126,18 +129,24 @@ public class ModelAction extends ActionSupport {
 
 		return NONE;
 	}
+	
+	public String getModelById()
+	{
+	     JsonConfig jsonConfig = new JsonConfig();
+		  jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
+		models=JSONObject.fromObject(modelService.getModelById(model.getId()),jsonConfig);
+		return SUCCESS;
+	}
 	public String getModelList()
 	{
 		
-	
-
-
-	  JsonConfig jsonConfig = new JsonConfig();
+     JsonConfig jsonConfig = new JsonConfig();
 	  jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
-
-	 models= JSONObject.fromObject( modelService.getModelList(),jsonConfig);
-		
-	//  models=JSONObject.
+	  jsonConfig.setExcludes(new String[]{"packets"});
+	
+	 Map<String, Object> jsonMap = new HashMap<String, Object>();
+	 jsonMap.put("list", modelService.getModelList());
+	 models= JSONObject.fromObject( jsonMap,jsonConfig);
 	  return SUCCESS;
 	}
 	public String getPageList()
@@ -148,11 +157,18 @@ public class ModelAction extends ActionSupport {
         int number = rows == 0 ? 10:rows;  
         int start = (intPage-1)*number;  
         Map<String, Object> jsonMap = new HashMap<String, Object>();
+        if(model==null)
+        {
        jsonMap.put("total", modelService.getCount());
        jsonMap.put("rows", modelService.getPageList(start, number));
-
+        }else{
+        	
+        	jsonMap.put("total",modelService.getCountByCondition(model));
+            jsonMap.put("rows", modelService.getPageListByCondition(model, start, number));
+        }
  	  JsonConfig jsonConfig = new JsonConfig();
  	  jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
+ 	  jsonConfig.setExcludes(new String[]{"packets"});
         models= JSONObject.fromObject(jsonMap,jsonConfig);
 		return SUCCESS;
 		
@@ -176,6 +192,19 @@ public class ModelAction extends ActionSupport {
 		return NONE;
 	}
 	
+	public String updateModel() throws IOException
+	{
+		 if(file!=null)
+		 {
+			 String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
+	       String url= Tools.saveFile(file, fileFileName, fileContentType, realpath);
+	      
+	       model.setUrl(url);
+		 }
+		 modelService.updateModel(model);
+		 
+		return NONE;
+	}
 	
 	
 

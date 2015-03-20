@@ -13,6 +13,9 @@
 <property name="urls" column="urls" type="string"></property>
 <property name="info" column="info" type="string"></property>
 <property name="effective" column="effective" type="boolean"></property>
+<property name="testPage" column="testPage" type="boolean"></property>
+<property name="createDate"  column="createDate" type="date"></property>
+<property name="owner" column="owner" type="string"></property>
 
 </class>
 

@@ -82,22 +82,22 @@
   
   
     <!-- Service -->
-  <bean id="userService" class="com.web.service.Impl.UserService">
+  <bean id="userService" class="com.web.service.Impl.UserServiceImpl">
   <property name="userDao" ref="userDao"></property>
   </bean>
-  <bean id="picService" class="com.web.service.Impl.ScrollpicService">
+  <bean id="picService" class="com.web.service.Impl.ScrollpicServiceImpl">
   <property name="spicDao" ref="spicDao"></property>
   </bean>
-  <bean  id="modelService"  class="com.web.service.Impl.ModelService">
+  <bean  id="modelService"  class="com.web.service.Impl.ModelServiceImpl">
   <property name="modelDao" ref="modelDao"></property>
   </bean>
-  <bean id="codeService" class="com.web.service.Impl.CodeService">
+  <bean id="codeService" class="com.web.service.Impl.CodeServiceImpl">
   <property name="codeDao" ref="codeDao"></property>
   </bean>
-  <bean id="packetService" class="com.web.service.Impl.PacketService">
+  <bean id="packetService" class="com.web.service.Impl.PacketServiceImpl">
   <property name="packetDao" ref="packetDao"></property>
   </bean>
-  <bean id="mainService" class="com.web.service.Impl.MainService">
+  <bean id="mainService" class="com.web.service.Impl.MainServiceImpl">
   <property name="menuDao" ref="menuDao"></property>
   </bean>
   <!-- Action -->
@@ -119,6 +119,7 @@
 
 <bean id="packetAction" class="com.web.action.PacketAction"  scope="prototype">
 <property name="packetService" ref="packetService"></property>
+<property name="modelService" ref="modelService"></property>
 </bean>
 
 <!-- 事务 -->

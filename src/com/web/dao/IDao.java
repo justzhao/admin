@@ -181,5 +181,5 @@ public interface IDao<T, ID extends Serializable> {
      * @param end  ½áÊøĞĞ
      * @return
      */
-    public abstract List getPageHql(String hql,int start,int number);
+    public abstract List getPageHql(String hql,int start,int number,Object... values);
 }

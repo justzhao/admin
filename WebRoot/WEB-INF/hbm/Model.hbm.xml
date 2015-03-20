@@ -19,8 +19,14 @@
 
 <many-to-one name="code"  lazy="false"  class="com.web.entity.IdentifyCode"   outer-join="auto"   access="property" column="code" not-null="true"></many-to-one>
 
+<set name="packets" table="tbl_model_packet" lazy="false">
+<key column="modelId"></key>
+<many-to-many class="com.web.entity.Packet" column="packetId"></many-to-many>
 
+</set>
+<property name="owner" column="owner" type="string"></property>
 
+<property name="packaged" column="packaged" type="boolean"></property>
 </class>
 
 

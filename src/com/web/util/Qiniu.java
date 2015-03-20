@@ -1,5 +1,15 @@
 package com.web.util;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
+import java.net.URLConnection;
+
+import org.apache.commons.codec.EncoderException;
+import org.apache.struts2.ServletActionContext;
 import org.json.JSONException;
 
 import com.qiniu.api.auth.AuthException;
@@ -8,17 +18,30 @@ import com.qiniu.api.config.Config;
 import com.qiniu.api.io.IoApi;
 import com.qiniu.api.io.PutExtra;
 import com.qiniu.api.io.PutRet;
+import com.qiniu.api.rs.GetPolicy;
 import com.qiniu.api.rs.PutPolicy;
 import com.qiniu.api.rs.RSClient;
+import com.qiniu.api.rs.URLUtils;
 
 public class Qiniu {
-	private final static   String QINIUURL="7x00ae.com1.z0.glb.clouddn.com ";
+	                                                               //http://7x00ae.com1.z0.glb.clouddn.com
+	private final static   String QINIUURL="7x00ae.com1.z0.glb.clouddn.com";
 	private final static  String   BUCKETNAME="ljh123";
 	private final static String ACCESSKEY="NkeUoq9b-b6Qh4dcn2XTZ6nxDJFP_2q5qBoUH8RM";
 	private final static String SECRETKEY="Wu9PjR1XaK-9tsccKiMdstSJuvbyv7Kes5UQSrNR";
 	
+	public static void main(String[] args) {
+		try {
+			downloadFile("1366_768_5111_2015031609432163612.jpg");
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public static  void  uploadFile(String key,String path) throws Exception
 	{
+		System.out.println("ÆßÅ£ÔÆ¿ªÊ¼ÉÏ´«");
 		
 		  Config.ACCESS_KEY = ACCESSKEY;
 	       Config.SECRET_KEY = SECRETKEY;
@@ -31,15 +54,59 @@ public class Qiniu {
      
 
         PutRet ret = IoApi.putFile(uptoken, key, path, extra);
-		
+    	System.out.println("ÆßÅ£ÔÆ½áÊøÉÏ´«");
 	}
 	public static void deleteFile(String key)
 	{
+		System.out.println("ÆßÅ£ÔÆ¿ªÊ¼É¾³ý");
 		  Config.ACCESS_KEY = ACCESSKEY;
 	       Config.SECRET_KEY = SECRETKEY;
 		 Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
 	        RSClient client = new RSClient(mac);
 	        client.delete(BUCKETNAME, key);
+	    	System.out.println("ÆßÅ£ÔÆ½áÊøÉ¾³ý");
+	}
+	public static void downloadFile(String key) throws Exception
+	{
+		System.out.println("ÆßÅ£ÔÆ¿ªÊ¼ÏÂÔØ");
+		Config.ACCESS_KEY = ACCESSKEY;
+        Config.SECRET_KEY = SECRETKEY;
+        Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
+        //String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
+        
+        //String realpath="D:\\Workspace\\JAVA\\MyEclipse10\\.metadata\\.me_tcat\\webapps\\admin\\upload"; 
+        String baseUrl = URLUtils.makeBaseUrl(QINIUURL,key);
+        GetPolicy getPolicy = new GetPolicy();
+        String downloadUrl = getPolicy.makeRequest(baseUrl, mac);
+  
+        String savePath=ServletActionContext.getServletContext().getRealPath("/upload");
+       // String savePath="D:\\Workspace\\JAVA\\MyEclipse10\\.metadata\\.me_tcat\\webapps\\admin\\upload"; 
+ 
+
+         
+         int bytesum = 0;
+         int byteread = 0;
+         URL url = new URL(downloadUrl);
+
+         try {
+             URLConnection conn = url.openConnection();
+             InputStream inStream = conn.getInputStream();
+             FileOutputStream fs = new FileOutputStream(savePath+"//"+key);
+
+             byte[] buffer = new byte[1204];
+         
+             while ((byteread = inStream.read(buffer)) != -1) {
+                 bytesum += byteread;
+                 System.out.println(bytesum);
+                 fs.write(buffer, 0, byteread);
+             }
+         } catch (FileNotFoundException e) {
+             e.printStackTrace();
+         } catch (IOException e) {
+             e.printStackTrace();
+         }
+        
+     	System.out.println("ÆßÅ£ÔÆ½áÊøÏÂÔØ");
 	}
 
 }

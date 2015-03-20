@@ -1,16 +1,22 @@
 package com.web.util;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
+
 
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
+import org.apache.tools.zip.ZipEntry;
+import org.apache.tools.zip.ZipOutputStream;
 
 public class Tools {
 
@@ -57,6 +63,10 @@ public class Tools {
 		   }
 	}
 	
+	/**
+	 *获取随机字符串
+	 * @return
+	 */
 	public  static  String getRandomFileName() {  
 		  
         SimpleDateFormat simpleDateFormat;  
@@ -74,17 +84,29 @@ public class Tools {
         return   str+rannum;// 当前时间  
     } 
 	
-	
+	/**
+	 * 获取扩张名
+	 * @param fileName
+	 * @return
+	 */
 	 private static String getExtention(String fileName)  {   
          int pos = fileName.lastIndexOf( "." );   
         return fileName.substring(pos);   
 } 
+	 /**
+	  * 获取文件名字
+	  * @param fileName
+	  * @return
+	  */
 	 private static String getFileName(String fileName)  {   
          int pos = fileName.lastIndexOf( "." );   
        
         return fileName.substring(0, pos);   
 } 
-	 
+	 /**
+	  * 获取时间
+	  * @return
+	  */
 	 public static Date getDate()
 	 {
 		 return new Date();
@@ -99,5 +121,53 @@ public class Tools {
 			   HttpServletResponse response = ServletActionContext.getResponse();
 		       response.setContentType("text/html;charset=utf-8"); 
 		        return  response.getWriter();  
+		}
+		/**
+		 * 压缩文件
+		 * @param paths
+		 * @return
+		 * @throws Exception 
+		 */
+		public static String ZipFiles(List<String> paths) throws Exception
+		{
+			String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
+			String zipName="arone"+getRandomFileName()+".zip";
+			File zip=new File(realpath+"//"+zipName);
+			
+			byte[] buf = new byte[1024];
+		    try {
+
+		      ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip));
+		    
+		     out.setEncoding("gbk");
+
+		      for (int i = 0; i < paths.size(); i++) {
+		        FileInputStream in = new FileInputStream(realpath+"//"+paths.get(i));
+
+		        out.putNextEntry(new ZipEntry(paths.get(i)));
+	
+		        int len;
+		        while ( (len = in.read(buf)) > 0) {
+		          out.write(buf, 0, len);
+		        }
+		        
+
+		        out.closeEntry();
+		        in.close();
+		        //删除下载下来的文件
+		        delFile(realpath+"//"+paths.get(i));
+		      }
+		
+		      out.close();
+		      System.out.println("压缩完成.");
+		      //上传到七牛云
+		      Qiniu.uploadFile(zipName, realpath+"//"+zipName);
+		      
+		    }
+		    catch (IOException e) {
+		      e.printStackTrace();
+		    }
+			
+			return zipName;
 		}
 }

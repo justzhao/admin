@@ -3,6 +3,7 @@ package com.web.action;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
+import net.sf.json.JsonConfig;
 
 import org.apache.struts2.ServletActionContext;
 
@@ -17,7 +19,8 @@ import org.apache.struts2.ServletActionContext;
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.web.entity.ScrollPic;
-import com.web.service.ScrollpicService;
+import com.web.service.IScrollpicService;
+import com.web.util.JsonDateValueProcessor;
 import com.web.util.Tools;
 
 
@@ -27,7 +30,7 @@ public class ScrollpicAction extends ActionSupport {
 	//private List<File> file;
 	private String fileFileName; //文件名称
     private String fileContentType;
-    private ScrollpicService picService;
+    private IScrollpicService picService;
     private int rows;
     private int page;
     private  ScrollPic pic;
@@ -79,12 +82,12 @@ public class ScrollpicAction extends ActionSupport {
 	}
 
 
-	public ScrollpicService getPicService() {
+	public IScrollpicService getPicService() {
 		return picService;
 	}
 
 
-	public void setPicService(ScrollpicService picService) {
+	public void setPicService(IScrollpicService picService) {
 		this.picService = picService;
 	}
 
@@ -133,7 +136,7 @@ public class ScrollpicAction extends ActionSupport {
 	    
 
 	      String url=Tools.saveFile(file, fileFileName, fileContentType, realpath);   
-	     //  String url=  picService.savePic(file, fileFileName, fileContentType, realpath);
+
 	      
 	      
 	       response.setContentType("text/html;charset=utf-8"); 
@@ -144,8 +147,8 @@ public class ScrollpicAction extends ActionSupport {
 	}
 	public String saveScroll() throws Exception
 	{
-		//System.out.println("this is"+pic.getInfo()+pic.getName()+pic.getUrls());
-		picService.saveScrollPic(pic);
+
+	    	picService.saveScrollPic(pic);
 		   HttpServletResponse response = ServletActionContext.getResponse();
 		   response.setContentType("text/html;charset=utf-8");   
 	        PrintWriter pw = response.getWriter();  
@@ -167,16 +170,35 @@ public class ScrollpicAction extends ActionSupport {
         int number = rows == 0 ? 10:rows;  
         int start = (intPage-1)*number;  
         Map<String, Object> jsonMap = new HashMap<String, Object>();
+        
+        if(pic==null)
+        {
         jsonMap.put("total", picService.getCount());
         jsonMap.put("rows", picService.getPageList(start, number));
+        }else
+        {
+        	 jsonMap.put("total", picService.getCountByCondition(pic));
+             jsonMap.put("rows", picService.getPageListByCondition(start, number, pic));
+        }
+        
+        JsonConfig jsonConfig = new JsonConfig();
+	    jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
       
-        pics= JSONObject.fromObject(jsonMap);
+        pics= JSONObject.fromObject(jsonMap,jsonConfig);
 		return SUCCESS;
 	}
 	public String deScrollPic() throws IOException{
 		
 		PrintWriter pw=Tools.getPw();
 		pw.print(picService.delScrollPic(pic));
+		return NONE;
+	}
+	
+	public String updateScroll() throws Exception
+	{
+		picService.updateScroll(pic);
+		PrintWriter pw=Tools.getPw();
+		pw.print("操作成功");
 		return NONE;
 	}
 

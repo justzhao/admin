@@ -7,33 +7,45 @@
 //初始化左侧
 function InitLeftMenu() {
 
-    $(".easyui-accordion").empty();
-    var menulist = "";
-   
-    $.each(_menus.menus, function(i, n) {
-        menulist += '<div   title="'+n.menuname+'"  icon="'+n.icon+'"  style="overflow:auto;" >';
-		menulist += '<ul >';
-        $.each(n.menus, function(j, o) {
-			menulist += '<li  ><div><a target="mainFrame" href="' + o.url + '" ><span class="icon '+o.icon+'" ></span>' + o.menuname + '</a></div></li> ';
-        })
-        menulist += '</ul></div>';
-    })
+	var m="";
+	$(function(){
+		$.get("getAllMenu",function(data){
+			//alert(_menus);
+		
+		    $(".easyui-accordion").empty();
+		    var menulist = "";
 
-	$(".easyui-accordion").append(menulist);
-	
-	$('.easyui-accordion li a').click(function(){
-		var tabTitle = $(this).text();
-		var url = $(this).attr("href");
-		addTab(tabTitle,url);
-		$('.easyui-accordion li div').removeClass("selected");
-		$(this).parent().addClass("selected");
-	}).hover(function(){
-		$(this).parent().addClass("hover");
-	},function(){
-		$(this).parent().removeClass("hover");
+		    $.each(data.menus, function(i, n) {
+		        menulist += '<div   title="'+n.menuname+'"  icon="'+n.icon+'"  style="overflow:auto;" >';
+				menulist += '<ul >';
+		        $.each(n.menus, function(j, o) {
+					menulist += '<li  ><div><a target="mainFrame" href="' + o.url + '" ><span class="icon '+o.icon+'" ></span>' + o.menuname + '</a></div></li> ';
+		        })
+		        menulist += '</ul></div>';
+		    })
+
+			$(".easyui-accordion").append(menulist);
+			
+			$('.easyui-accordion li a').click(function(){
+				var tabTitle = $(this).text();
+				var url = $(this).attr("href");
+				addTab(tabTitle,url);
+				$('.easyui-accordion li div').removeClass("selected");
+				$(this).parent().addClass("selected");
+			}).hover(function(){
+				$(this).parent().addClass("hover");
+			},function(){
+				$(this).parent().removeClass("hover");
+			});
+			
+			$(".easyui-accordion").accordion();
+			});
+		
 	});
+	
 
-	$(".easyui-accordion").accordion();
+
+
 }
 
 function addTab(subtitle,url){

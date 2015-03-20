@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+
+<class name="com.web.entity.Packet" table="tbl_packet">
+
+<id name="id" column="id" type="integer">
+<generator class="increment"></generator>
+</id>
+
+<property name="name" column="name" type="string"></property>
+
+<property name="info" column="info" type="string"></property>
+<property name="url" column="url"  type="string"></property>
+<property name="effective" column="effective" type="boolean"></property>
+<property name="xml" column="xml" type="string"></property>
+<property name="thumbPic" column="thumbPic" type="string"></property>
+<property name="createDate" column="createDate" type="date"></property>
+<property name="version" column="version" type="string"></property>
+<property name="count" column="count" type="integer"></property>
+<property name="descPic" column="descPic" type="string"></property>
+
+<set name="models" table="tbl_model_packet" lazy="false">
+<key column="packetId"></key>
+
+<many-to-many class="com.web.entity.Model" column="modelId"></many-to-many>
+</set>
+
+
+</class>
+
+
+</hibernate-mapping>

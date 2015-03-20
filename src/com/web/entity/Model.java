@@ -1,6 +1,7 @@
 package com.web.entity;
 
 import java.util.Date;
+import java.util.Set;
 
 
 
@@ -15,7 +16,11 @@ public class Model {
 	private String offset;
 	private String url;
 	private Date createDate;
+	private Date endDate;
 	private IdentifyCode code;
+	private Set<Packet> packets;
+	private String owner;
+	private boolean packaged;
 	public int getId() {
 		return id;
 	}
@@ -72,11 +77,40 @@ public class Model {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
+	
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
 	public IdentifyCode getCode() {
 		return code;
 	}
 	public void setCode(IdentifyCode code) {
 		this.code = code;
+	}
+	
+	public Set<Packet> getPackets() {
+		return packets;
+	}
+	public void setPackets(Set<Packet> packets) {
+		this.packets = packets;
+	}
+	
+	public String getOwner() {
+		return owner;
+	}
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+	
+
+	public boolean isPackaged() {
+		return packaged;
+	}
+	public void setPackaged(boolean packaged) {
+		this.packaged = packaged;
 	}
 	@Override
 	public String toString() {

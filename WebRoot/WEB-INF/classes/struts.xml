@@ -31,7 +31,7 @@
    <action name="saveScroll" class="scrollPicAction"  method=" saveScroll"></action>
 
 <action name="deScrollPic"  class="scrollPicAction"  method="deScrollPic"></action>
-
+<action name="updateScroll" class="scrollPicAction"  method="updateScroll"></action>
 </package>
 <package name="model"  extends="struts-default">
 
@@ -42,9 +42,45 @@
 <action name="checkModelName"  class="modelAction" method="checkName">
 
 </action>
+<action name="updateModel" class="modelAction"  method="updateModel"></action>
 <action name="delModel" class="modelAction" method="delModel"></action>
 </package>
+<package name="packet"  extends="struts-default">
 
+<action name="savePacket"  class="packetAction" method="savePacket"></action>
+
+
+</package>
+
+
+<package name="code"  extends="struts-default">
+		
+		<action name="checkName" class="codeAction" method="checkName">
+		
+		</action>
+		
+		<action name="saveCode" class="codeAction"  method="saveCode">
+	    </action>
+		
+		<action name="addCode"  class="codeAction"  method="uploadImg">
+			<interceptor-ref name="fileUpload">
+		    <param name="maximumSize">409600000</param>
+		    </interceptor-ref>
+		    <interceptor-ref name="defaultStack"></interceptor-ref>
+	    </action>
+	    
+	    <action name="updateCode" class="codeAction" method="updateCode">
+	    	<interceptor-ref name="fileUpload">
+		    <param name="maximumSize">409600000</param>
+		    </interceptor-ref>
+		    <interceptor-ref name="defaultStack"></interceptor-ref>
+	    </action>
+	    
+	    <action name="deleteCode" class="codeAction" method="deleteCode">
+		
+		</action>
+	    
+	</package>
 
 <package name="json" extends="json-default">
 
@@ -65,10 +101,17 @@
     <result type="json">
  <param name="root">codes</param>
  </result>
+ 
+ </action>
+                                                                                                            
+ <action name="getModelById" class="modelAction" method="getModelById">
+     <result type="json">
+ <param name="root">models</param>
+ </result>
  </action>
        <action name="getModelList"  class="modelAction"  method="getModelList">
     <result type="json">
- <param name="root">models</param>
+ <param name="root">models.list</param>
  </result>
   </action>
   
@@ -82,6 +125,20 @@
   <param name="includeProperties">menus.*</param> 
  </result>
   </action>
+  
+  <action name="getPagePacket"  class="packetAction"  method="getPagePacket">
+      <result type="json">
+ <param name="root">packets</param>
+ </result>
+  </action>
+  
+  
+  	    
+	    <action name="showContent" class="codeAction" method="showContent">
+			<result type="json">
+		    <param name="root">results</param>
+		    </result>
+		</action>
   
 </package>
 
