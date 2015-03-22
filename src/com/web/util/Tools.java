@@ -19,6 +19,8 @@ import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipOutputStream;
 
 public class Tools {
+	
+	private final static 	String SAVEPATH = ServletActionContext.getServletContext().getRealPath("/upload");
 
 	/**
 	 * 山传文件到本地的工具
@@ -52,15 +54,20 @@ public class Tools {
 	}
 	
 	/**
-	 * 删除文件
+	 * 输入文件名字删除文件
 	 * @param path
 	 */
 	public static void delFile(String path)
 	{
+		System.gc();
+		path=SAVEPATH+"\\"+path;
+		System.out.println("开始删除文件");
 		File file = new File(path);
 		   if(file.exists()){
-		     file.delete();
+			   System.out.println("正在删除:"+file.delete());
+			
 		   }
+		  System.out.println("删除结束"); 
 	}
 	
 	/**
@@ -77,11 +84,11 @@ public class Tools {
   
         String str = simpleDateFormat.format(date);  
 
-        Random random = new Random();  
+       // Random random = new Random();  
   
-        int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数  
+      //  int rannum = (int) (random.nextDouble() * (99999 - 10000 + 1)) + 10000;// 获取5位随机数  
   
-        return   str+rannum;// 当前时间  
+        return   str;// 当前时间  
     } 
 	
 	/**
@@ -123,16 +130,19 @@ public class Tools {
 		        return  response.getWriter();  
 		}
 		/**
-		 * 压缩文件
+		 * 输入文件名字压缩文件
 		 * @param paths
 		 * @return
 		 * @throws Exception 
 		 */
-		public static String ZipFiles(List<String> paths) throws Exception
+		public static String ZipFiles(List<String> paths,String zipName) throws Exception
 		{
-			String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
-			String zipName="arone"+getRandomFileName()+".zip";
-			File zip=new File(realpath+"//"+zipName);
+
+			 if(zipName.equals(""))
+			 {
+				 zipName="arone"+getRandomFileName()+".zip";
+			 }
+				 File zip=new File(SAVEPATH+"//"+zipName);
 			
 			byte[] buf = new byte[1024];
 		    try {
@@ -142,7 +152,7 @@ public class Tools {
 		     out.setEncoding("gbk");
 
 		      for (int i = 0; i < paths.size(); i++) {
-		        FileInputStream in = new FileInputStream(realpath+"//"+paths.get(i));
+		        FileInputStream in = new FileInputStream(SAVEPATH+"//"+paths.get(i));
 
 		        out.putNextEntry(new ZipEntry(paths.get(i)));
 	
@@ -153,15 +163,21 @@ public class Tools {
 		        
 
 		        out.closeEntry();
+		        
 		        in.close();
-		        //删除下载下来的文件
-		        delFile(realpath+"//"+paths.get(i));
+	
+		   
 		      }
-		
+		      
 		      out.close();
+		      
+		      for(int i=0;i<paths.size();i++)
+		      {
+		    	     delFile(paths.get(i));
+		      }
 		      System.out.println("压缩完成.");
 		      //上传到七牛云
-		      Qiniu.uploadFile(zipName, realpath+"//"+zipName);
+		  //    Qiniu.uploadFile(zipName, realpath+"//"+zipName);
 		      
 		    }
 		    catch (IOException e) {

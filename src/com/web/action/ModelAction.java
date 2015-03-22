@@ -120,6 +120,9 @@ public class ModelAction extends ActionSupport {
 	       String url= Tools.saveFile(file, fileFileName, fileContentType, realpath);
 	      
 	       model.setUrl(url);
+	       
+	       //上传用户暂时写死
+	       model.setOwner("admin");
 	  
 	       modelService.saveModel(model);
 	      
@@ -185,8 +188,8 @@ public class ModelAction extends ActionSupport {
 	public String delModel() throws IOException
 	{
 		PrintWriter pw=Tools.getPw();
-		
-		pw.print(modelService.delModel(model));
+		String ids=ServletActionContext.getRequest().getParameter("ids");
+		pw.print(modelService.delModels(ids));
 		
 		
 		return NONE;
@@ -203,6 +206,15 @@ public class ModelAction extends ActionSupport {
 		 }
 		 modelService.updateModel(model);
 		 
+		return NONE;
+	}
+	public String zipModels() throws Exception
+	{
+		System.out.println("zip models");
+		String ids=ServletActionContext.getRequest().getParameter("ids");
+		
+		PrintWriter pw=Tools.getPw();
+		pw.print(modelService.zipModes(ids));
 		return NONE;
 	}
 	

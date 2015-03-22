@@ -24,7 +24,7 @@ import com.web.service.ICodeService;
 import com.web.util.JsonDateValueProcessor;
 import com.web.util.Tools;
 
-public class CodeAction extends ActionSupport {
+public class CodeActionbak extends ActionSupport {
 	
 	private ICodeService codeService;
 	
@@ -168,18 +168,11 @@ public class CodeAction extends ActionSupport {
         //每页的开始记录  第一页为1  第二页为number +1  
         int start = (intPage-1)*number; 
            
-       // List<IdentifyCode> list = codeService.getPageHql(start,number);//每页的数据，放入list 
+        List<IdentifyCode> list = codeService.getPageHql(start,number);//每页的数据，放入list 
         
         Map<String, Object> jsonMap = new HashMap<String, Object>();//定义map 
-        //判断首次加载 还是查询
-        if(code==null){
-        	jsonMap.put("total", codeService.getCount());//total键 存放总记录数，必须的 
-            jsonMap.put("rows", codeService.getPageHql(start,number));//rows键 存放每页记录 list
-        }else{
-        	jsonMap.put("total",codeService.getCountByCondition(code));
-            jsonMap.put("rows", codeService.getPageListByCondition(code, start, number));
-        }
-         
+        jsonMap.put("total", codeService.getCount());//total键 存放总记录数，必须的 
+        jsonMap.put("rows", list);//rows键 存放每页记录 list 
         results = JSONObject.fromObject(jsonMap,jsonConfig);//格式化result   一定要是JSONObject
 		return SUCCESS;
 	}
@@ -206,9 +199,7 @@ public class CodeAction extends ActionSupport {
 	{
 		//System.out.println("upload file is:"+code.getName()+code.getUrl());
 		code.setCreateDate(new Date());
-		code.setOwner("admin");
 		codeService.saveCodeTo(code); //七牛 数据库
-		
 		
 	    HttpServletResponse response = ServletActionContext.getResponse();
 	    response.setContentType("text/html;charset=utf-8");   
@@ -227,10 +218,8 @@ public class CodeAction extends ActionSupport {
 		int id = Integer.parseInt(request.getParameter("id"));
 		String name = request.getParameter("name");
 		String url = request.getParameter("url");
-		String owner = request.getParameter("owner");
 		
 		IdentifyCode code = new IdentifyCode(id,name,url);
-		code.setOwner(owner);
 		
 		System.out.println("update code id "+code.getId());
 		System.out.println("update name id "+code.getName());
@@ -243,26 +232,16 @@ public class CodeAction extends ActionSupport {
 		update createDate id Fri Mar 20 09:51:32 CST 2015*/
 		
 		IdentifyCode oldCode = codeService.getCodeByID(id);
-		//新增判断两个URL是否相同 
 		String oldUrl = oldCode.getUrl();
-		if(!oldUrl.equals(url)){
-			System.out.println("old url is "+oldUrl);
-			System.out.println("new url is "+url);
-			
-			codeService.deltFrom(oldUrl);
-			
-			codeService.saveCodeTo(code);
-		}else {
-			codeService.updateCode(code);
-		}
 		
+		codeService.deltFrom(oldUrl);
 		
 		
 		//code.setCreateDate(new Date());
 		
 		//System.out.println("update code id "+code.getId());
 		
-		//codeService.saveCodeTo(code); //七牛 数据库
+		codeService.saveCodeTo(code); //七牛 数据库
 		//先处理本地
 		//codeService.updateCode(code);
 		

@@ -71,7 +71,7 @@ public class MainAction extends ActionSupport {
 	public String getAllMenu()
 	{
 		
-	  System.out.println("the size is "+mainService.getMenu().size());
+	 
 		menus=JSONArray.fromObject(mainService.getMenu());
 		  System.out.println("the size is "+menus);
 		return SUCCESS;

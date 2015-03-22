@@ -31,29 +31,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		$(function(){
        		 $("#tt").datagrid({
        		 
-       		 	url:'getPageModel',
+       		 	url:'getPageModel'
+       		 	
        
 		
 		 });
 		  $("#tt").datagrid('hideColumn', 'url'); 
-
-                $('#editcode').combobox({
-				
+		  
+		  
+		  		$.post("getCodeList",function(data){
+		  		
+		  		 $('#editcode').combobox({
+				  data:data
 	
-       }); 
+              }); 
      
 				$('#code').combobox({
 				
-		
+		                 data:data,
 				        onLoadSuccess: function (data) {
 				            if (data) {
 				               $('#code').combobox('setValue',data[0].id);
 				            }
 				            }
+					}); 
+		  		
+		  		});
 
-			
-		
-			}); 
+               
 			
 
       
@@ -62,15 +67,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$('#ff').form({
 				url:'saveModel',
 				onSubmit:function(){
-					return $(this).form('validate');
+					if($(this).form('validate'))
+					{
+					   
+						 $.messager.progress({
+							 title: '稍等',
+							 msg: '正在操作中...',
+							text: '操作中'
+							 });
+					
+					 return true;
+					}else
+					{
+					  return false;
+					}
 				},
 				success:function(data){
 			
-			    
+			     $.messager.progress('close');
 					$.messager.alert('消息', "操作成功", 'info',function(){
 					
 					$(".panel-tool-close").click();
-				    window.location.href="listModel.jsp";
+				     $('#tt').datagrid('reload'); 
 					});
 			}
 			});
@@ -80,12 +98,51 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$('#editform').form({
 				url:'updateModel',
 				onSubmit:function(){
-				 		return $(this).form('validate');
+				 		if($(this).form('validate'))
+				 		{
+				 		 $.messager.progress({
+					        title: '稍等',
+					        msg: '正在操作中...',
+					        text: '操作中'
+					    });
+				 		return true;
+				 		}else
+				 		{
+				 		return false;
+				 		}
 				},
 				success:function(data){
+				 $.messager.progress('close');
 				$.messager.alert('消息', "操作成功", 'info',function(){
 					$(".panel-tool-close").click();
-				    window.location.href="listModel.jsp";
+				    $('#tt').datagrid('reload'); 
+					});
+				}
+			});
+			
+			
+						$('#packet').form({
+				url:'savePacket',
+				onSubmit:function(){
+					 if($(this).form('validate'))
+					 {
+					 $.messager.progress({
+					        title: '稍等',
+					        msg: '正在操作中...',
+					        text: '操作中'
+					    });
+					  return true;
+					 }else{
+					 return false;
+					 }
+				},
+				success:function(data){
+				 $.messager.progress('close');
+					$.messager.alert('消息', "操作成功", 'info',function(){
+					
+					
+					$(".panel-tool-close").click();
+				
 					});
 				}
 			});
@@ -113,13 +170,34 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    	function removeRow(){
 
          var row = $('#tt').datagrid('getSelected');
+         var rows = $('#tt').datagrid('getSelections'); 
+         
+
+         
     if (row){
     
     
+                 $.each(rows, function (i, n) {
+
+			if (i == 0) {
+			
+			parm = n.id;
+			
+			} else {
+			
+			parm += "," + n.id;
+			
+			}
+
+          }); 
+    
+    
+    //alert(parm);
+     
      $.messager.confirm("操作提示", "您确定要执行操作吗？", function (data) {
             if (data) {
                
-                $.post("delModel",{'model.id':row.id},function(d){
+                $.post("delModel",{'ids':parm},function(d){
                    if(d)
                    {
            
@@ -172,6 +250,7 @@ function editRow()
 	 $('#editcreateDate').datebox('setValue',row.createDate);
 	 $('#editsize').numberbox('setValue',row.size);
 	 document.getElementById("editinfo").value=row.info;
+	 document.getElementById("editowner").value=row.owner;
 	 document.getElementById("editrotate").value=row.rotate;//editsize
       if(row.animation==false)
       {
@@ -220,9 +299,60 @@ function editRow()
     }
 
 }
-function addColumn()
+function addZip()
 {
-  alert('add');
+
+$.messager.progress({
+        title: '稍等',
+        msg: '正在生成数据包...',
+        text: '操作中'
+    }); 
+  var rows = $('#tt').datagrid('getSelections'); 
+   var row = $('#tt').datagrid('getSelected');
+ 
+  if(row)
+  {
+  
+      
+                 $.each(rows, function (i, n) {
+
+			if (i == 0) {
+			
+			parm = n.id;
+			urls=n.url;
+			
+			} else {
+			
+			parm += "," + n.id;
+			urls+=","+n.url;
+			
+			}
+
+          }); 
+          
+               $.post("zipModels",{'ids':parm},function(d){
+                   if(d!='')
+                   {
+                      //  alert(d);
+                        document.getElementById("packetname").value=d;
+                        document.getElementById("packeturl").value=d;
+                        document.getElementById("modelids").value=parm;
+                        $.messager.progress('close');
+                        $('#addPacket').dialog('open');
+               
+                   }else{
+                   
+                    alert('打包失败');
+                   }
+                });
+
+  }else
+  {
+  alert('没有选择要打包的模型');
+  
+  
+  
+  }
 }
 		
 	</script>
@@ -246,11 +376,13 @@ border:1px   solid   #C0C0C0;
 </style>
 </head>
 <body>
-
-	<table id="tt"  style="width:100%;height:400px"	title="模型列表" iconCls="icon-save"   singleSelect="true"  pagination="true"  pageList="[5,10,15]"  
-			toolbar="#tb">
+ 
+	<table id="tt"  style="width:100%;height:400px"	title="模型列表"   iconCls="icon-save"     pagination="true"  pageList="[5,10,15]"  
+		toolbar="#tb">
 		<thead>
 			<tr>
+
+<th field="ck"  checkbox ="true"></th>
 <th field="id" width="50">编号</th>
 <th field="name"     width="100">名字</th>
 <th field="code"  formatter="formatCode"  width="100">识别码</th>
@@ -277,15 +409,15 @@ border:1px   solid   #C0C0C0;
 		         <a href="#" class="easyui-linkbutton" iconCls="icon-edit" plain="true" onclick="javascript:editRow()">编辑</a>
          <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:removeRow()">删除</a>
          
-          <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:addColumn()">生成数据包</a>
+          <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:addZip()">生成数据包</a>
 
 	  </div>
 	  <div>
 	  		<span>上传开始时间</span>
-	  			   <input   id="start"   style="width:100px"  class="easyui-datebox" >
+	  			   <input   id="start"   style="width:100px"  class="easyui-datebox"  editable=false >
 	  		<span>结束时间</span>
 	  		
-	  			   <input  id="end"    style="width:100px"  class="easyui-datebox"  >
+	  			   <input  id="end"    style="width:100px"  class="easyui-datebox"  editable=false>
 	  		<span>名字</span>
         <input id="name"  type="text"  style="line-height:20px;border:1px solid #ccc">
 
@@ -322,7 +454,7 @@ border:1px   solid   #C0C0C0;
 	   	   <td class="td1">  识别码：</td>
 	   <td>
 
-  	<input id="code" style="width:150px"  name ="model.code.id"  url="getCodeList" valueField="id" textField="name">
+  	<input id="code" style="width:150px"  name ="model.code.id"  valueField="id" textField="name">
 	   </td>
 	   </tr>
 
@@ -332,7 +464,7 @@ border:1px   solid   #C0C0C0;
 	   </td>
 	   
 	   <td>
-	   <input type="text"  class="easyui-datebox"  name="model.createDate" >
+	   <input type="text"  class="easyui-datebox"  name="model.createDate"  editable=false>
 	   </td>
 	   </tr>
 	   <tr>
@@ -401,6 +533,7 @@ border:1px   solid   #C0C0C0;
 	   <tr>
 	   <input id="editid" type="hidden"  name="model.id">
 	   <input id="editurl" type="hidden" name="model.url">
+	    <input id="editowner" type="hidden" name="model.owner">
 	     <td  class="td1" >名字:</td><td style="width:70%">
 	     <input  id="editname" class="easyui-validatebox textbox"   type="text"   name ="model.name"  required="true"  >
 	    
@@ -413,7 +546,7 @@ border:1px   solid   #C0C0C0;
 	   	   <td class="td1">  识别码：</td>
 	   <td>
 
-  	<input   id="editcode"  style="width:150px"  name ="model.code.id"  url="getCodeList"  valueField="id"  textField="name">
+  	<input   id="editcode"  style="width:150px"  name ="model.code.id"    valueField="id"  textField="name">
 	   </td>
 	   </tr>
 
@@ -423,7 +556,7 @@ border:1px   solid   #C0C0C0;
 	   </td>
 	   
 	   <td>
-	   <input id="editcreateDate"     type="text"  class="easyui-datebox"  name="model.createDate" >
+	   <input id="editcreateDate"     type="text"  class="easyui-datebox"  name="model.createDate"  editable=false >
 	   </td>
 	   </tr>
 	   <tr>
@@ -479,6 +612,109 @@ border:1px   solid   #C0C0C0;
 	   </tr>  
 	  
 	   </table> </form>
+</div>
+
+
+<div id="addPacket" class="easyui-dialog" style="top:80px;padding:5px;width:600px;height:300px;"
+			title="添加数据包" iconCls="icon-ok"
+			 closed="true" modal="true">
+<form id="packet"  name="packet"  enctype= "multipart/form-data"  method="post">
+	   <table   style="width:100%; font-size: 12px;font-weight: normal">
+	
+	   <tr>
+	   <td  class="td1" >
+	   名字:
+	   </td>
+	   <td style="width:70%">
+	   
+	   <input id="packetname"   class="easyui-validatebox textbox"  type="text"  style="width:250px"  name ="packet.name"  required="true"></td>
+	   
+	   <input id="packeturl"  type="hidden"  name="packet.url" />
+	   <input id="modelids"  type="hidden"  name="ids" />
+	   </tr>
+
+	   	   <tr>  
+	   	   
+	   	   
+	   <td class="td1">
+	   备注
+	   </td>
+	   <td><input type="text"  style="width:250px"  class="easyui-validatebox textbox"  name="packet.info" ></td>
+	   </tr>
+	   
+	   	   	   <tr>
+	   <td class="td1">
+	  针对设备
+	   </td>
+	   <td><input type="radio" name="packet.device" value="0">所有设备
+	   <input type="radio" name="packet.device" value="1">苹果
+	    <input type="radio" name="packet.device" value="2">安卓
+	   
+	   </td>
+	   </tr>
+	   
+	
+	   	   
+	   	   	   	   <tr>
+
+
+	   	   
+	   <td class="td1">
+	   是否测试版本
+	   </td>
+	   <td>
+	   
+	   <s:checkbox name="packet.effective"></s:checkbox>
+
+
+	 
+	   
+	   </td>
+	   </tr>
+	   
+	   	   	   <tr>
+	   <td class="td1">
+	  创建日期
+	   </td>
+	   <td><input type="text"  class="easyui-datebox"  name="packet.createDate" editable=false ></td>
+	   </tr>
+	   	  
+	
+	    <tr>
+                        <td class="td1">
+                            缩略图上传：
+                        </td>
+                        <td>                            
+             
+                                   	    <input type="file" name="thumb"  class=" easyui-validatebox textbox"  required="true"  /> 
+                              
+                       
+                          
+                      
+                
+                  
+                        </td>
+                    </tr>
+	   	 	   	   	   <tr>
+	   <td class="td1">
+	 版本号
+	   </td>
+	   <td><input type="text"  class=" textbox"   style="width:250px"  name="packet.version" ></td>
+	   </tr>
+	   
+	   	   	   	   <tr>
+	   <td class="td1">
+	  说明文件
+	   </td>
+	   <td>  <input   type="file" name="desc"  class="easyui-validatebox textbox"  required="true"  /> 
+	   </td>
+	   </tr>
+	   
+	   <tr>
+	   <td style="text-align:right" colspan=2> <input  type="submit" value="提交"></td>
+	   </tr>
+	   
+	   </table></form>
 </div>
 
 		   

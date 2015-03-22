@@ -1,7 +1,9 @@
 package com.web.service.Impl;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.struts2.ServletActionContext;
 
@@ -62,7 +64,24 @@ public boolean delModel(Model m) {
 	// TODO Auto-generated method stub
 	  //这里当然不仅仅是从数据库里面删除，还需要重新把对应的包删除，删除七牛云上的东西，
 	 modelDao.delete(m);
+	 
+	 
 	return true;
+}
+  
+  @Override
+public boolean delModels(String ids) {
+	// TODO Auto-generated method stub
+	  
+	  if(ids!=null)
+	  {
+	  String []id=ids.split(",");
+	  for(int i=0;i<id.length;i++)
+	  {
+	  modelDao.deleteById(Integer.parseInt(id[i]));
+	  }
+	  }
+	  return true;
 }
   
   @Override
@@ -151,6 +170,46 @@ public boolean updateModel(Model m) {
 	
 	  modelDao.saveOrUpdate (m);
 	  return true;
+}
+  
+  @Override
+public String zipModes(String ids) throws Exception {
+	// TODO Auto-generated method stub
+	  
+	  //1 需要先获取每个model，从七牛云上下载对应的文件
+	  if(ids!=null)
+	  {
+		  String id[]=ids.split(",");
+		  List <String> paths=new ArrayList<String>();
+		  for(int i=0;i<id.length;i++)
+		  {
+			  Model m=(Model) modelDao.get(Integer.parseInt(id[i]));
+			  paths.add(m.getUrl());
+			  Qiniu.downloadFile(m.getUrl());
+			  
+		  }
+		  //2打包  (先不打包)
+	//  return	  Tools.ZipFiles(paths,"");
+		
+		  return Tools.getRandomFileName()+".zip";
+		  
+	  }
+	  
+	return "";
+}
+  
+  @Override
+public boolean updatePacket(Set<Model> ms) {
+	// TODO Auto-generated method stub
+	  Iterator iterator = ms.iterator();
+	  while(iterator.hasNext())
+	  {
+		  Model  m = (Model) iterator.next();
+	       m.setPackaged(true);
+	       modelDao.saveOrUpdate(m);
+	  }
+	  
+	return false;
 }
 
 	  

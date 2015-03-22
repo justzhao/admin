@@ -18,6 +18,11 @@ public class Packet {
 	private int count;
 	private String descPic;
 	private int device;
+	
+	private Date endDate;
+	private int  endcount;
+	
+	private String owner;
 	private Set<Model> models=new HashSet<Model>();
 	public int getId() {
 		return id;
@@ -97,6 +102,35 @@ public class Packet {
 	public void setModels(Set<Model> models) {
 		this.models = models;
 	}
+	public String getOwner() {
+		return owner;
+	}
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+	public Date getEndDate() {
+		return endDate;
+	}
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+	public int getEndcount() {
+		return endcount;
+	        
+	}
+	public void setEndcount(int endcount) {
+		this.endcount = endcount;
+	}
+	@Override
+	public String toString() {
+		return "Packet [id=" + id + ", name=" + name + ", url=" + url
+				+ ", info=" + info + ", effective=" + effective + ", xml="
+				+ xml + ", createDate=" + createDate + ", thumbPic=" + thumbPic
+				+ ", version=" + version + ", count=" + count + ", descPic="
+				+ descPic + ", device=" + device + ", endDate=" + endDate
+				+ ", endcount=" + endcount + ", owner=" + owner + "]";
+	}
+	
 	
 
 	

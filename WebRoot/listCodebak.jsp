@@ -18,7 +18,7 @@
 	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
 	<!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
 	-->
-	<script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
+	<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
 	<script type="text/javascript" src="./js/uploadify/jquery.uploadify.min.js"></script>
 	
 	<script type="text/javascript" src="./js/easyui-lang-zh_CN.js"></script>
@@ -29,30 +29,11 @@
 			$('#ff').form({
 				url:'saveCode',
 				onSubmit:function(){
-					if($(this).form('validate'))
-					{
-					   $.messager.progress({
-						 title: '稍等',
-						 msg: '正在操作中...',
-						text: '操作中'
-						 });
-					 return true;
-					}else
-					{
-					
-					return false;
-					}
+					return $(this).form('validate');
 				},
 				success:function(data){
-				
-				    $.messager.progress('close');
-		             $.messager.alert('消息', "操作成功", 'info',function(){
-					
-					
-					   $('#tt').datagrid('reload');
-					$(".panel-tool-close").click();
-				
-					});
+					$.messager.alert('Info', "操作成功", 'info');
+					$('#tt').datagrid('reload');
 				}
 			});
 			
@@ -124,7 +105,7 @@
         	 },
         	 
 	         'onUploadError' : function(file, errorCode, errorMsg, errorString) {
-	            //alert('The file ' + file.name + ' could not be uploaded: ' + errorString);
+	            alert('The file ' + file.name + ' could not be uploaded: ' + errorString);
 	         },
 	         
 	         //检测FLASH失败调用
@@ -143,31 +124,9 @@
             });
   		
 		});
-	    function doSearch(){
-		   /*  $('#tt').datagrid('load',{
-		    itemid: $('#itemid').val(),
-		    productid: $('#productid').val()
-		    }); */
-		    var checked = document.getElementById('packed').checked;
-		    //alert(checked); true false
-		    $('#tt').datagrid('load',{
-				'code.name': $('#name').val(),
-				'code.createDate': $('#start').datebox('getValue'),
-				'code.endDate': $('#end').datebox('getValue'),
-				'code.owner': $('#owner').val(),
-				'code.packed': checked
-				
-			});
-	    }
-	    
-		function formatPacked(value)
-		{
-			return value!=0?"是":"否";
-		}
 		
 		function newCode() {
 			$('#ff').form('clear');
-			document.getElementById("count").innerHTML=0;
 			$('#dd').dialog('open').dialog('setTitle','添加识别码');
 		}
 		
@@ -218,29 +177,12 @@
 	        $('#fU').form({
 					url:'updateCode',
 					onSubmit:function(){
-						 if($(this).form('validate'))
-						 {
-						  $.messager.progress({
-							 title: '稍等',
-							 msg: '正在操作中...',
-							text: '操作中'
-							 });
-						 
-						 return true;
-						 }else
-						 {
-						 return false;
-						 }
+						return $(this).form('validate');
 					},
 					success:function(data){
-					
-				
-						$.messager.alert('Info', "操作成功", 'info',function(){
-							 $.messager.progress('close');
-							 	$(".panel-tool-close").click();
-					      	$('#tt').datagrid('reload');
-						});
-						
+						$.messager.alert('Info', "操作成功", 'info');
+							$(".panel-tool-close").click();
+						$('#tt').datagrid('reload');
 					}
 				});
 		});
@@ -265,7 +207,7 @@ width:30%
 </head>
 <body>
 
-	<table id="tt" class="easyui-datagrid" style="width:100%;height:400px"
+	<table id="tt" class="easyui-datagrid" style="width:100%;height:100%"
 			url="showContent"
 			title="识别码列表" iconCls="icon-save" pagination="true" pageList="[5,10,15]" 
 			singleSelect ="true"
@@ -279,40 +221,20 @@ width:30%
 
 <th field="url" width="250">图片</th>
 
-<!-- <th field="effective"   formatter="formatEffective"  width="100">是否有效</th> -->
-<th field="owner" width="100">上传用户</th>
-
-<th field="packed"   formatter="formatPacked"  width="100">是否被打包</th>
 
 <th field="createDate" width="100">创建日期</th>
 			</tr>
 		</thead>
 	</table>
 	<div id="tb">
-	    <div>
+	    
 		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="newCode();">添加</a>
 		
 		<a href="#" class="easyui-linkbutton" iconcls="icon-edit" plain="true"
                 onclick="editCode()" >修改</a>
 		
 		<a href="#" class="easyui-linkbutton" iconcls="icon-remove" plain="true" onclick="deltCode();">删除</a>
-		</div>
-		
-		<div>
-			<span>开始时间</span>
-			<input id="start" class="easyui-datebox" style="line-height:26px;border:1px solid #ccc" editable=false>
-			<span>结束时间</span>
-			<input id="end" class="easyui-datebox" style="line-height:26px;border:1px solid #ccc" editable=false>
-			<span>名字</span>
-			<input id="name"  type="text" style="line-height:20px;border:1px solid #ccc">
-			<span>上传用户</span>
-			<input id="owner"  type="text"  style="line-height:20px;border:1px solid #ccc">
-			<span>是否被打包</span>
-			<input id="packed"  type="checkbox"  style="line-height:20px;border:1px solid #ccc">
-			
-			<a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="doSearch()">搜索</a>
-			
-		</div>
+
 	</div>
 	
 
@@ -329,18 +251,7 @@ width:30%
 	   </td>
 	   <td style="width:70%"><input class="easyui-validatebox textbox" type="text" name ="code.name" required="true" validtype="remote['checkName','codeName']" invalidMessage="识别码名已存在"></td>
 	   </tr>
-	   
-	   <%-- <tr>
-	   <td class="td1">
-	         是否有效
-	   </td>
-	   <td>
-	   <s:checkbox name="code.effective"></s:checkbox>
-	   </td>
-	   </tr> --%>
-	   
-	   
-	   
+	
 	  <tr>
       	<td class="td1">
                <label for="Attachment_GUID">图片上传：</label>
@@ -387,7 +298,6 @@ width:30%
 	   <table   style="width:100%; font-size: 12px;font-weight: normal">
 	   
 	   <input type="hidden"  id="id" name="id" />	
-	   <input type="hidden"  id="id" name="owner" />	
 	   <tr>
 	   <td  class="td1" >
 	         名字:

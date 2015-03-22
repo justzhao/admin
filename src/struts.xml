@@ -7,7 +7,7 @@
 <package name="Home" extends="struts-default" >
 
 <action name="arone"  class="mainAction"    method="home">
-<result name="success">/Admin/home.jsp</result>
+<result name="success">/main.jsp</result>
 
 </action>
 
@@ -39,6 +39,9 @@
 
 </action>
 
+
+<action name="zipModels"  class="modelAction"  method="zipModels">
+</action>
 <action name="checkModelName"  class="modelAction" method="checkName">
 
 </action>
@@ -49,7 +52,9 @@
 
 <action name="savePacket"  class="packetAction" method="savePacket"></action>
 
+<action name="delPacket" class="packetAction" method="delPacket"> </action>
 
+<action name="updatePacket"  class="packetAction"  method="updatePacket"></action>
 </package>
 
 
@@ -122,7 +127,7 @@
   </action>
 <action name="getAllMenu"  class="mainAction"  method="getAllMenu">
     <result type="json">
-  <param name="includeProperties">menus.*</param> 
+  <param name="root">menus</param> 
  </result>
   </action>
   

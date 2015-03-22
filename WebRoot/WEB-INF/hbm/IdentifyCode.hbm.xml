@@ -13,7 +13,9 @@
 <property name="url" column="url" type="string"></property>
 
 <property name="createDate" column="createDate" type="date"></property>
+<property name="owner" column="owner" type="string"></property>
 
+<property name="packed" column="isPacked" type="boolean"></property>
 
 </class>
 

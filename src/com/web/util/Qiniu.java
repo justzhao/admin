@@ -30,6 +30,8 @@ public class Qiniu {
 	private final static String ACCESSKEY="NkeUoq9b-b6Qh4dcn2XTZ6nxDJFP_2q5qBoUH8RM";
 	private final static String SECRETKEY="Wu9PjR1XaK-9tsccKiMdstSJuvbyv7Kes5UQSrNR";
 	
+   private final static  String SAVEPATH=ServletActionContext.getServletContext().getRealPath("/upload");
+	
 	public static void main(String[] args) {
 		try {
 			downloadFile("1366_768_5111_2015031609432163612.jpg");
@@ -55,6 +57,8 @@ public class Qiniu {
 
         PutRet ret = IoApi.putFile(uptoken, key, path, extra);
     	System.out.println("七牛云结束上传");
+    	//删除本地文件
+    	Tools.delFile(key);
 	}
 	public static void deleteFile(String key)
 	{
@@ -72,15 +76,13 @@ public class Qiniu {
 		Config.ACCESS_KEY = ACCESSKEY;
         Config.SECRET_KEY = SECRETKEY;
         Mac mac = new Mac(Config.ACCESS_KEY, Config.SECRET_KEY);
-        //String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
-        
-        //String realpath="D:\\Workspace\\JAVA\\MyEclipse10\\.metadata\\.me_tcat\\webapps\\admin\\upload"; 
+
         String baseUrl = URLUtils.makeBaseUrl(QINIUURL,key);
         GetPolicy getPolicy = new GetPolicy();
         String downloadUrl = getPolicy.makeRequest(baseUrl, mac);
   
-        String savePath=ServletActionContext.getServletContext().getRealPath("/upload");
-       // String savePath="D:\\Workspace\\JAVA\\MyEclipse10\\.metadata\\.me_tcat\\webapps\\admin\\upload"; 
+
+ 
  
 
          
@@ -91,13 +93,13 @@ public class Qiniu {
          try {
              URLConnection conn = url.openConnection();
              InputStream inStream = conn.getInputStream();
-             FileOutputStream fs = new FileOutputStream(savePath+"//"+key);
+             FileOutputStream fs = new FileOutputStream(SAVEPATH+"//"+key);
 
              byte[] buffer = new byte[1204];
          
              while ((byteread = inStream.read(buffer)) != -1) {
                  bytesum += byteread;
-                 System.out.println(bytesum);
+               //  System.out.println(bytesum);
                  fs.write(buffer, 0, byteread);
              }
          } catch (FileNotFoundException e) {

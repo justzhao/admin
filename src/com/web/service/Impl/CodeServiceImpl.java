@@ -2,6 +2,7 @@ package com.web.service.Impl;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.struts2.ServletActionContext;
@@ -107,6 +108,99 @@ public class CodeServiceImpl implements com.web.service.ICodeService {
 	@Override
 	public void deltFrom(String oldUrl) {
 		Qiniu.deleteFile(oldUrl);
+	}
+	
+	
+	@Override
+	public int getCountByCondition(IdentifyCode code) {
+		// TODO Auto-generated method stub
+	    List<Object> paramList = new ArrayList<Object>();  
+    	
+	    String hql = "select count(*) from IdentifyCode code  where 1=1" ;
+	    //按名字搜索
+	    if(code.getName()!=null&&!code.getName().equals(""))
+	    {
+			hql =hql +" and  code.name like ?";
+			
+			paramList.add("%"+code.getName()+"%");
+	    }
+	    //按开始时间
+	    if(code.getCreateDate()!=null &&!code.getCreateDate().equals(""))
+	    {
+			hql=hql+" and code.createDate >=?";
+			
+			paramList.add(code.getCreateDate());
+	    }
+	    //按结束时间
+	    if(code.getEndDate()!=null&&!code.getEndDate().equals(""))
+	    {
+			hql=hql+" and  code.createDate <=?";
+			
+			paramList.add(code.getEndDate());
+	    }
+	    //按上传用户
+	    if(code.getOwner()!=null&&!code.getOwner().equals(""))
+	    {
+			hql =hql +" and  code.owner like ?";
+			
+			paramList.add("%"+code.getOwner()+"%");
+	    }
+	    //按是否被打包
+	    if(code.isPacked()||!code.isPacked())
+	    {
+			hql =hql +" and  code.packed = ?";
+			
+			paramList.add(code.isPacked());
+	    }
+	    System.out.println("the hql is "+hql);
+	    
+	    System.out.println("the size is "+codeDao.countByHql(hql, paramList.toArray()).intValue());
+	    
+	    return codeDao.countByHql(hql, paramList.toArray()).intValue();
+	}
+	
+	@Override
+	public List getPageListByCondition(IdentifyCode code, int start, int number) {
+		// TODO Auto-generated method stub
+		ArrayList  paramList = new ArrayList();  
+		  
+		String hql = "from IdentifyCode code  where 1=1" ;
+	    //按名字搜索
+	    if(code.getName()!=null&&!code.getName().equals(""))
+	    {
+			hql =hql +" and  code.name like ?";
+			
+			paramList.add("%"+code.getName()+"%");
+	    }
+	    //按开始时间
+	    if(code.getCreateDate()!=null &&!code.getCreateDate().equals(""))
+	    {
+			hql=hql+" and code.createDate >=?";
+			
+			paramList.add(code.getCreateDate());
+	    }
+	    //按结束时间
+	    if(code.getEndDate()!=null&&!code.getEndDate().equals(""))
+	    {
+			hql=hql+" and  code.createDate <=?";
+			
+			paramList.add(code.getEndDate());
+	    }
+	  //按上传用户
+	    if(code.getOwner()!=null&&!code.getOwner().equals(""))
+	    {
+			hql =hql +" and  code.owner like ?";
+			
+			paramList.add("%"+code.getOwner()+"%");
+	    }
+	  //按是否被打包
+	    if(code.isPacked()||!code.isPacked())
+	    {
+			hql =hql +" and  code.packed = ?";
+			
+			paramList.add(code.isPacked());
+	    }
+	    return codeDao.getPageHql(hql, start, number,paramList.toArray());
 	}
 
  

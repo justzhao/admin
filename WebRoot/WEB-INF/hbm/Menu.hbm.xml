@@ -8,12 +8,12 @@
 <generator class="increment"></generator>
 </id>
 
-<property name="menuname" column="name" type="string"></property>
+<property name="text" column="name" type="string"></property>
  <property name="pid" column="pid" type="integer"></property>
-<property name="icon" column="icon"  type="string"></property>
 
-<property name="url"  column="url" type="string"></property>
-<set name="menus"  lazy="false">
+
+<property name="id"  column="url" type="string"></property>
+<set name="children"  lazy="false">
 <key column="pid"></key>
 <one-to-many class="com.web.entity.Menu"/>
 </set>

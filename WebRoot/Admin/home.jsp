@@ -17,9 +17,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     <link rel="stylesheet" href="js/themes/icon.css" type="text/css"></link>
 
     <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="js/jQuery.easyui.js"></script>
+        <script type="text/javascript" src="js/jQuery.easyui.js"></script> 
 
-<!--
+     <!--  
+    <script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+
+
+	<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+
 <script type="text/javascript" src="js/home.js"></script>
   -->
 <script type="text/javascript" src="js/outlook2.js"></script>

@@ -9,41 +9,56 @@ function InitLeftMenu() {
 
 	var m="";
 	$(function(){
-		$.get("getAllMenu",function(data){
-			//alert(_menus);
 		
-	  m=data;
-			});
+		$("#tree").tree( {
+			url : "getAllMenu",
+			onClick : doMenuClick,
+			onLoadSuccess:function(){
 		
+				$("#tree").tree("collapseAll");
+				
+			}
+		
+	
+		      
+	
+		});
+
+		
+		
+		function doMenuClick(node) {
+			
+			  $(this).tree('toggle', node.target);  
+			if ($("#tree").tree("isLeaf", node.target) == false)
+				return;
+
+			var id = node.id;
+			var text = node.text;
+			if (!id) return;
+					
+			var elTab = parent.$('#tabs'); 
+			if (elTab.tabs('exists', text)) {
+				elTab.tabs('select', text);
+			} else {
+				// FIXME: iframe 必须包在 div 里, 否则会出现多余的滚动条
+				// 如果新tab页能够设置style, 就不必这个多余的div了
+				var url = id;
+				var content = '<div style="width:100%;height:100%;overflow:hidden;">'+
+						'<iframe src="' + url + '" scrolling="auto" style="width:100%;height:100%;border:0;" ></iframe></div>';
+
+				elTab.tabs('add', {
+					title : text,
+					content : content,
+					// href: url,
+					closable : true
+				});
+			}
+		}
 	});
 	
-    $(".easyui-accordion").empty();
-    var menulist = "";
 
-    $.each(_menus.menus, function(i, n) {
-        menulist += '<div   title="'+n.menuname+'"  icon="'+n.icon+'"  style="overflow:auto;" >';
-		menulist += '<ul >';
-        $.each(n.menus, function(j, o) {
-			menulist += '<li  ><div><a target="mainFrame" href="' + o.url + '" ><span class="icon '+o.icon+'" ></span>' + o.menuname + '</a></div></li> ';
-        })
-        menulist += '</ul></div>';
-    })
 
-	$(".easyui-accordion").append(menulist);
-	
-	$('.easyui-accordion li a').click(function(){
-		var tabTitle = $(this).text();
-		var url = $(this).attr("href");
-		addTab(tabTitle,url);
-		$('.easyui-accordion li div').removeClass("selected");
-		$(this).parent().addClass("selected");
-	}).hover(function(){
-		$(this).parent().addClass("hover");
-	},function(){
-		$(this).parent().removeClass("hover");
-	});
 
-	$(".easyui-accordion").accordion();
 }
 
 function addTab(subtitle,url){

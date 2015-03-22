@@ -4,48 +4,30 @@ String path = request.getContextPath();
 String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.getServerPort()+path+"/";
 %>
 
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html xmlns="http://www.w3.org/1999/xhtml">
+
 <head id="Head1">
-    <title>漂亮的easyui后台框架演示-css后台模板-www.16sucai.com</title>
-    <link href="css/default.css" rel="stylesheet" type="text/css" />
-    <link rel="stylesheet" type="text/css" href="js/themes/default/easyui.css" />
-    <link rel="stylesheet" type="text/css" href="js/themes/icon.css" />
-    <script type="text/javascript" src="js/jquery-1.4.2.min.js"></script>
-    <script type="text/javascript" src="js/jQuery.easyui.js"></script>
+    <title>口袋家居后台管理系统</title>
+<META http-equiv="X-UA-Compatible" content="IE=8" > </META>
+    <link rel="stylesheet" href="css/default.css" type="text/css"></link>
+   
+    <link rel="stylesheet" href="js/themes/default/easyui.css" type="text/css"></link>
 
-	<script type="text/javascript" src='js/outlook2.js'> </script>
+    <link rel="stylesheet" href="js/themes/icon.css" type="text/css"></link>
 
-    <script type="text/javascript">
-	 var _menus = {"menus":[
-						{"menuid":"1","icon":"icon-sys","menuname":"系统管理",
-							"menus":[{"menuname":"菜单管理","icon":"icon-nav","url":"http://www.16sucai.com"},
-									{"menuname":"添加用户","icon":"icon-add","url":"demo.html"},
-									{"menuname":"用户管理","icon":"icon-users","url":"demo2.html"},
-									{"menuname":"角色管理","icon":"icon-role","url":"demo2.html"},
-									{"menuname":"权限设置","icon":"icon-set","url":"demo.html"},
-									{"menuname":"系统日志","icon":"icon-log","url":"demo.html"}
-								]
-						},{"menuid":"8","icon":"icon-sys","menuname":"员工管理",
-							"menus":[{"menuname":"员工列表","icon":"icon-nav","url":"demo.html"},
-									{"menuname":"视频监控","icon":"icon-nav","url":"demo1.html"}
-								]
-						},{"menuid":"56","icon":"icon-sys","menuname":"部门管理",
-							"menus":[{"menuname":"添加部门","icon":"icon-nav","url":"demo1.html"},
-									{"menuname":"部门列表","icon":"icon-nav","url":"demo2.html"}
-								]
-						},{"menuid":"28","icon":"icon-sys","menuname":"财务管理",
-							"menus":[{"menuname":"收支分类","icon":"icon-nav","url":"demo.html"},
-									{"menuname":"报表统计","icon":"icon-nav","url":"demo1.html"},
-									{"menuname":"添加支出","icon":"icon-nav","url":"demo.html"}
-								]
-						},{"menuid":"39","icon":"icon-sys","menuname":"商城管理",
-							"menus":[{"menuname":"商品分","icon":"icon-nav","url":"/shop/productcatagory.aspx"},
-									{"menuname":"商品列表","icon":"icon-nav","url":"/shop/product.aspx"},
-									{"menuname":"商品订单","icon":"icon-nav","url":"/shop/orders.aspx"}
-								]
-						}
-				]};
+
+
+<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+
+
+
+<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+
+<script type="text/javascript" src="js/main.js"></script>
+<script>
+
+
         //设置登录窗口
         function openPwd() {
             $('#w').window({
@@ -123,39 +105,51 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		
 		
 
-    </script>
+
+</script>
 
 </head>
 <body class="easyui-layout" style="overflow-y: hidden"  scroll="no">
 <noscript>
 <div style=" position:absolute; z-index:100000; height:2046px;top:0px;left:0px; width:100%; background:white; text-align:center;">
     <img src="images/noscript.gif" alt='抱歉，请开启脚本支持！' />
-</div></noscript>
-    <div region="north" split="true" border="false" style="overflow: hidden; height: 30px;
+</div>
+
+</noscript>
+
+
+
+
+<div class="easyui-layout" data-options="fit:true" style="width:100%;height:450px;">
+
+
+<div data-options="region:'north',split:true" style="overflow: hidden; height: 30px;
         background: url(images/layout-browser-hd-bg.gif) #7f99be repeat-x center 50%;
         line-height: 20px;color: #fff; font-family: Verdana, 微软雅黑,黑体">
-        <span style="float:right; padding-right:20px;" class="head">欢迎 16素材 <a href="#" id="editpass">修改密码</a> <a href="#" id="loginOut">安全退出</a></span>
-        <span style="padding-left:10px; font-size: 16px; "><img src="images/blocks.gif" width="20" height="20" align="absmiddle" /> 16素材网  www.16sucai.com</span>
-    </div>
-    <div region="south" split="true" style="height: 30px; background: #D2E0F2; ">
-        <div class="footer">By 疯狂秀才 Email:bjhxl@59ibox.cn</div>
-    </div>
-    <div region="west" split="true" title="导航菜单" style="width:180px;" id="west">
-<div class="easyui-accordion" fit="true" border="false">
-		<!--  导航内容 -->
-				
-			</div>
+        <span style="float:right; padding-right:20px;" class="head">管理员 <a href="#" id="editpass">修改密码</a> <a href="#" id="loginOut">安全退出</a></span>
+        <span style="padding-left:10px; font-size: 16px; "><img src="images/blocks.gif" width="20" height="20" align="absmiddle" /> 欢迎使用口袋家居</span>
+</div>
 
-    </div>
-    <div id="mainPanle" region="center" style="background: #eee; overflow-y:hidden">
-        <div id="tabs" class="easyui-tabs"  fit="true" border="false" >
+<div data-options="region:'west',split:true" title="导航菜单" style="width:180px; height:800px" id="west" >
+  <ul id="tree"   class="easyui-tree"></ul>
+</div>
+<div data-options="region:'south'" style="height: 30px; background: #D2E0F2; ">
+<div class="footer">By 成都锐丽元科技科技有限公司 Email:17171146@qq.com</div>
+</div>
+<div   id="mainPanle" data-options="region:'center'" style="padding:10px">
+
+
+
+<div id="tabs" class="easyui-tabs"  fit="true" border="false" >
 			<div title="欢迎使用" style="padding:20px;overflow:hidden;" id="home">
 				
-			<h1>Welcome to jQuery UI!</h1>
+			<h1>欢迎使用口袋家居</h1>
 
 			</div>
 		</div>
-    </div>
+</div>
+</div>
+
     
     
     <!--修改密码窗口-->
@@ -176,8 +170,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
                 </table>
             </div>
             <div region="south" border="false" style="text-align: right; height: 30px; line-height: 30px;">
-                <a id="btnEp" class="easyui-linkbutton" icon="icon-ok" href="javascript:void(0)" >
-                    确定</a> <a class="easyui-linkbutton" icon="icon-cancel" href="javascript:void(0)"
+                <a id="btnEp" class="easyui-linkbutton"  href="javascript:void(0)" >
+                    确定</a> <a class="easyui-linkbutton" href="javascript:void(0)"
                         onclick="closeLogin()">取消</a>
             </div>
         </div>

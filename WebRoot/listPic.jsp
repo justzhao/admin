@@ -46,14 +46,32 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 			$('#ff').form({
 				url:'saveScroll',
 				onSubmit:function(){
-					return $(this).form('validate');
+					 if($(this).form('validate'))
+					 {
+					 
+
+								 $.messager.progress({
+									 title: '稍等',
+									 msg: '正在操作中...',
+									text: '操作中'
+									 });
+					 return true;
+					 }else
+					 {
+					 
+					 return false;
+					 
+					 }
 				},
 				success:function(data){
+				
+				     $.messager.progress('close');
 					$.messager.alert('消息', "操作成功", 'info',function(){
 					
-					
+				
 					$(".panel-tool-close").click();
-					$('#ff').form('clear')
+					$('#ff').form('clear');
+					 document.getElementById("count").innerHTML=0;
 				  $('#tt').datagrid('reload');
 				  
 					});
@@ -64,14 +82,23 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 						$('#editff').form({
 				url:'updateScroll',
 				onSubmit:function(){
-					return $(this).form('validate');
+					 if($(this).form('validate'))
+					 {
+					  $.messager.progress({
+						 title: '稍等',
+						 msg: '正在操作中...',
+						text: '操作中'
+						 });
+					   return true;
+					 }
 				},
 				success:function(data){
+				   $.messager.progress('close');
 					$.messager.alert('消息', "操作成功", 'info',function(){
 					
 					
 					$(".panel-tool-close").click();
-					//$('#ff').form('clear')
+		
 				  $('#tt').datagrid('reload');
 				  
 					});
@@ -178,6 +205,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
           document.getElementById("editname").value=row.name;
           document.getElementById("editinfo").value=row.info;//
             document.getElementById("editdate").value=row.createDate;
+            document.getElementById("editowner").value=row.owner;
+            
           if(row.effective==true)
           {
             document.getElementById("editeff").checked=true;
@@ -287,10 +316,10 @@ border:1px   solid   #C0C0C0;
 	  </div>
 	  <div>
 	  <span>上传开始时间</span>
-	  			   <input   id="start"   style="width:100px"  class="easyui-datebox" >
+	  			   <input   id="start"   style="width:100px"  class="easyui-datebox"  editable=false >
 	  		<span>结束时间</span>
 	  		
-	  			   <input  id="end"    style="width:100px"  class="easyui-datebox"  >
+	  			   <input  id="end"    style="width:100px"  class="easyui-datebox"  editable=false>
 	  		<span>名字</span>
       <input id="name"  type="text"  style="line-height:20px;border:1px solid #ccc">
 			  		<span>上传用户</span>
@@ -370,7 +399,7 @@ border:1px   solid   #C0C0C0;
                                 <a href="javascript:void(0)" class="easyui-linkbutton" id="btnCancelUpload" data-options="plain:true,iconCls:'icon-cancel'"
                                     onclick="javascript: $('#file_upload').uploadify('cancel', '*')">取消</a>
                                 
-                                      当前有图片 <label id="count">0 </label>张
+                                      当前有图片 <label id="count" name="count" >0 </label>张
                                 <div id="fileQueue" class="fileQueue"></div>
                                     
                               
@@ -404,7 +433,7 @@ border:1px   solid   #C0C0C0;
       
         <input id="editid"  type="hidden"  name="pic.id" />
         <input id="editdate" type="hidden" name="pic.createDate"/>
-
+      <input id="editowner"  type="hidden"  name="pic.owner" />
 	   <tr>
 	   <td  class="td1" >
 	   名字:

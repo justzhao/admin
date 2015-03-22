@@ -63,7 +63,8 @@ public class DaoImpl<T,ID extends Serializable> implements IDao<T, ID> {
 	@Override
 	public T load(ID id) {
 		// TODO Auto-generated method stub
-		return null;
+		 T load = (T) this.getSession().load(getEntityClass(), id);
+	        return load;
 	}
 
 	@Override
@@ -82,13 +83,19 @@ public class DaoImpl<T,ID extends Serializable> implements IDao<T, ID> {
 	public void delete(T t) {
 		// TODO Auto-generated method stub
 		this.getSession().delete(t);
+		
+
 	}
 
 	@Override
 	public boolean deleteById(ID Id) {
 		// TODO Auto-generated method stub
-	//	this.getSession().d
-		return false;
+		T t = get(Id);
+        if(t == null){
+            return false;
+        }
+        delete(t);
+       return true;
 	}
 
 	@Override
@@ -274,5 +281,12 @@ public class DaoImpl<T,ID extends Serializable> implements IDao<T, ID> {
 		return query.list();
 		}
 	
+	public void merge(T t) {
+		
+		this.getSession().merge(t);
+		
+		
+		
+	};
 
 }

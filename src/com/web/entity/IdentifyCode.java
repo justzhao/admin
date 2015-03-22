@@ -9,6 +9,11 @@ public class IdentifyCode {
 	private String name;
 	private String url;
 	private Date createDate;
+	private Date endDate;
+	
+	private String owner;
+    
+	private boolean packed;
 
 	
 	public IdentifyCode() {
@@ -47,6 +52,30 @@ public class IdentifyCode {
 	}
 	
 
+
+	public Date getEndDate() {
+		return endDate;
+	}
+
+	public void setEndDate(Date endDate) {
+		this.endDate = endDate;
+	}
+
+	public String getOwner() {
+		return owner;
+	}
+
+	public void setOwner(String owner) {
+		this.owner = owner;
+	}
+
+	public boolean isPacked() {
+		return packed;
+	}
+
+	public void setPacked(boolean packed) {
+		this.packed = packed;
+	}
 
 	@Override
 	public String toString() {

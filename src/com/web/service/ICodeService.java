@@ -52,7 +52,11 @@ public interface ICodeService {
 
 	public void deltFrom(String oldUrl);
 	
-	
+
+	public int getCountByCondition(IdentifyCode code);
+
+
+	public List getPageListByCondition(IdentifyCode code, int start,int number);
 	
 	
 

@@ -1,6 +1,7 @@
 package com.web.service;
 
 import java.util.List;
+import java.util.Set;
 
 import com.web.entity.Model;
 
@@ -58,6 +59,13 @@ public interface IModelService  {
     public boolean delModel(Model m);
 
     /**
+     * 同时删除多个模型
+     * @param ids
+     * @return
+     */
+    public boolean delModels(String ids);
+    
+    /**
      * 根据id获取模型
      * @param m
      * @return
@@ -70,4 +78,14 @@ public interface IModelService  {
      * @return
      */
     public boolean updateModel(Model m);
+    
+    /**
+     * 先把对应的模型包打包
+     * @param ids
+     * @return
+     * @throws Exception 
+     */
+    public String zipModes(String ids) throws Exception;
+    
+    public  boolean updatePacket(Set<Model> ms);
 }

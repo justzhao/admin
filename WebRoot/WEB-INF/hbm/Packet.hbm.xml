@@ -19,7 +19,8 @@
 <property name="version" column="version" type="string"></property>
 <property name="count" column="count" type="integer"></property>
 <property name="descPic" column="descPic" type="string"></property>
-
+<property name="owner" column="owner" type="string"></property>
+<property name="device" column="device"  type="int"></property>
 <set name="models" table="tbl_model_packet" lazy="false">
 <key column="packetId"></key>
 

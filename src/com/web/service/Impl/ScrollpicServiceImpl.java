@@ -47,7 +47,7 @@ public void setSpicDao(IDao spicDao) {
 	
 		 String path = ServletActionContext.getServletContext().getRealPath("/upload");
 		 
-		 System.out.println("the reapath is "+path+"\\"+pic.getUrls());
+		 //System.out.println("the reapath is "+path+"\\"+pic.getUrls());
 		 Qiniu.uploadFile(pic.getUrls(), path+"\\"+pic.getUrls());
 		 Tools.delFile(path+"\\"+pic.getUrls());
 	
@@ -210,7 +210,7 @@ public void setSpicDao(IDao spicDao) {
 
 			}
 			
-			spicDao.saveOrUpdate(pic);
+			spicDao.merge(pic);
 		 
 			return false;
 		}

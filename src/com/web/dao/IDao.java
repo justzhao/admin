@@ -182,4 +182,10 @@ public interface IDao<T, ID extends Serializable> {
      * @return
      */
     public abstract List getPageHql(String hql,int start,int number,Object... values);
+    
+    /**
+     * 也是更新实体
+     * @param t
+     */
+    public abstract void merge(T t);
 }
