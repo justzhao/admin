@@ -14,262 +14,20 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 
-	<link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/icon.css">
 
-<link rel="stylesheet" href="./js/uploadify/uploadify.css" type="text/css"></link>
-
-<!--  
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>
-	-->
-	<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
-	<!-- 
-	<script type="text/javascript" src="http://www.jeasyui.net/Public/js/easyui/jquery.easyui.min.js"></script>
-	-->
-	<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
+<link rel="stylesheet" href="js/jquery-easyui-1.4.2/themes/default/easyui.css" type="text/css"></link>
+<link rel="stylesheet" href="js/jquery-easyui-1.4.2/themes/icon.css" type="text/css"></link>
+<link rel="stylesheet" href="css/mycss.css" type="text/css"></link>
+<link rel="stylesheet" href="js/uploadify/uploadify.css" type="text/css"></link>
+<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-easyui-1.4.2/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/jquery-easyui-1.4.2/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="js/uploadify/jquery.uploadify.min.js"></script>
 
 
-	<script type="text/javascript" src="js/easyui-lang-zh_CN.js"></script> 
-	<script type="text/javascript" src="./js/uploadify/jquery.uploadify.min.js"></script>
-	
-	
-	<script type="text/javascript">
-		$(function(){
-		 $("#tt").datagrid({
-		 url:'getPagePic'
-		 });
-		
-		 $("#tt").datagrid('hideColumn', 'urls'); 
-
-         
-
-			$('#ff').form({
-				url:'saveScroll',
-				onSubmit:function(){
-					 if($(this).form('validate'))
-					 {
-					 
-
-								 $.messager.progress({
-									 title: '稍等',
-									 msg: '正在操作中...',
-									text: '操作中'
-									 });
-					 return true;
-					 }else
-					 {
-					 
-					 return false;
-					 
-					 }
-				},
-				success:function(data){
-				
-				     $.messager.progress('close');
-					$.messager.alert('消息', "操作成功", 'info',function(){
-					
-				
-					$(".panel-tool-close").click();
-					$('#ff').form('clear');
-					 document.getElementById("count").innerHTML=0;
-				  $('#tt').datagrid('reload');
-				  
-					});
-				}
-			});
-			
-			
-						$('#editff').form({
-				url:'updateScroll',
-				onSubmit:function(){
-					 if($(this).form('validate'))
-					 {
-					  $.messager.progress({
-						 title: '稍等',
-						 msg: '正在操作中...',
-						text: '操作中'
-						 });
-					   return true;
-					 }
-				},
-				success:function(data){
-				   $.messager.progress('close');
-					$.messager.alert('消息', "操作成功", 'info',function(){
-					
-					
-					$(".panel-tool-close").click();
-		
-				  $('#tt').datagrid('reload');
-				  
-					});
-				}
-			});
-			
-			
-			
-
- var urls='';
- var count=0;
-            
-            
-                  $('#file_upload').uploadify({
-                'swf': './js/uploadify/uploadify.swf',  //FLash文件路径
-                'buttonText': '浏  览',                                 //按钮文本
-                'debug' : false,
-                'uploader': 'addPic',                       //处理文件上传Action
-                 'fileObjName':'file',
-               ' cancelImg' : './js/uploadify/uploadify-cancel.png',
-                'queueID': 'fileQueue',                        //队列的ID
-                'queueSizeLimit': 10,                          //队列最多可上传文件数量，默认为999
-                'auto': false,                                 //选择文件后是否自动上传，默认为true
-                'multi': true,                                 //是否为多选，默认为true
-                'removeCompleted': true,                       //是否完成后移除序列，默认为true
-                'fileSizeLimit': '1000MB',                       //单个文件大小，0为无限制，可接受KB,MB,GB等单位的字符串值
-                'fileTypeDesc': 'Image Files',                 //文件描述
-                'fileTypeExts': '*.gif; *.jpg; *.png; *.bmp',  //上传的文件后缀过滤器
-                 'onSelect' : function(file) {
-                  
-        },
-        'onUploadError' : function(file, errorCode, errorMsg, errorString) {
-         //   alert('The file ' + file.name + ' could not be uploaded: ' + errorString);
-        },
-        //检测FLASH失败调用
-        'onFallback':function(){
-            alert("您未安装FLASH控件，无法上传图片！请安装FLASH控件后再试。");
-        },
-        //上传到服务器，服务器返回相应信息到data里
-        'onUploadSuccess':function(file, data, response){
-        // data 就是需要保存的 变量；
-
- 
-           document.getElementById("urls").value=data;
-           count=document.getElementById("count").innerHTML;
-           document.getElementById("count").innerHTML=Number(count)+1;
-        }
-            });
-            
-            
-                              $('#edit_file_upload').uploadify({
-                'swf': './js/uploadify/uploadify.swf',  //FLash文件路径
-                'buttonText': '浏  览',                                 //按钮文本
-                'debug' : false,
-                'uploader': 'addPic',                       //处理文件上传Action
-                 'fileObjName':'file',
-               ' cancelImg' : './js/uploadify/uploadify-cancel.png',
-                'queueID': 'editfileQueue',                        //队列的ID
-                'queueSizeLimit': 10,                          //队列最多可上传文件数量，默认为999
-                'auto': false,                                 //选择文件后是否自动上传，默认为true
-                'multi': true,                                 //是否为多选，默认为true
-                'removeCompleted': true,                       //是否完成后移除序列，默认为true
-                'fileSizeLimit': '1000MB',                       //单个文件大小，0为无限制，可接受KB,MB,GB等单位的字符串值
-                'fileTypeDesc': 'Image Files',                 //文件描述
-                'fileTypeExts': '*.gif; *.jpg; *.png; *.bmp',  //上传的文件后缀过滤器
-                 'onSelect' : function(file) {
-                  
-        },
-        'onUploadError' : function(file, errorCode, errorMsg, errorString) {
-           // alert('The file ' + file.name + ' could not be uploaded: ' + errorString);
-        },
-        //检测FLASH失败调用
-        'onFallback':function(){
-            alert("您未安装FLASH控件，无法上传图片！请安装FLASH控件后再试。");
-        },
-        //上传到服务器，服务器返回相应信息到data里
-        'onUploadSuccess':function(file, data, response){
-        // data 就是需要保存的 变量；
-
- 
-           document.getElementById("editurls").value=data;
-           count=document.getElementById("editcount").innerHTML;
-           document.getElementById("editcount").innerHTML=Number(count)+1;
-        }
-            });
-  
-		});
-
-		
-		
-		function formatEffective(value)
-		{
-		 return value!=0?"是":"否";
-		}
-
-   function editRow()
-   {
-   
-   $('#editff').form('clear')
-         var row = $('#tt').datagrid('getSelected');
-           if (row){
-          document.getElementById("editid").value=row.id;
-          document.getElementById("editurls").value=row.urls;
-          document.getElementById("editname").value=row.name;
-          document.getElementById("editinfo").value=row.info;//
-            document.getElementById("editdate").value=row.createDate;
-            document.getElementById("editowner").value=row.owner;
-            
-          if(row.effective==true)
-          {
-            document.getElementById("editeff").checked=true;
-          }
-          if(row.testPage==true)
-          {
-            document.getElementById("edittest").checked=true;
-          }
-          
+<script type="text/javascript" src="js/pic.js"></script>
 
 
-       $('#edit').dialog('open');
-         }
-   }
-
-
-	    	function removeRow(){
-	    	
-
-	    		
-
-         var row = $('#tt').datagrid('getSelected');
-    if (row){
-    
-    
-     $.messager.confirm("操作提示", "您确定要执行操作吗？", function (data) {
-            if (data) {
-               
-                $.post("deScrollPic",{'pic.id':row.id},function(d){
-                   if(d)
-                   {
-           
-                      $('#tt').datagrid('reload');
-                   }else{
-                   alert('删除失败');
-                   }
-                });
-                
-              
-              
-            }
-         
-        });
-
-		    }else{
-		      alert('没有选择数据');
-		    }
-
-}
-		function doSearch()
-		{
-				$('#tt').datagrid('load',{
-				'pic.name': $('#name').val(),
-				'pic.createDate': $('#start').datebox('getValue'),
-				'pic.endDate': $('#end').datebox('getValue'),//operator
-				'pic.owner':$('#operator').val()
-				
-			});
-				
-		
-		}
-		
-	</script>
 
 
 <style>
@@ -291,16 +49,16 @@ border:1px   solid   #C0C0C0;
 </head>
 <body>
 
-	<table id="tt" style="width:100%;height:400px"	title="首页图列表" iconCls="icon-save"   singleSelect="true"  pagination="true"  pageList="[5,10,15]"
+	<table id="tt" style="width:100%;height:450px"	title="首页图列表" iconCls="icon-save"   singleSelect="true"  pagination="true"  pageList="[5,10,15]"
 			toolbar="#tb"  >
 		<thead>
 			<tr>
 <th field="id" width="50">编号</th>
 <th field="name" width="100">名字</th>
-<th field="info" width="300">备注</th>
+<th field="info" width="200">备注</th>
 
-<th field="urls" width="200">图片</th>
-<th field="effective"   formatter="formatEffective"  width="100">是否有效</th>
+<th field="urls" width="100"  formatter="formatUrls" >图片</th>
+<th field="effective"   formatter="formatEffective"  width="150">是否有效(客户端显示的)</th>
 <th field="testPage"   formatter="formatEffective"  width="100">是否测试页</th>
 <th field="createDate"   width="100"  >上传时间</th>
 <th field="owner"   width="100"  >上传用户</th>
@@ -311,10 +69,10 @@ border:1px   solid   #C0C0C0;
 	    <div>
 		<a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:$('#dd').dialog('open')">添加</a>
 		
-        <a href="#" class="easyui-linkbutton" iconcls="icon-edit" plain="true"   onclick="editRow()" >修改</a>
+        <a href="#" class="easyui-linkbutton" iconcls="icon-edit" plain="true"   onclick="editRow()" >编辑</a>
 	         <a href="#" class="easyui-linkbutton" iconCls="icon-remove" plain="true" onclick="javascript:removeRow()">删除</a>
 	  </div>
-	  <div>
+	  <div style="margin-top: 10px;margin-bottom: 10px">
 	  <span>上传开始时间</span>
 	  			   <input   id="start"   style="width:100px"  class="easyui-datebox"  editable=false >
 	  		<span>结束时间</span>
@@ -413,7 +171,7 @@ border:1px   solid   #C0C0C0;
 	   
 	   
 	   <tr>
-	   <td style="text-align:right" colspan=2> <input  type="submit" value="提交"></td>
+	   <td style="text-align:right" colspan=2> <input  type="submit"   class="subbtn"    value="提交"></td>
 	   </tr>
 	
 	   </table>   
@@ -513,7 +271,7 @@ border:1px   solid   #C0C0C0;
 	   
 	   
 	   <tr>
-	   <td style="text-align:right" colspan=2> <input  type="submit" value="提交"></td>
+	   <td style="text-align:right" colspan=2> <input  type="submit"   class="subbtn"   value="提交"></td>
 	   </tr>
 	
 	   </table>   

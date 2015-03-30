@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -41,7 +42,7 @@ public class Qiniu {
 		}
 	}
 	
-	public static  void  uploadFile(String key,String path) throws Exception
+	public static  void  uploadFile(String key) throws Exception
 	{
 		System.out.println("七牛云开始上传");
 		
@@ -55,7 +56,7 @@ public class Qiniu {
         PutExtra extra = new PutExtra();
      
 
-        PutRet ret = IoApi.putFile(uptoken, key, path, extra);
+        PutRet ret = IoApi.putFile(uptoken, key, SAVEPATH+"\\"+key, extra);
     	System.out.println("七牛云结束上传");
     	//删除本地文件
     	Tools.delFile(key);
@@ -70,7 +71,7 @@ public class Qiniu {
 	        client.delete(BUCKETNAME, key);
 	    	System.out.println("七牛云结束删除");
 	}
-	public static void downloadFile(String key) throws Exception
+	public static void downloadFile(String key) throws Exception 
 	{
 		System.out.println("七牛云开始下载");
 		Config.ACCESS_KEY = ACCESSKEY;
@@ -89,7 +90,23 @@ public class Qiniu {
          int bytesum = 0;
          int byteread = 0;
          URL url = new URL(downloadUrl);
+         
+         URLConnection conn = url.openConnection();
+         InputStream inStream = conn.getInputStream();
+         FileOutputStream fs = new FileOutputStream(SAVEPATH+"//"+key);
 
+         byte[] buffer = new byte[1204];
+     
+         while ((byteread = inStream.read(buffer)) != -1) {
+             bytesum += byteread;
+        
+             fs.write(buffer, 0, byteread);
+         }
+          inStream.close();
+          fs.close();
+         
+
+/**
          try {
              URLConnection conn = url.openConnection();
              InputStream inStream = conn.getInputStream();
@@ -99,15 +116,17 @@ public class Qiniu {
          
              while ((byteread = inStream.read(buffer)) != -1) {
                  bytesum += byteread;
-               //  System.out.println(bytesum);
+            
                  fs.write(buffer, 0, byteread);
              }
          } catch (FileNotFoundException e) {
              e.printStackTrace();
+            
          } catch (IOException e) {
              e.printStackTrace();
+      
          }
-        
+*/
      	System.out.println("七牛云结束下载");
 	}
 

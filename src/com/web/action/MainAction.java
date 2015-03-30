@@ -1,14 +1,18 @@
 package com.web.action;
 
+import java.util.Map;
+
 import org.apache.struts2.json.annotations.JSON;
 
 import net.sf.json.JSONArray;
 
 
+import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.web.entity.User;
 import com.web.service.IMainService;
 import com.web.service.IUserService;
+import com.web.util.Tools;
 
 public class MainAction extends ActionSupport {
 	private User user;
@@ -47,7 +51,10 @@ public class MainAction extends ActionSupport {
 	public String home()
 	{
 		
-		System.out.println("index........");
+		Map request=(Map)ActionContext.getContext().get("request");
+		   request.put("Menus", mainService.getMenu());
+		   request.put("user", Tools.getCurrentUser());
+		   
 		return SUCCESS;
 	}
 	@Override
@@ -71,9 +78,11 @@ public class MainAction extends ActionSupport {
 	public String getAllMenu()
 	{
 		
-	 
+
 		menus=JSONArray.fromObject(mainService.getMenu());
-		  System.out.println("the size is "+menus);
+		// System.out.println("the size is "+menus);
+	
+		
 		return SUCCESS;
 	}
 

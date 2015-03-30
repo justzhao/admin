@@ -14,13 +14,25 @@ public class Packet {
 	private String xml;
 	private  Date createDate;
 	private String thumbPic;
+	private String thumbUp;
+	private String thumbFooter;
+	private String thumbWord;
+	private String character;
+	private String background;
+	
+	
+	
 	private String version;
 	private int count;
 	private String descPic;
+	
+	
 	private int device;
 	
 	private Date endDate;
 	private int  endcount;
+	
+	private int searchFlag;
 	
 	private String owner;
 	private Set<Model> models=new HashSet<Model>();
@@ -120,6 +132,44 @@ public class Packet {
 	}
 	public void setEndcount(int endcount) {
 		this.endcount = endcount;
+	}
+	
+	public int getSearchFlag() {
+		return searchFlag;
+	}
+	public void setSearchFlag(int searchFlag) {
+		this.searchFlag = searchFlag;
+	}
+	
+	public String getThumbUp() {
+		return thumbUp;
+	}
+	public void setThumbUp(String thumbUp) {
+		this.thumbUp = thumbUp;
+	}
+	public String getThumbFooter() {
+		return thumbFooter;
+	}
+	public void setThumbFooter(String thumbFooter) {
+		this.thumbFooter = thumbFooter;
+	}
+	public String getThumbWord() {
+		return thumbWord;
+	}
+	public void setThumbWord(String thumbWord) {
+		this.thumbWord = thumbWord;
+	}
+	public String getCharacter() {
+		return character;
+	}
+	public void setCharacter(String character) {
+		this.character = character;
+	}
+	public String getBackground() {
+		return background;
+	}
+	public void setBackground(String background) {
+		this.background = background;
 	}
 	@Override
 	public String toString() {

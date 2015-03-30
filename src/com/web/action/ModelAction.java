@@ -22,6 +22,7 @@ import com.web.service.IModelService;
 
 import com.web.util.JsonDateValueProcessor;
 import com.web.util.Tools;
+import com.web.util.XmlTreeUtil;
 
 public class ModelAction extends ActionSupport {
 
@@ -114,21 +115,27 @@ public class ModelAction extends ActionSupport {
 		
 			
 		 String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
-	    
-
-	        
-	       String url= Tools.saveFile(file, fileFileName, fileContentType, realpath);
-	      
-	       model.setUrl(url);
-	       
 	       //上传用户暂时写死
-	       model.setOwner("admin");
+	       model.setOwner(Tools.getCurrentUser().getName());
 	  
-	       modelService.saveModel(model);
-	      
+	       //上传的时间
+	       model.setCreateDate(Tools.getDate());
+	       PrintWriter pw =Tools.getPw();
+	        
+	       try {       
+	    	   
+	    	   String url= Tools.saveFile(file, fileFileName, fileContentType, realpath);
+	           model.setUrl(url);
+	        
+	           pw.print(modelService.saveModel(model));
 	
-	        PrintWriter pw =Tools.getPw();;
-	        pw.print("操作成功"); 
+			
+		} catch (RuntimeException e) {
+			// TODO: handle exception
+		       pw.print(false); 
+		}
+	
+	 
 
 		return NONE;
 	}
@@ -146,13 +153,13 @@ public class ModelAction extends ActionSupport {
      JsonConfig jsonConfig = new JsonConfig();
 	  jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
 	  jsonConfig.setExcludes(new String[]{"packets"});
-	
+
 	 Map<String, Object> jsonMap = new HashMap<String, Object>();
 	 jsonMap.put("list", modelService.getModelList());
 	 models= JSONObject.fromObject( jsonMap,jsonConfig);
 	  return SUCCESS;
 	}
-	public String getPageList()
+	public String getPageList() throws IOException
 	{
 		
 		int intPage = page == 0 ? 1:page; 
@@ -162,6 +169,8 @@ public class ModelAction extends ActionSupport {
         Map<String, Object> jsonMap = new HashMap<String, Object>();
         if(model==null)
         {
+        	
+    //XmlTreeUtil.parseNodeToXML( modelService.getPageList(start, number));
        jsonMap.put("total", modelService.getCount());
        jsonMap.put("rows", modelService.getPageList(start, number));
         }else{
@@ -172,6 +181,7 @@ public class ModelAction extends ActionSupport {
  	  JsonConfig jsonConfig = new JsonConfig();
  	  jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
  	  jsonConfig.setExcludes(new String[]{"packets"});
+
         models= JSONObject.fromObject(jsonMap,jsonConfig);
 		return SUCCESS;
 		
@@ -188,8 +198,16 @@ public class ModelAction extends ActionSupport {
 	public String delModel() throws IOException
 	{
 		PrintWriter pw=Tools.getPw();
-		String ids=ServletActionContext.getRequest().getParameter("ids");
-		pw.print(modelService.delModels(ids));
+		
+		
+		try {
+			String ids=ServletActionContext.getRequest().getParameter("ids");
+			pw.print(modelService.delModels(ids));
+		} catch (RuntimeException e) {
+			// TODO: handle exception
+			pw.print(false);
+		}
+
 		
 		
 		return NONE;
@@ -197,27 +215,60 @@ public class ModelAction extends ActionSupport {
 	
 	public String updateModel() throws IOException
 	{
-		 if(file!=null)
-		 {
-			 String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
-	       String url= Tools.saveFile(file, fileFileName, fileContentType, realpath);
-	      
-	       model.setUrl(url);
-		 }
-		 modelService.updateModel(model);
+		
+		PrintWriter pw=Tools.getPw();
+		
+		try {
+			 if(file!=null)
+			 {
+				 String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
+		       String url= Tools.saveFile(file, fileFileName, fileContentType, realpath);
+		      
+		       model.setUrl(url);
+			 }
+			 pw.print(modelService.updateModel(model));
+			 
+		} catch (RuntimeException e) {
+			// TODO: handle exception
+			pw.print(false);
+		}
+
 		 
 		return NONE;
 	}
 	public String zipModels() throws Exception
 	{
-		System.out.println("zip models");
-		String ids=ServletActionContext.getRequest().getParameter("ids");
-		
-		PrintWriter pw=Tools.getPw();
-		pw.print(modelService.zipModes(ids));
-		return NONE;
-	}
 	
+		PrintWriter pw=Tools.getPw();
+	
+		 try {
+				
+			 
+			 String ids=ServletActionContext.getRequest().getParameter("ids");
+         	pw.print(modelService.zipModes(ids));
+			
+		} catch (RuntimeException e) {
+			// TODO: handle exception
+			pw.print("");
+		}
+			return NONE;
+	}
+	public String cancelZips() throws Exception 
+	{
+		PrintWriter pw=Tools.getPw();
+		
+		 try {
+				
+			 
+			 String ids=ServletActionContext.getRequest().getParameter("ids");
+        	pw.print(modelService.cancelZip(ids));
+			
+		} catch (Exception e) {
+			// TODO: handle exception
+			pw.print(false);
+		}
+			return NONE;
+	}
 	
 
 	

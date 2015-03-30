@@ -6,22 +6,35 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Random;
 
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.struts2.ServletActionContext;
 import org.apache.tools.zip.ZipEntry;
 import org.apache.tools.zip.ZipOutputStream;
 
+import com.opensymphony.xwork2.ActionContext;
+import com.web.entity.User;
+
 public class Tools {
 	
 	private final static 	String SAVEPATH = ServletActionContext.getServletContext().getRealPath("/upload");
 
+	
+	public static void main(String[] args) {
+		
+
+		
+	}
 	/**
 	 * 山传文件到本地的工具
 	 * @param file
@@ -63,6 +76,7 @@ public class Tools {
 		path=SAVEPATH+"\\"+path;
 		System.out.println("开始删除文件");
 		File file = new File(path);
+		
 		   if(file.exists()){
 			   System.out.println("正在删除:"+file.delete());
 			
@@ -125,6 +139,8 @@ public class Tools {
 		 * @throws IOException
 		 */
 		public static PrintWriter getPw() throws IOException{
+			
+			
 			   HttpServletResponse response = ServletActionContext.getResponse();
 		       response.setContentType("text/html;charset=utf-8"); 
 		        return  response.getWriter();  
@@ -142,29 +158,40 @@ public class Tools {
 			 {
 				 zipName="arone"+getRandomFileName()+".zip";
 			 }
-				 File zip=new File(SAVEPATH+"//"+zipName);
+         File zip=new File(SAVEPATH+"//"+zipName);
 			
+
 			byte[] buf = new byte[1024];
-		    try {
+
 
 		      ZipOutputStream out = new ZipOutputStream(new FileOutputStream(zip));
 		    
 		     out.setEncoding("gbk");
 
 		      for (int i = 0; i < paths.size(); i++) {
-		        FileInputStream in = new FileInputStream(SAVEPATH+"//"+paths.get(i));
+		    	  
+		    	  File f=new File(SAVEPATH+"//"+paths.get(i));
+		    	  if(f.exists())
+		    	  {
+				        FileInputStream in = new FileInputStream(SAVEPATH+"//"+paths.get(i));
 
-		        out.putNextEntry(new ZipEntry(paths.get(i)));
-	
-		        int len;
-		        while ( (len = in.read(buf)) > 0) {
-		          out.write(buf, 0, len);
-		        }
-		        
+				        out.putNextEntry(new ZipEntry(paths.get(i)));
+			
+				        int len;
+				        while ( (len = in.read(buf)) > 0) {
+				          out.write(buf, 0, len);
+				        }
+				        
 
-		        out.closeEntry();
-		        
-		        in.close();
+				        out.closeEntry();
+				        
+				        in.close();
+		    	  }
+		    	  else
+		    	  {
+		    		System.out.println("文件不存在");  
+		    	  }
+
 	
 		   
 		      }
@@ -175,15 +202,57 @@ public class Tools {
 		      {
 		    	     delFile(paths.get(i));
 		      }
+		   
 		      System.out.println("压缩完成.");
-		      //上传到七牛云
-		  //    Qiniu.uploadFile(zipName, realpath+"//"+zipName);
-		      
-		    }
-		    catch (IOException e) {
-		      e.printStackTrace();
-		    }
+
+
+     
+
 			
 			return zipName;
 		}
+		
+		
+		/**
+		 * 去掉list中重复的元素
+		 * @param list
+		 * @return
+		 */
+		 public   static   List  removeDuplicate(List list)   { 
+			    HashSet h  =   new  HashSet(list); 
+			    list.clear(); 
+			    list.addAll(h); 
+			    //System.out.println(list); 
+			    
+			    return list;
+			} 
+		 
+		 /**
+		  * 答应一个list
+		  * @param list
+		  */
+		 public static void printfList(List list)
+		 {
+			 
+			 for(int i=0;i<list.size();i++)
+			 {
+				 System.out.println("the key is "+list.get(i).toString());
+				 
+			 }
+		 }
+		 public static User getCurrentUser()
+		 {
+		
+			  User u=(User) ActionContext.getContext().getSession().get("user");
+			 
+			 if(u==null)
+			 {
+				 u=new User();
+			 }else
+			 {
+				 System.out.println("the name is "+u.getName());
+			 }
+				 
+			 return u;
+		 }
 }

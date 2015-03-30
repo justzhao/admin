@@ -3,19 +3,24 @@ package com.web.service.Impl;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 
 import org.apache.struts2.ServletActionContext;
+
 import org.hibernate.HibernateException;
 
 import com.web.dao.IDao;
 import com.web.entity.IdentifyCode;
+import com.web.entity.Model;
 import com.web.util.Qiniu;
 import com.web.util.Tools;
 
 public class CodeServiceImpl implements com.web.service.ICodeService {
 
 	private  IDao codeDao;
+	private IDao modelDao;
 	
 	public IDao getCodeDao() {
 		return codeDao;
@@ -24,11 +29,20 @@ public class CodeServiceImpl implements com.web.service.ICodeService {
 	public void setCodeDao(IDao codeDao) {
 		this.codeDao = codeDao;
 	}
+	
+
+	public IDao getModelDao() {
+		return modelDao;
+	}
+
+	public void setModelDao(IDao modelDao) {
+		this.modelDao = modelDao;
+	}
 
 	@Override
 	public List getCodeList() {
 		// TODO Auto-generated method stub
-		return  codeDao.getListByHQL(" from IdentifyCode");
+		return  codeDao.getListByHQL(" from IdentifyCode where id!=1");
 	}
 	
 	@Override
@@ -42,67 +56,68 @@ public class CodeServiceImpl implements com.web.service.ICodeService {
 	public boolean saveCodeTo(IdentifyCode code) throws Exception {
 			// 先把文件上传到七牛云
 		
-			 String path = ServletActionContext.getServletContext().getRealPath("/upload");
-			 
-			 System.out.println("the reapath is "+path+"\\"+code.getUrl());
 	
-			 String url = code.getUrl();
-			 
+	         String url = code.getUrl();
 
-			 
-             Qiniu.uploadFile(url, path+"\\"+url);
+             Qiniu.uploadFile(url );
              //上传完之后删除本地的
-             Tools.delFile(path+"\\"+url);
-             
-			 codeDao.saveOrUpdate(code);  //更新数据库
+           //  Tools.delFile(url);
+		      codeDao.saveOrUpdate(code);  //更新数据库
 			
 			
-		return false;
+		return true;
 	}
 
 	@Override
 	public Long isRptByName(String codeName) {
 		
-		return codeDao.countByHql("select count(*) from IdentifyCode code where code.name=?", codeName);
+		return codeDao.countByHql("select count(*) from IdentifyCode code where code.id!=1 and  code.name=?", codeName);
 	}
 
 	@Override
 	public List<IdentifyCode> getPageHql(int start, int number) {
-		return codeDao.getPageHql("from IdentifyCode code", start, number);
+		return codeDao.getPageHql("from IdentifyCode code where code.id!=1", start, number);
 	}
 
 	@Override
 	public Long getCount() {
-		return codeDao.countByHql("select count(*) from IdentifyCode");
+		return codeDao.countByHql("select count(*) from IdentifyCode where id!=1");
 	}
 
 	@Override
 	public IdentifyCode getCodeByID(Integer id) {
 		IdentifyCode code =  (IdentifyCode) codeDao.get(id);
-		System.out.println("to delete code id "+code.getId());
+		
 		return code;
 	}
 
 	@Override
 	public boolean deleteCode(IdentifyCode code) {
-		try{
-			codeDao.delete(code);
-			//int a = 1/0;
+		// 需要先更新有模型
+		//直接去那个表里面查。
+		
+     List<Model> models=modelDao.getListByHQL("from Model where id!=1 and code.id=?",code.getId() );
+     for(int i=0;i<models.size();i++)
+     {
+    IdentifyCode c=(IdentifyCode) codeDao.get(1);
+    models.get(i).setCode(c);
+     modelDao.saveOrUpdate(models.get(i));
+     codeDao.evict(c);
+     }
+     
+     codeDao.deleteById(code.getId());
+		
 			return true;
 			
-		}catch(HibernateException e){
-			return false;
-		}catch(Exception e){
-			return false;
-		}
-		
-		
+
+	
+
 	}
 
 	@Override
 	public boolean updateCode(IdentifyCode code) {
 		codeDao.saveOrUpdate(code);
-		return false;
+		return true;
 	}
 
 	@Override
@@ -116,7 +131,7 @@ public class CodeServiceImpl implements com.web.service.ICodeService {
 		// TODO Auto-generated method stub
 	    List<Object> paramList = new ArrayList<Object>();  
     	
-	    String hql = "select count(*) from IdentifyCode code  where 1=1" ;
+	    String hql = "select count(*) from IdentifyCode code  where 1=1 and code.id!=1" ;
 	    //按名字搜索
 	    if(code.getName()!=null&&!code.getName().equals(""))
 	    {
@@ -146,15 +161,24 @@ public class CodeServiceImpl implements com.web.service.ICodeService {
 			paramList.add("%"+code.getOwner()+"%");
 	    }
 	    //按是否被打包
-	    if(code.isPacked()||!code.isPacked())
-	    {
+
+	    if(code.getSearchFlag()==0)
+	    {//否
+	    	
 			hql =hql +" and  code.packed = ?";
 			
-			paramList.add(code.isPacked());
+			paramList.add(false);
+	    }else if(code.getSearchFlag()==1)
+	    {//是
+			hql =hql +" and  code.packed = ?";
+			
+			paramList.add(true);
+	    }else{
+	    	
 	    }
-	    System.out.println("the hql is "+hql);
-	    
-	    System.out.println("the size is "+codeDao.countByHql(hql, paramList.toArray()).intValue());
+
+
+	   
 	    
 	    return codeDao.countByHql(hql, paramList.toArray()).intValue();
 	}
@@ -164,7 +188,7 @@ public class CodeServiceImpl implements com.web.service.ICodeService {
 		// TODO Auto-generated method stub
 		ArrayList  paramList = new ArrayList();  
 		  
-		String hql = "from IdentifyCode code  where 1=1" ;
+		String hql = "from IdentifyCode code  where 1=1 and code.id!=1" ;
 	    //按名字搜索
 	    if(code.getName()!=null&&!code.getName().equals(""))
 	    {
@@ -194,12 +218,23 @@ public class CodeServiceImpl implements com.web.service.ICodeService {
 			paramList.add("%"+code.getOwner()+"%");
 	    }
 	  //按是否被打包
-	    if(code.isPacked()||!code.isPacked())
-	    {
+
+	    if(code.getSearchFlag()==0)
+	    {//否
+	    	
 			hql =hql +" and  code.packed = ?";
 			
-			paramList.add(code.isPacked());
+			paramList.add(false);
+	    }else if(code.getSearchFlag()==1)
+	    {//是
+			hql =hql +" and  code.packed = ?";
+			
+			paramList.add(true);
+	    }else{
+	    	
 	    }
+	    
+	    hql=hql+"  order by id asc";
 	    return codeDao.getPageHql(hql, start, number,paramList.toArray());
 	}
 

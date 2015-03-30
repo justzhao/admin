@@ -4,20 +4,73 @@
 <constant name="struts.multipart.maxSize" value="209715200000" />
 <constant name="struts.ui.theme" value="simple" />
 <constant name="struts.multipart.saveDir" value="d:/tmp"/>
+<constant name="struts.action.extension" value=","/> 
+
+
 <package name="Home" extends="struts-default" >
 
+
+
+<interceptors> 
+<!-- 声明自己的拦截器 -->
+  <interceptor name="MyInterceptor" class="com.web.util.CheckLoginInterceptor">
+  <param name="includeMethods">home</param>
+   </interceptor>  
+<interceptor-stack name="MyInterceptorStack">  
+<interceptor-ref name="defaultStack" /> 
+<interceptor-ref name="MyInterceptor"/> 
+</interceptor-stack>  
+
+
+</interceptors>
+<default-interceptor-ref name="MyInterceptorStack"></default-interceptor-ref> 
+<global-results>
+<result name="homeLogin">/login.jsp</result>
+</global-results>
+
+
+
+
+
+<action name="homeLogin" class="authorityAction" method="homeLogin" >
+<result name="success" >/login.jsp</result>
+</action>
+
+<action name="checkUser" class="authorityAction"  method="checkUser">
+<result name="success"  type="redirectAction">arone</result>
+<result name="error" type="redirect">/login.jsp</result>
+</action>
+
+<action name="loginOut" class="authorityAction"  method="loginOut">
+
+<result name="success" type="redirect">/login.jsp</result>
+</action>
+
+<action name="checkUserName" class="authorityAction"  method="checkUserName" >
+</action>
+<action name="saveUser" class="authorityAction"  method="saveUser">
+
+</action>
+<action name="deleteUser" class="authorityAction"  method="deleteUser">
+
+</action>
+<action name="updateUser" class="authorityAction" method="updateUser">
+</action>
+
 <action name="arone"  class="mainAction"    method="home">
+  <interceptor-ref name="MyInterceptorStack">
+  <param name="includeMethods">home</param>
+  
+
+  </interceptor-ref>   
 <result name="success">/main.jsp</result>
-
 </action>
 
+<action name="changPass" class="authorityAction"  method="changPass"></action>
 
-<action name="userRegister" class="mainAction" method="userRegister">
-<result name="success">/userRegisger.jsp</result>
-</action>
-<action name="registerAction"  class="mainAction" method="registerAction">
-<result name="success">/index.jsp</result>
-</action>
+
+
+
 </package>
 
 <package name="pic" extends="struts-default"  >
@@ -42,6 +95,9 @@
 
 <action name="zipModels"  class="modelAction"  method="zipModels">
 </action>
+
+<action name="cancelZip"  class="modelAction"  method="cancelZips"></action>
+
 <action name="checkModelName"  class="modelAction" method="checkName">
 
 </action>
@@ -145,6 +201,17 @@
 		    </result>
 		</action>
   
+  <action name="getPageUser" class="authorityAction" method="getPageList">
+<result type="json">
+<param name="root"> results</param>
+</result>
+</action>
+
+<action name="getRoleList" class="authorityAction" method="getRoleList">
+    	<result type="json">
+    	<param name="root">roles</param>
+    	</result>
+</action>
 </package>
 
 

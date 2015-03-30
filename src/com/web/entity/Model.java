@@ -21,6 +21,8 @@ public class Model {
 	private Set<Packet> packets;
 	private String owner;
 	private boolean packaged;
+	private int searchFlag;
+	
 	public int getId() {
 		return id;
 	}
@@ -111,6 +113,14 @@ public class Model {
 	}
 	public void setPackaged(boolean packaged) {
 		this.packaged = packaged;
+	}
+	
+	
+	public int getSearchFlag() {
+		return searchFlag;
+	}
+	public void setSearchFlag(int searchFlag) {
+		this.searchFlag = searchFlag;
 	}
 	@Override
 	public String toString() {

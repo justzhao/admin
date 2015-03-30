@@ -14,9 +14,20 @@ import com.web.entity.Packet;
 import com.web.service.IPacketService;
 import com.web.util.Qiniu;
 import com.web.util.Tools;
+import com.web.util.XmlTreeUtil;
 
 public class PacketServiceImpl implements IPacketService {
 	private IDao packetDao;
+	private IDao modelDao;
+	private IDao codeDao;
+
+	public IDao getModelDao() {
+		return modelDao;
+	}
+
+	public void setModelDao(IDao modelDao) {
+		this.modelDao = modelDao;
+	}
 
 	public IDao getPacketDao() {
 		return packetDao;
@@ -26,37 +37,100 @@ public class PacketServiceImpl implements IPacketService {
 		this.packetDao = packetDao;
 	}
 
-	@Override
-	public void savePacket(Packet p) throws Exception {
-		// TODO Auto-generated method stub
-		//模型包已经生成，现在要做的就是把xml 文件和，说明图。缩略图不放在包里面
-		
-		String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
-
-	  
-		
-		//上传缩略图和说明图到七牛云
-		Qiniu.uploadFile(p.getThumbPic(), realpath+"//"+p.getThumbPic());
 	
+	public IDao getCodeDao() {
+		return codeDao;
+	}
 
-		 List<String> paths=new ArrayList<String>();
-		 paths.add(p.getDescPic()); //加入说明图路径
-		 
-		 //加入模型路径
-		  Set<Model>  models=p.getModels();
-		  Iterator iterator = models.iterator();
-		  
-		    while (iterator.hasNext()) {  
-      	     Model  m = (Model) iterator.next();
-     	       paths.add(m.getUrl());
+	public void setCodeDao(IDao codeDao) {
+		this.codeDao = codeDao;
+	}
 
-		      }
+	@Override
+	public boolean savePacket(Packet p)  {
+		// TODO Auto-generated method stub
 
-		//把说明文件压缩到zip中
-		Tools.ZipFiles(paths,p.getUrl());
+
+			  
+			  try {
+					 List<String> paths=new ArrayList<String>();
+						
+					  //获取所有的模型
+					  Set<Model>  models=p.getModels();
+					  
+					  Iterator ite = models.iterator();
+					  while(ite.hasNext())
+					  {
+						  Model  m = (Model) ite.next();
+					      
+						  //更新识别码打包状态
+						  m.getCode().setPacked(true);
+				   Qiniu.downloadFile(m.getCode().getUrl());
+				   
+				   //加入识别码的路径
+		    	     paths.add(m.getCode().getUrl());
+		    	     
+					  codeDao.merge(m.getCode());
+		    	        
+		    	        //更新包的打包状态
+					  m.setPackaged(true);
+				       modelDao.saveOrUpdate(m);
+				       
+				       //添加路径
+			  	       paths.add(m.getUrl());
+			  	     codeDao.evict(m.getCode());
+				  }
+				  
+				  
+				  List<Model> modellist = new ArrayList<Model>(models);
+				  //把所有的模型的属性生成xml .
+				XmlTreeUtil.parseNodeToXML(modellist);
+				
+				//所有的文件都在upload目录下面，现在要做的就是把 xml，说明图，识别码，模型打成zip包。
+				
+				//  XmlTreeUtil.parseNodeToXML(treeNodes)
+				String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
+
+
+				//上传缩略住到七牛云
+				Qiniu.uploadFile(p.getThumbPic());
+			   //上传缩略图上到七牛云
+				Qiniu.uploadFile(p.getThumbUp());
+				 //上传缩略图下到七牛云
+				Qiniu.uploadFile(p.getThumbFooter());
+				 //上传缩略图文字到七牛云
+				Qiniu.uploadFile(p.getThumbWord());
+				 //加入说明图路径
+				 paths.add(p.getDescPic());
+				 //加入人物
+				 paths.add(p.getCharacter());
+				 //加入背景
+				 paths.add(p.getBackground());
+		           //加入xml文件
+				 paths.add(XmlTreeUtil.NAME);
+				 
+				 
+		   //paths 是需要所有打包的文件的路径，这里过滤下。
+				 
+				 paths=Tools.removeDuplicate(paths);
+
+		    
+				//把说明文件压缩到zip中
+				Tools.ZipFiles(paths,p.getUrl());
+				Qiniu.uploadFile(p.getUrl());
+		     
+				packetDao.save(p);
+			} catch (Exception e) {
+				// TODO: handle exception
+				
+				return false;
+			}
+			  
+    	  
+    	     
+    	  
 		
-     
-		packetDao.save(p);
+		return true;
 		
 	}
 	
@@ -85,10 +159,28 @@ public class PacketServiceImpl implements IPacketService {
 			  hql=hql+" and p.name like ?";
 			  paramList.add("%"+p.getName()+"%");
 		  }
-          hql=hql+" and p.effective=?";
-          paramList.add(p.isEffective());
-          
-          if(p.getCreateDate()!=null&&!p.getCreateDate().equals(""))
+
+		    if(p.getSearchFlag()==0)
+		    {//否
+		    	
+				hql =hql +" and p.effective = ?";
+				
+				paramList.add(false);
+		    }
+		    if(p.getSearchFlag()==1)
+		    {//是
+				hql =hql +" and  p.effective= ?";
+				
+				paramList.add(true);
+		    }
+		    
+		    if(p.getDevice()!=-1){
+		    	
+		    	hql=hql+ " and p.device=?";
+		    	paramList.add(p.getDevice());
+		    }
+		    
+         if(p.getCreateDate()!=null&&!p.getCreateDate().equals(""))
           {
         	  hql=hql+" and p.createDate>=?";
         	  paramList.add(p.getCreateDate());
@@ -108,7 +200,7 @@ public class PacketServiceImpl implements IPacketService {
         	  hql=hql+" and p.count>=?";
         	  paramList.add(p.getDevice());
           }
-		//System.out.println("the hql is "+hql);
+
 		return packetDao.countByHql(hql, paramList.toArray()).intValue();
 	}
 	@Override
@@ -124,9 +216,26 @@ public class PacketServiceImpl implements IPacketService {
 			  hql=hql+" and p.name like ?";
 			  paramList.add("%"+p.getName()+"%");
 		  }
-        hql=hql+" and p.effective=?";
-        paramList.add(p.isEffective());
+
+		  
+		    if(p.getSearchFlag()==0)
+		    {//否
+				hql =hql +" and p.effective = ?";
+				paramList.add(false);
+		    } 
+		    
+		    if(p.getSearchFlag()==1)
+		    {//是
+				hql =hql +" and  p.effective= ?";
+				paramList.add(true);
+		    }
         
+		    if(p.getDevice()!=-1){
+		    	
+		    	hql=hql+ " and p.device=?";
+		    	paramList.add(p.getDevice());
+		    }    
+		    
         if(p.getCreateDate()!=null&&!p.getCreateDate().equals(""))
         {
       	  hql=hql+" and p.createDate>=?";
@@ -147,6 +256,8 @@ public class PacketServiceImpl implements IPacketService {
       	  hql=hql+" and p.count>=?";
       	  paramList.add(p.getDevice());
         }
+        
+        hql=hql+"  order by id asc";
 		return packetDao.getListByHQL(hql, paramList.toArray());
 	}
 	
@@ -155,9 +266,9 @@ public class PacketServiceImpl implements IPacketService {
 		// TODO Auto-generated method stub
 		//需要删除七牛云上的包，xml，缩略图，
 		Packet p=(Packet) packetDao.get(id);
-		Qiniu.deleteFile(p.getDescPic());
+
 		Qiniu.deleteFile(p.getThumbPic());
-		Qiniu.deleteFile(p.getXml());
+
 		Qiniu.deleteFile(p.getUrl());
 		packetDao.delete(p);
 		
@@ -172,11 +283,35 @@ public class PacketServiceImpl implements IPacketService {
 		if(!pc.getThumbPic().equals(p.getThumbPic()))
 		{
 			Qiniu.deleteFile(pc.getThumbPic());
-			 String path = ServletActionContext.getServletContext().getRealPath("/upload");
+
 	
-			Qiniu.uploadFile(p.getThumbPic(),path+"\\"+p.getThumbPic());
+			Qiniu.uploadFile(p.getThumbPic());
 		}
+		
+		
+		if(!pc.getThumbUp().equals(p.getThumbUp()))
+		{
+			Qiniu.deleteFile(pc.getThumbUp());
+
 	
+			Qiniu.uploadFile(p.getThumbUp());
+		}
+		
+		if(!pc.getThumbFooter().equals(p.getThumbFooter()))
+		{
+			Qiniu.deleteFile(pc.getThumbFooter());
+
+	
+			Qiniu.uploadFile(p.getThumbFooter());
+		}
+		
+		if(!pc.getThumbWord().equals(p.getThumbWord()))
+		{
+			Qiniu.deleteFile(pc.getThumbWord());
+
+	
+			Qiniu.uploadFile(p.getThumbWord());
+		}
 		//packetDao.ge
 		
 		packetDao.merge(p);

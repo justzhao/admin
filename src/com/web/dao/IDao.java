@@ -3,6 +3,7 @@ package com.web.dao;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.transaction.annotation.Transactional;
@@ -188,4 +189,13 @@ public interface IDao<T, ID extends Serializable> {
      * @param t
      */
     public abstract void merge(T t);
+    
+    /**
+     * ¥”session÷–»•µÙT
+     * @param t
+     */
+    public abstract void evict(T t);
+    
+    
+    public abstract Set filter(Set s,String hql); 
 }

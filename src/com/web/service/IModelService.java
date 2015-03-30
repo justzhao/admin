@@ -87,5 +87,17 @@ public interface IModelService  {
      */
     public String zipModes(String ids) throws Exception;
     
+    /**
+     * 打包的时候取消要删除已经下载的模型
+     * @param ids
+     * @return
+     */
+    public boolean cancelZip(String ids);
+    
+    /**
+     * 更新数据包
+     * @param ms
+     * @return
+     */
     public  boolean updatePacket(Set<Model> ms);
 }

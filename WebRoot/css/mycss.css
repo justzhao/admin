@@ -1,0 +1,79 @@
+table   {
+border-collapse:collapse;
+} 
+td {
+border:1px   solid   #C0C0C0;
+ text-align: left;
+}
+input [type="text"]
+{
+	height:25px !important;
+	
+}
+
+.td1 {
+background-color:#FFF6F1;
+ width:30%;
+ height:30px;
+}
+
+.subbtn{
+border:none;
+background:url('../images/login/btn.jpg') left top no-repeat;
+width:80px;
+height:29px;	
+}
+
+.opear
+{
+	top:40px; 
+	padding:5px; 
+	width:700px;
+	height:450px; 
+	
+}
+
+a {
+	
+text-decoration: none;	
+	
+}
+.a-upload {
+    padding: 4px 10px;
+    height: 20px;
+    line-height: 20px;
+    position: relative;
+    cursor: pointer;
+    color: #888;
+    background: #fafafa;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    overflow: hidden;
+    display: inline-block;
+    *display: inline;
+    *zoom: 1
+}
+
+.a-upload  input {
+    position: absolute;
+
+    right: 0;
+    top: 0;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    cursor: pointer
+}
+
+.a-upload:hover {
+    color: #444;
+    background: #eee;
+    border-color: #ccc;
+    text-decoration: none
+}
+.operw{
+	top:20px; 
+	padding:5px;
+	width:600px;
+	height:300px;
+	
+}

@@ -41,14 +41,14 @@ public void setSpicDao(IDao spicDao) {
 		//设置时间
 		pic.setCreateDate(new Date());
 		//设置上传者,暂时写死
-		pic.setOwner("admin");
+
 		
 		// 先把文件上传到七牛云
 	
 		 String path = ServletActionContext.getServletContext().getRealPath("/upload");
 		 
 		 //System.out.println("the reapath is "+path+"\\"+pic.getUrls());
-		 Qiniu.uploadFile(pic.getUrls(), path+"\\"+pic.getUrls());
+		 Qiniu.uploadFile(pic.getUrls());
 		 Tools.delFile(path+"\\"+pic.getUrls());
 	
 		 
@@ -101,13 +101,13 @@ public void setSpicDao(IDao spicDao) {
 		
 		spicDao.save(pic);
 		
-		return false;
+		return true;
 	}
 	
 	@Override
 		public List getPicList() {
 			// TODO Auto-generated method stub
-			return spicDao.getListByHQL("from ScrollPic");
+			return spicDao.getListByHQL("from ScrollPic order by id");
 		}
 	
 	@Override
@@ -116,7 +116,7 @@ public void setSpicDao(IDao spicDao) {
 
 			
 			
-	         return spicDao.getPageHql("from ScrollPic  order by id desc", start, number);
+	         return spicDao.getPageHql("from ScrollPic  order by id asc", start, number);
 		}
 	@Override
 		public int getCount() {
@@ -127,20 +127,22 @@ public void setSpicDao(IDao spicDao) {
 	@Override
 		public boolean delScrollPic(ScrollPic p) {
 			// TODO Auto-generated method stub
-		/**
-		 * 删除七牛云上的文件	
-		 */
-	    p=(ScrollPic) spicDao.get(p.getId());
-	    String []urls=p.getUrls().split(",");
-	    
-	    for(int i=0;i<urls.length;i++)
-	    {
-	    	System.out.println("the url is "+urls[i]);
-	    	Qiniu.deleteFile(urls[i]);
-	    }
-	    
-		spicDao.delete(p);
-		return true;
+       
+			p=(ScrollPic) spicDao.get(p.getId());
+			spicDao.delete(p);
+            String []urls=p.getUrls().split(",");
+		    
+		    for(int i=0;i<urls.length;i++)
+		    {
+
+		    	Qiniu.deleteFile(urls[i]);
+		    }
+		    
+		
+		    return true;
+		
+
+	
 		}
 	
 
@@ -158,18 +160,12 @@ public void setSpicDao(IDao spicDao) {
 		 
 			 String path = ServletActionContext.getServletContext().getRealPath("/upload");
 			 
-			 System.out.println("the reapath is "+path+"\\"+pic.getUrls());
-			 Qiniu.uploadFile(pic.getUrls(), path+"\\"+pic.getUrls());
-			 Tools.delFile(path+"\\"+pic.getUrls());
+			 //System.out.println("the reapath is "+path+"\\"+pic.getUrls());
+			 Qiniu.uploadFile(pic.getUrls());
+			// Tools.delFile(path+"\\"+pic.getUrls());
 		 }
-			 
-			 
-			 
-
 			if(pic.getEffective()==true)
 			{
-				
-		
 				List<ScrollPic> p=    spicDao.getListByHQL ("from ScrollPic where effective=? ", true);
 				if(p.size()>0)
 				{
@@ -212,7 +208,7 @@ public void setSpicDao(IDao spicDao) {
 			
 			spicDao.merge(pic);
 		 
-			return false;
+			return true;
 		}
 	 
 	 @Override
@@ -275,7 +271,8 @@ public void setSpicDao(IDao spicDao) {
     	 hql=hql+" and sc.createDate<=?";
     	 paramList.add(pic.getEndDate());
      }
-   //  System.out.println("the size is "+spicDao.countByHql(hql, paramList.toArray()).intValue());
+     hql=hql+"  order by id asc";
+ 
  	return spicDao.getPageHql(hql, start, number, paramList.toArray());
 	}
 	

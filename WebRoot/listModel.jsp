@@ -1,5 +1,4 @@
-
-  <%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
+<%@ page language="java" import="java.util.*" pageEncoding="UTF-8"%>
 <%@ taglib uri="/struts-tags" prefix="s" %>
 <%
 
@@ -9,375 +8,28 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 
 %>
 
-<html>
+<!DOCTYPE html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 
-	<link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/default/easyui.css">
-	<link rel="stylesheet" type="text/css" href="http://www.jeasyui.net/Public/js/easyui/themes/icon.css">
+<link rel="stylesheet" href="js/jquery-easyui-1.4.2/themes/default/easyui.css" type="text/css"></link>
+<link rel="stylesheet" href="js/jquery-easyui-1.4.2/themes/icon.css" type="text/css"></link>
+<link rel="stylesheet" href="css/mycss.css" type="text/css"></link>
+<link rel="stylesheet" href="js/uploadify/uploadify.css" type="text/css"></link>
+<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
+<script type="text/javascript" src="js/jquery-easyui-1.4.2/jquery.easyui.min.js"></script>
+<script type="text/javascript" src="js/jquery-easyui-1.4.2/locale/easyui-lang-zh_CN.js"></script>
+<script type="text/javascript" src="js/uploadify/jquery.uploadify.min.js"></script>
 
-<link rel="stylesheet" href="./js/uploadify/uploadify.css" type="text/css"></link>
-<!-- 
-	<script type="text/javascript" src="http://code.jquery.com/jquery-1.4.4.min.js"></script>-->
-		<!--<script type="text/javascript" src="http://code.jquery.com/jquery-1.6.1.min.js"></script>-->
-		<script type="text/javascript" src="js/jquery-1.11.2.min.js"></script>
-	<script type="text/javascript" src="js/jquery.easyui.min.js"></script>
-		<script type="text/javascript" src="js/easyui-lang-zh_CN.js"></script>
-	<script type="text/javascript" src="./js/uploadify/jquery.uploadify.min.js"></script>
-	
-	
-	<script type="text/javascript">
-		$(function(){
-       		 $("#tt").datagrid({
-       		 
-       		 	url:'getPageModel'
-       		 	
-       
-		
-		 });
-		  $("#tt").datagrid('hideColumn', 'url'); 
-		  
-		  
-		  		$.post("getCodeList",function(data){
-		  		
-		  		 $('#editcode').combobox({
-				  data:data
-	
-              }); 
-     
-				$('#code').combobox({
-				
-		                 data:data,
-				        onLoadSuccess: function (data) {
-				            if (data) {
-				               $('#code').combobox('setValue',data[0].id);
-				            }
-				            }
-					}); 
-		  		
-		  		});
-
-               
-			
-
-      
-      
-
-			$('#ff').form({
-				url:'saveModel',
-				onSubmit:function(){
-					if($(this).form('validate'))
-					{
-					   
-						 $.messager.progress({
-							 title: '稍等',
-							 msg: '正在操作中...',
-							text: '操作中'
-							 });
-					
-					 return true;
-					}else
-					{
-					  return false;
-					}
-				},
-				success:function(data){
-			
-			     $.messager.progress('close');
-					$.messager.alert('消息', "操作成功", 'info',function(){
-					
-					$(".panel-tool-close").click();
-				     $('#tt').datagrid('reload'); 
-					});
-			}
-			});
-			
-			
-			
-			$('#editform').form({
-				url:'updateModel',
-				onSubmit:function(){
-				 		if($(this).form('validate'))
-				 		{
-				 		 $.messager.progress({
-					        title: '稍等',
-					        msg: '正在操作中...',
-					        text: '操作中'
-					    });
-				 		return true;
-				 		}else
-				 		{
-				 		return false;
-				 		}
-				},
-				success:function(data){
-				 $.messager.progress('close');
-				$.messager.alert('消息', "操作成功", 'info',function(){
-					$(".panel-tool-close").click();
-				    $('#tt').datagrid('reload'); 
-					});
-				}
-			});
-			
-			
-						$('#packet').form({
-				url:'savePacket',
-				onSubmit:function(){
-					 if($(this).form('validate'))
-					 {
-					 $.messager.progress({
-					        title: '稍等',
-					        msg: '正在操作中...',
-					        text: '操作中'
-					    });
-					  return true;
-					 }else{
-					 return false;
-					 }
-				},
-				success:function(data){
-				 $.messager.progress('close');
-					$.messager.alert('消息', "操作成功", 'info',function(){
-					
-					
-					$(".panel-tool-close").click();
-				
-					});
-				}
-			});
-			
-		});
-		
-		
-	
-      function formatCode(value)
-      {
-
-	   if(value!=undefined)
-	      return value.name;
-	      
-	        
- 	    }
-	   function  formatAnimation(value)
-	   {
-	
-	        return value!=0?"是":"否";
-	    
-	    }
-	    
-	    
-	    	function removeRow(){
-
-         var row = $('#tt').datagrid('getSelected');
-         var rows = $('#tt').datagrid('getSelections'); 
-         
-
-         
-    if (row){
-    
-    
-                 $.each(rows, function (i, n) {
-
-			if (i == 0) {
-			
-			parm = n.id;
-			
-			} else {
-			
-			parm += "," + n.id;
-			
-			}
-
-          }); 
-    
-    
-    //alert(parm);
-     
-     $.messager.confirm("操作提示", "您确定要执行操作吗？", function (data) {
-            if (data) {
-               
-                $.post("delModel",{'ids':parm},function(d){
-                   if(d)
-                   {
-           
-                      $('#tt').datagrid('reload');
-                   }else{
-                   
-                    alert('删除失败');
-                   }
-                });
-                
-              
-              
-            }
-         
-        });
-
-    }else{
-      alert('没有选择数据');
-    }
-
-}
-
-function doSearch()
-{
-
-  var ck= document.getElementById("packaged").checked;
-  
-	$('#tt').datagrid('load',{
-				'model.name': $('#name').val(),
-				'model.createDate': $('#start').datebox('getValue'),
-				'model.endDate': $('#end').datebox('getValue'),
-				'model.owner':$('#owner').val(),
-				'model.packaged':ck
-			
-			});
-
-}
-
-function editRow()
-{
-   var row = $('#tt').datagrid('getSelected');
-    if (row){
-    
-       
-      document.getElementById("editid").value=row.id;
-    
-     document.getElementById("editurl").value=row.url;
-     document.getElementById("editname").value=row.name;
-
-	 $('#editcreateDate').datebox('setValue',row.createDate);
-	 $('#editsize').numberbox('setValue',row.size);
-	 document.getElementById("editinfo").value=row.info;
-	 document.getElementById("editowner").value=row.owner;
-	 document.getElementById("editrotate").value=row.rotate;//editsize
-      if(row.animation==false)
-      {
-      document.getElementById("editanimation").checked=false;
-      }else
-      {
-     document.getElementById("editanimation").checked=true;
-      }
-       $('#editcode').combobox('setValue',row.code.id);
-
-	 document.getElementById("editoffset").value=row.offset;
-    $('#edit').dialog('open');
-    /**
-    
-    $.get("getModelById",{'model.id':row.id},function(data){
-    
-   
-      document.getElementById("editid").value=data.id;
-    
-     document.getElementById("editurl").value=data.url;
-     document.getElementById("editname").value=data.name;
-
-	 $('#editcreateDate').datebox('setValue',data.createDate);
-	 $('#editsize').numberbox('setValue',data.size);
-	 document.getElementById("editinfo").value=data.info;
-	 document.getElementById("editrotate").value=data.rotate;//editsize
-      if(data.animation==false)
-      {
-      document.getElementById("editanimation").checked=false;
-      }else
-      {
-     document.getElementById("editanimation").checked=true;
-      }
-       $('#editcode').combobox('setValue',data.code.id);
-
-	 document.getElementById("editoffset").value=data.offset;
-    $('#edit').dialog('open');
- 
- },"json");
-    */
-    
-    }else
-    {
-    
-        alert('没有选择数据');
-    }
-
-}
-function addZip()
-{
-
-$.messager.progress({
-        title: '稍等',
-        msg: '正在生成数据包...',
-        text: '操作中'
-    }); 
-  var rows = $('#tt').datagrid('getSelections'); 
-   var row = $('#tt').datagrid('getSelected');
- 
-  if(row)
-  {
-  
-      
-                 $.each(rows, function (i, n) {
-
-			if (i == 0) {
-			
-			parm = n.id;
-			urls=n.url;
-			
-			} else {
-			
-			parm += "," + n.id;
-			urls+=","+n.url;
-			
-			}
-
-          }); 
-          
-               $.post("zipModels",{'ids':parm},function(d){
-                   if(d!='')
-                   {
-                      //  alert(d);
-                        document.getElementById("packetname").value=d;
-                        document.getElementById("packeturl").value=d;
-                        document.getElementById("modelids").value=parm;
-                        $.messager.progress('close');
-                        $('#addPacket').dialog('open');
-               
-                   }else{
-                   
-                    alert('打包失败');
-                   }
-                });
-
-  }else
-  {
-  alert('没有选择要打包的模型');
-  
-  
-  
-  }
-}
-		
-	</script>
+	<script type="text/javascript" src="js/model.js"></script>
 
 
-<style>
-table   {
-border-collapse:collapse;
-} 
-td {
-border:1px   solid   #C0C0C0;
- text-align: left;
-} 
 
-.td1 {
-
-
- background-color:#FFF6F1;
- width:30%
-}
-</style>
 </head>
 <body>
  
-	<table id="tt"  style="width:100%;height:400px"	title="模型列表"   iconCls="icon-save"     pagination="true"  pageList="[5,10,15]"  
+	<table id="tt"  style="width:100%;height:450px"	title="模型列表"   iconCls="icon-save"     pagination="true"  pageList="[5,10,15]"  
 		toolbar="#tb">
 		<thead>
 			<tr>
@@ -412,7 +64,7 @@ border:1px   solid   #C0C0C0;
           <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:addZip()">生成数据包</a>
 
 	  </div>
-	  <div>
+	  <div  style="margin-top: 10px;margin-bottom: 10px">
 	  		<span>上传开始时间</span>
 	  			   <input   id="start"   style="width:100px"  class="easyui-datebox"  editable=false >
 	  		<span>结束时间</span>
@@ -424,27 +76,34 @@ border:1px   solid   #C0C0C0;
     		<span>上传用户</span>
         <input id="owner"  type="text"  style="line-height:20px;border:1px solid #ccc">
 
-          		<span>是否被打包</span>
-        
-         <input id="packaged"  type="checkbox" />
+</div>
+<div style="margin-top: 10px;margin-bottom: 10px"">
 
+          		<span>是否被打包</span>
+        	<input type="radio" name="packed" value="0" > 否
+			<input type="radio" name="packed" value="1"> 是
+			<input type="radio" name="packed" value="2" checked> 全部 
+
+
+<span>识别码</span>
+		<input id="searchcode" style="width:150px"  name ="model.code.id"  valueField="id" textField="name"   >
 		<a href="#" class="easyui-linkbutton"  iconCls="icon-search" plain="true" onclick="doSearch()">搜索</a>
 	  </div>
 	</div>
 	
 
 
-		<div id="dd" class="easyui-dialog" style="top:100px;padding:5px;width:600px;height:300px;"
+		<div id="dd"  class="opear easyui-dialog"
 			title="添加模型" iconCls="icon-ok"
 			 closed="true" modal="true">
 			 
 	 		<form id="ff"  name="ff"  enctype= "multipart/form-data"  method="post">	
-	   <table   style="width:100%; font-size: 12px;font-weight: normal">
+	   <table   style="width:100%; font-size: 14px;font-weight: normal">
 	  
 	   <tr>
 	     <td  class="td1" >名字:</td><td style="width:70%">
 	     <input  class="easyui-validatebox textbox"   type="text"   name ="model.name"  required="true"   validtype="remote['checkModelName','model.name']" invalidMessage="用户名已存在">
-	    
+	     
 	    </td>
 	   </tr>
 	   	  
@@ -454,19 +113,10 @@ border:1px   solid   #C0C0C0;
 	   	   <td class="td1">  识别码：</td>
 	   <td>
 
-  	<input id="code" style="width:150px"  name ="model.code.id"  valueField="id" textField="name">
+  	<input id="code" style="width:150px"  name ="model.code.id"  valueField="id" textField="name"   >
 	   </td>
 	   </tr>
 
-	   <tr>
-	   <td class="td1">
-	    发布时间
-	   </td>
-	   
-	   <td>
-	   <input type="text"  class="easyui-datebox"  name="model.createDate"  editable=false>
-	   </td>
-	   </tr>
 	   <tr>
 	   <td class="td1">
 	    备注：
@@ -480,8 +130,10 @@ border:1px   solid   #C0C0C0;
 	    模型：
 	   </td>
 	   <td>
-	    <input type="file" name="file"     class="easyui-validatebox textbox"     required="true"  />
-	    
+	   <!-- class="easyui-validatebox "  required="true"   -->
+	    <a href="javascript:void(0)" class="a-upload">
+	    <input type="file" name="file"   id="modelfile"  class="easyui-validatebox "  required="true"  />点击这里上传文件
+	    </a>
 	   </td>
 	   </tr>
 	   	   	   <tr>
@@ -516,14 +168,19 @@ border:1px   solid   #C0C0C0;
 	   
 	  
 	   	
-	   <tr><td style="text-align:right" colspan=2> <input   type="submit" value="提交"></td> 
+	   <tr><td style="text-align:right" colspan=2> 
+	   
+	   <input  type="button" onclick="cancel()"  class="subbtn" value="取消">
+	   <input   type="submit"  class="subbtn"   value="提交">
+	   
+	   </td> 
 	   </tr>  
 	  
 	   </table> </form>
 </div>
 
 <!-- 编辑模型 -->
-<div id="edit" class="easyui-dialog" style="top:100px;padding:5px;width:600px;height:300px;"
+<div id="edit" class="opear easyui-dialog" 
 			title="编辑模型" iconCls="icon-ok"
 			 closed="true" modal="true">
 			 
@@ -531,9 +188,10 @@ border:1px   solid   #C0C0C0;
 	   <table   style="width:100%; font-size: 12px;font-weight: normal">
 	  
 	   <tr>
-	   <input id="editid" type="hidden"  name="model.id">
-	   <input id="editurl" type="hidden" name="model.url">
-	    <input id="editowner" type="hidden" name="model.owner">
+	   <input id="editid" type="hidden"  name="model.id" />
+	   <input id="editurl" type="hidden" name="model.url" />
+	    <input id="editowner" type="hidden" name="model.owner" />
+	    <input id="editcreateDate"  type="hidden" name="model.createDate" />
 	     <td  class="td1" >名字:</td><td style="width:70%">
 	     <input  id="editname" class="easyui-validatebox textbox"   type="text"   name ="model.name"  required="true"  >
 	    
@@ -550,15 +208,7 @@ border:1px   solid   #C0C0C0;
 	   </td>
 	   </tr>
 
-	   <tr>
-	   <td class="td1">
-	    发布时间
-	   </td>
-	   
-	   <td>
-	   <input id="editcreateDate"     type="text"  class="easyui-datebox"  name="model.createDate"  editable=false >
-	   </td>
-	   </tr>
+
 	   <tr>
 	   <td class="td1">
 	    备注：
@@ -572,8 +222,10 @@ border:1px   solid   #C0C0C0;
 	    模型：
 	   </td>
 	   <td>
-	    <input id=editfile  type="file" name="file"  class="easyui-validatebox textbox"   />
-	    
+	   
+	    <a href="javascript:void(0)" class="a-upload"> 
+	    <input id=editfile  type="file" name="file"  class="easyui-validatebox "   /> 点击这里上传文件
+	    </a>
 	   </td>
 	   </tr>
 	   	   	   <tr>
@@ -608,14 +260,16 @@ border:1px   solid   #C0C0C0;
 	   
 	  
 	   	
-	   <tr><td style="text-align:right" colspan=2> <input   type="submit" value="提交"></td> 
+	   <tr><td style="text-align:right" colspan=2> 
+	   <input  type="button" onclick="cancel()"  class="subbtn" value="取消">
+	   <input   type="submit"  class="subbtn"   value="提交"></td> 
 	   </tr>  
 	  
 	   </table> </form>
 </div>
 
 
-<div id="addPacket" class="easyui-dialog" style="top:80px;padding:5px;width:600px;height:300px;"
+<div id="addPacket" class="opear easyui-dialog"  
 			title="添加数据包" iconCls="icon-ok"
 			 closed="true" modal="true">
 <form id="packet"  name="packet"  enctype= "multipart/form-data"  method="post">
@@ -627,7 +281,9 @@ border:1px   solid   #C0C0C0;
 	   </td>
 	   <td style="width:70%">
 	   
-	   <input id="packetname"   class="easyui-validatebox textbox"  type="text"  style="width:250px"  name ="packet.name"  required="true"></td>
+	   <input id="packetname"   class="easyui-validatebox textbox"  type="text"  style="width:250px"  name ="packet.name"  required="true">
+	    <span id="modelcount" style="color:red"> </span>
+	   </td>
 	   
 	   <input id="packeturl"  type="hidden"  name="packet.url" />
 	   <input id="modelids"  type="hidden"  name="ids" />
@@ -671,47 +327,104 @@ border:1px   solid   #C0C0C0;
 	   
 	   </td>
 	   </tr>
-	   
-	   	   	   <tr>
-	   <td class="td1">
-	  创建日期
-	   </td>
-	   <td><input type="text"  class="easyui-datebox"  name="packet.createDate" editable=false ></td>
-	   </tr>
-	   	  
-	
+
 	    <tr>
-                        <td class="td1">
-                            缩略图上传：
-                        </td>
-                        <td>                            
-             
-                                   	    <input type="file" name="thumb"  class=" easyui-validatebox textbox"  required="true"  /> 
-                              
-                       
-                          
-                      
-                
-                  
-                        </td>
-                    </tr>
-	   	 	   	   	   <tr>
+      <td class="td1">
+                  主题缩略图：
+    </td>
+     <td>  
+                   <a href="javascript:void(0)" class="a-upload">
+       <input type="file" name="thumb"   accept="image/gif, image/jpeg"  class="easyui-validatebox "  required="true"   /> 点击这里上传文件
+        </a>
+     </td>
+     </tr>
+     
+     	    <tr>
+      <td class="td1">
+                  主题大图分割图上半部：
+    </td>
+     <td>   
+     
+             <a href="javascript:void(0)" class="a-upload">
+      <input type="file" name="thumbUp"   id="thumbUp"  accept="image/gif, image/jpeg"  class="easyui-validatebox "  required="true"  /> 点击这里上传文件 
+      
+      </a>
+     </td>
+     </tr>
+     
+     
+     	    <tr>
+      <td class="td1">
+                主题大图分割图下半部：
+    </td>
+     <td>    <a href="javascript:void(0)" class="a-upload">
+       <input type="file" name="thumbFooter"  id="thumbFooter" accept="image/gif, image/jpeg" class="easyui-validatebox "  required="true"    /> 
+        点击这里上传文件 
+      
+      </a>
+     </td>
+     </tr>
+     
+     	    <tr>
+      <td class="td1">
+                主题大图分割图文字部分：
+    </td>
+     <td>   
+      <a href="javascript:void(0)" class="a-upload">  
+      <input type="file" name="thumbWord"  id="thumbWord"  accept="image/gif, image/jpeg"   class="easyui-validatebox "  required="true"   />  点击这里上传文件
+      </a>
+     </td>
+     </tr>
+	   	 
+	   	      	    <tr>
+      <td class="td1">
+                人物：
+    </td>
+     <td>   
+      <a href="javascript:void(0)" class="a-upload">  
+      <input type="file" name="character"  id="character"  accept="image/gif, image/jpeg" class="easyui-validatebox "  required="true"     />  点击这里上传文件
+      </a>
+     </td>
+     </tr>
+	   	 	   	      
+	  	    <tr>
+		      <td class="td1">
+		                人物相关背景图：
+		    </td>
+		     <td>   
+		      <a href="javascript:void(0)" class="a-upload">  
+		      <input type="file" name="background"  id="background"   accept="image/gif, image/jpeg"   class="easyui-validatebox "  required="true" />  点击这里上传文件
+		      </a>
+		     </td>
+     </tr>
+	   	 
+	   	 	   	   	  
+	   	 	   	   	  
+	   	 <tr>
 	   <td class="td1">
 	 版本号
 	   </td>
-	   <td><input type="text"  class=" textbox"   style="width:250px"  name="packet.version" ></td>
+	   <td><input type="text"  class=" easyui-numberbox textbox"   style="width:250px"  name="packet.version"  required="true"  precision="2"   ></td>
 	   </tr>
 	   
 	   	   	   	   <tr>
 	   <td class="td1">
 	  说明文件
 	   </td>
-	   <td>  <input   type="file" name="desc"  class="easyui-validatebox textbox"  required="true"  /> 
+	   <td> 
+	   
+	        <a href="javascript:void(0)" class="a-upload"> 
+	    <input   type="file" name="desc"  id="desc" class="easyui-validatebox "  required="true"  /> 
+	   点击这里上传文件</a>
+	   
 	   </td>
 	   </tr>
 	   
 	   <tr>
-	   <td style="text-align:right" colspan=2> <input  type="submit" value="提交"></td>
+	   <td style="text-align:right" colspan=2> 
+	   
+	   <input  type="button" onclick="cancelPacket()"  class="subbtn" value="取消">
+	   <input  type="submit"  class="subbtn"   value="提交"></td>
 	   </tr>
 	   
 	   </table></form>

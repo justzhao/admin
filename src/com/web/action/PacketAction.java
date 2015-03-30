@@ -21,6 +21,7 @@ import com.web.entity.Packet;
 import com.web.service.IModelService;
 import com.web.service.IPacketService;
 import com.web.util.JsonDateValueProcessor;
+import com.web.util.Qiniu;
 import com.web.util.Tools;
 
 
@@ -31,12 +32,33 @@ public class PacketAction extends ActionSupport {
 	 private IModelService modelService;
      private Packet packet;
      private JSONObject packets;
+     
      private File thumb;
      private File desc;
+     private File thumbUp;
+     private File thumbFooter;
+     private File thumbWord;
+     private File character;
+     private File background;
+     
      private String thumbFileName;
-     private String thumbContentType;
      private String descFileName;
+     private String thumbUpFileName;
+     private String thumbFooterFileName;
+     private String thumbWordFileName;
+     private String characterFileName;
+     private String backgroundFileName;
+     
+     
+     private String thumbContentType;
      private String descContentType;
+     private String thumbUpContentType;
+     private String thumbFooterContentType;
+     private String thumbWordContentType;
+     private String characterContentType;
+     private String backgroundContentType;
+     
+     
      private Set<Model> models=new HashSet<Model>();
      private int rows;
      private int page;
@@ -107,6 +129,96 @@ public class PacketAction extends ActionSupport {
 	}
 	
 
+	public File getThumbUp() {
+		return thumbUp;
+	}
+	public void setThumbUp(File thumbUp) {
+		this.thumbUp = thumbUp;
+	}
+	public File getThumbFooter() {
+		return thumbFooter;
+	}
+	public void setThumbFooter(File thumbFooter) {
+		this.thumbFooter = thumbFooter;
+	}
+	public File getThumbWord() {
+		return thumbWord;
+	}
+	public void setThumbWord(File thumbWord) {
+		this.thumbWord = thumbWord;
+	}
+	public File getCharacter() {
+		return character;
+	}
+	public void setCharacter(File character) {
+		this.character = character;
+	}
+	public File getBackground() {
+		return background;
+	}
+	public void setBackground(File background) {
+		this.background = background;
+	}
+	public String getThumbUpFileName() {
+		return thumbUpFileName;
+	}
+	public void setThumbUpFileName(String thumbUpFileName) {
+		this.thumbUpFileName = thumbUpFileName;
+	}
+	public String getThumbFooterFileName() {
+		return thumbFooterFileName;
+	}
+	public void setThumbFooterFileName(String thumbFooterFileName) {
+		this.thumbFooterFileName = thumbFooterFileName;
+	}
+	public String getThumbWordFileName() {
+		return thumbWordFileName;
+	}
+	public void setThumbWordFileName(String thumbWordFileName) {
+		this.thumbWordFileName = thumbWordFileName;
+	}
+	public String getCharacterFileName() {
+		return characterFileName;
+	}
+	public void setCharacterFileName(String characterFileName) {
+		this.characterFileName = characterFileName;
+	}
+	public String getBackgroundFileName() {
+		return backgroundFileName;
+	}
+	public void setBackgroundFileName(String backgroundFileName) {
+		this.backgroundFileName = backgroundFileName;
+	}
+	public String getThumbUpContentType() {
+		return thumbUpContentType;
+	}
+	public void setThumbUpContentType(String thumbUpContentType) {
+		this.thumbUpContentType = thumbUpContentType;
+	}
+	public String getThumbFooterContentType() {
+		return thumbFooterContentType;
+	}
+	public void setThumbFooterContentType(String thumbFooterContentType) {
+		this.thumbFooterContentType = thumbFooterContentType;
+	}
+	public String getThumbWordContentType() {
+		return thumbWordContentType;
+	}
+	public void setThumbWordContentType(String thumbWordContentType) {
+		this.thumbWordContentType = thumbWordContentType;
+	}
+	public String getCharacterContentType() {
+		return characterContentType;
+	}
+	public void setCharacterContentType(String characterContentType) {
+		this.characterContentType = characterContentType;
+	}
+	public String getBackgroundContentType() {
+		return backgroundContentType;
+	}
+	public void setBackgroundContentType(String backgroundContentType) {
+		this.backgroundContentType = backgroundContentType;
+	}
 	public Set<Model> getModels() {
 		return models;
 	}
@@ -128,33 +240,53 @@ public class PacketAction extends ActionSupport {
 	}
 	public String savePacket() throws Exception
      {
-		 String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
-      packet.setThumbPic(Tools.saveFile(thumb, thumbFileName, thumbContentType, realpath)) ;
-	   packet.setDescPic(Tools.saveFile(desc,descFileName,descContentType,realpath));
-
-		 String modeids=ServletActionContext.getRequest().getParameter("ids");
-		 if(modeids!=null)
-		 {
-		 String []id=modeids.split(",");
-		 for(int i=0;i<id.length;i++)
-		 {
-			 packet.getModels().add(modelService.getModelById(Integer.parseInt(id[i])));
-		 }
-		 }
-
 		 //上传用户先写死。
-		 packet.setOwner("admin");
+		 packet.setOwner(Tools.getCurrentUser().getName());
 
+		 //设置上传用户的时间
+		 packet.setCreateDate(Tools.getDate());
 		 //xml s
-		 packet.setXml("test.xml");
-	
-		 //添加模型
-	   packetService.savePacket(packet);
-	   // 然后需要更新模型标知已经打包
-	   modelService.updatePacket(packet.getModels());
-	   
-	   
-    	 return NONE;
+		packet.setXml("armodels.xml");
+		 PrintWriter pw=Tools.getPw();
+		try {
+			
+			 String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
+		       //保存缩略图主题
+				 packet.setThumbPic(Tools.saveFile(thumb, thumbFileName, thumbContentType, realpath)) ;
+				 //保存缩略图上
+				 packet.setThumbUp(Tools.saveFile(thumbUp, thumbUpFileName, thumbUpContentType, realpath));
+				 //保存缩略图下
+				 packet.setThumbFooter(Tools.saveFile(thumbFooter, thumbFooterFileName, thumbFooterContentType, realpath));
+				 //保存缩略图文字
+				 packet.setThumbWord(Tools.saveFile(thumbWord,thumbWordFileName, thumbWordContentType, realpath));
+				 //保存人物
+				 packet.setCharacter(Tools.saveFile(character, characterFileName, characterContentType, realpath));
+				 //保存背景
+				 packet.setBackground(Tools.saveFile(background,backgroundFileName, backgroundContentType, realpath));
+			   //保存说明图
+				 packet.setDescPic(Tools.saveFile(desc,descFileName,descContentType,realpath));
+
+				 //保存所有的模型
+				 String modeids=ServletActionContext.getRequest().getParameter("ids");
+				 if(modeids!=null)
+				 {
+				 String []id=modeids.split(",");
+				 for(int i=0;i<id.length;i++)
+				 {
+					 packet.getModels().add(modelService.getModelById(Integer.parseInt(id[i])));
+				 }
+				 }
+
+
+			
+				 //添加模型
+			pw.print(packetService.savePacket(packet));
+		} catch (RuntimeException e) {
+			// TODO: handle exception
+			pw.print(false);
+		}
+		
+ 	 return NONE;
      }
      
      public String getPagePacket(){
@@ -176,16 +308,7 @@ public class PacketAction extends ActionSupport {
         	 
         	 jsonMap.put("total", packetService.getCountByCondition(packet));
         	 jsonMap.put("rows",packetService.getPageListByCondition(packet, start, number));
-        	 /**
-        	 if(packet.getName().equals("")&&packet.getOwner().equals("")&&packet.getCreateDate()==null&&packet.getEndDate()==null&&packet.getEndcount()==0&&packet.getCount()==0)
-        	 {
-            	 jsonMap.put("total", packetService.getCount());
-            	 jsonMap.put("rows", packetService.getPageList(start, number));
-        	 }else
-        	 {
-        	 jsonMap.put("total", packetService.getCountByCondition(packet));
-        	 jsonMap.put("rows",packetService.getPageListByCondition(packet, start, number));
-        	 }*/
+
          }
          JsonConfig jsonConfig = new JsonConfig();
     	  jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
@@ -199,19 +322,54 @@ public class PacketAction extends ActionSupport {
      {
     	 
     	 PrintWriter pw=Tools.getPw();
-    	 pw.print(packetService.delPacketById(packet.getId()));
+    	 
+    	 try {
+    		 pw.print(packetService.delPacketById(packet.getId()));
+		} catch (RuntimeException e) {
+			// TODO: handle exception
+			pw.print(false);
+		}
+    
     	 return NONE;
      }
      
      public String updatePacket() throws Exception
-     {
+     { 
     	 
-    	 if(thumb!=null)
-    	 {
+    	 PrintWriter pw=Tools.getPw();
+    	 
+    	 try {
     		 String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
-    		 packet.setThumbPic(Tools.saveFile(thumb, thumbFileName, thumbContentType, realpath)) ;
-    	 }
-    	 packetService.updatePacket(packet);
+        	 if(thumb!=null)
+        	 {
+        		
+        		 packet.setThumbPic(Tools.saveFile(thumb, thumbFileName, thumbContentType, realpath)) ;
+        	 }
+        	 
+        	 if(thumbUp!=null)
+        	 {
+        		 packet.setThumbUp(Tools.saveFile(thumbUp, thumbUpFileName, thumbUpContentType, realpath));
+        	 }
+        	 if(thumbFooter!=null)
+        	 {
+        		 packet.setThumbFooter(Tools.saveFile(thumbFooter, thumbFooterFileName, thumbFooterContentType, realpath));
+        	 }
+        	 if(thumbWord!=null)
+        	 {
+        		 packet.setThumbWord(Tools.saveFile(thumbWord, thumbWordFileName, thumbWordContentType, realpath));
+        	 }
+        	 
+        	 
+        	 
+        	 
+        	 
+        	 pw.print(packetService.updatePacket(packet));
+		} catch (RuntimeException e) {
+			// TODO: handle exception
+			pw.print(false);
+		}
+    	 
+
     	 return NONE;
      }
 	 

@@ -10,9 +10,10 @@ public interface IPacketService {
 	/**
 	 * 添加一个数据包
 	 * @param p
+	 * @return 
 	 * @throws Exception
 	 */
-	public void savePacket(Packet p) throws Exception;
+	public boolean savePacket(Packet p) throws Exception;
 	
 
 	/**

@@ -3,7 +3,9 @@ package com.web.dao;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.hibernate.Query;
 import org.hibernate.ScrollableResults;
@@ -101,18 +103,37 @@ public class DaoImpl<T,ID extends Serializable> implements IDao<T, ID> {
 	@Override
 	public void deleteAll(Collection<T> entities) {
 		// TODO Auto-generated method stub
-		
+		for(Object entity : entities) {
+            this.getSession().delete(entity);
+        }
 	}
 
 	@Override
 	public void queryHql(String hqlString, Object... values) {
 		// TODO Auto-generated method stub
-		
+		 Query query = this.getSession().createQuery(hqlString);
+	        if (values != null)
+	        {
+	            for (int i = 0; i < values.length; i++)
+	            {
+	                query.setParameter(i, values[i]);
+	            }
+	        }
+	        query.executeUpdate();
 	}
 
 	@Override
 	public void querySql(String sqlString, Object... values) {
 		// TODO Auto-generated method stub
+		Query query = this.getSession().createSQLQuery(sqlString);
+        if (values != null)
+        {
+            for (int i = 0; i < values.length; i++)
+            {
+                query.setParameter(i, values[i]);
+            }
+        }
+        query.executeUpdate();
 		
 	}
 
@@ -182,12 +203,13 @@ public class DaoImpl<T,ID extends Serializable> implements IDao<T, ID> {
 	@Override
 	public void refresh(T t) {
 		// TODO Auto-generated method stub
-		
+		this.getSession().refresh(t);
 	}
 
 	@Override
 	public void update(T t) {
 		// TODO Auto-generated method stub
+		 this.getSession().update(t);
 		
 	}
 
@@ -287,6 +309,17 @@ public class DaoImpl<T,ID extends Serializable> implements IDao<T, ID> {
 		
 		
 		
-	};
+	}
+
+	public void evict(T t) {
+		
+		this.getSession().evict(t);
+	}
+	@Override
+		public Set filter(Set s,String hql) {
+			// TODO Auto-generated method stub
+		return   new HashSet( this.getSession().createFilter(s,hql).list());
+	
+		}
 
 }

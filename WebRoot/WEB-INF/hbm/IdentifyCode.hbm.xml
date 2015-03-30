@@ -17,6 +17,8 @@
 
 <property name="packed" column="isPacked" type="boolean"></property>
 
+
+
 </class>
 
 

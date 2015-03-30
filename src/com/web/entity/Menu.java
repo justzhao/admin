@@ -8,6 +8,8 @@ public class Menu {
 	private int pid;
 	private String id;
 	private String text;
+	
+	private String iconCls;
 
 	private Set<Menu> children=new HashSet<Menu>();
 
@@ -51,6 +53,14 @@ public class Menu {
 		this.children = children;
 	}
 
+	public String getIconCls() {
+		return iconCls;
+	}
+
+	public void setIconCls(String iconCls) {
+		this.iconCls = iconCls;
+	}
+    
 
 	
 	

@@ -63,6 +63,9 @@
   <bean id="userDao" class="com.web.dao.Impl.UserDaoImpl">
   <property name="sessionFactory" ref="sessionFactory"></property>
   </bean>
+  <bean id="roleDao" class="com.web.dao.Impl.RoleDaoImpl">
+  <property name="sessionFactory" ref="sessionFactory"></property>
+  </bean>
   <bean id="spicDao" class="com.web.dao.Impl.ScrollPicDao">
     <property name="sessionFactory" ref="sessionFactory"></property>
    </bean>
@@ -90,21 +93,32 @@
   </bean>
   <bean  id="modelService"  class="com.web.service.Impl.ModelServiceImpl">
   <property name="modelDao" ref="modelDao"></property>
+  <property name="packetDao" ref="packetDao"></property>
   </bean>
   <bean id="codeService" class="com.web.service.Impl.CodeServiceImpl">
   <property name="codeDao" ref="codeDao"></property>
+  <property name="modelDao" ref="modelDao"></property>
   </bean>
   <bean id="packetService" class="com.web.service.Impl.PacketServiceImpl">
   <property name="packetDao" ref="packetDao"></property>
+  <property name="codeDao"  ref="codeDao"></property>
+  <property name="modelDao" ref="modelDao"></property>
   </bean>
   <bean id="mainService" class="com.web.service.Impl.MainServiceImpl">
   <property name="menuDao" ref="menuDao"></property>
+  </bean>
+  <bean id="authorityService" class="com.web.service.Impl.AuthorityServiceImpl">
+ <property name="userDao" ref="userDao"></property>
+  <property name="roleDao" ref="roleDao"></property>
   </bean>
   <!-- Action -->
   
   <bean id="mainAction" class="com.web.action.MainAction"  scope="prototype">
   <property name="userService" ref="userService"></property>
   <property name="mainService" ref="mainService"></property>
+  </bean>
+  <bean id="authorityAction" class="com.web.action.AuthorityAction" scope="prototype">
+  <property name="authorityService" ref="authorityService"></property>
   </bean>
   <bean id="scrollPicAction" class="com.web.action.ScrollpicAction" scope="prototype">
 <property name="picService" ref="picService"></property>

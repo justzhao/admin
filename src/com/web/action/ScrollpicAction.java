@@ -147,12 +147,20 @@ public class ScrollpicAction extends ActionSupport {
 	}
 	public String saveScroll() throws Exception
 	{
+		 PrintWriter pw = Tools.getPw();  
+			pic.setOwner(Tools.getCurrentUser().getName());
+		 try {
+			  pw.print(picService.saveScrollPic(pic));
+		} catch (RuntimeException e) {
+			// TODO: handle exception
+			  pw.print(false); 
+		}
+		
+	    
+	
 
-	    	picService.saveScrollPic(pic);
-		   HttpServletResponse response = ServletActionContext.getResponse();
-		   response.setContentType("text/html;charset=utf-8");   
-	        PrintWriter pw = response.getWriter();  
-	        pw.print("保存成功"); 
+	       
+	      
 		return NONE;
 	}
 	public String getPicList()
@@ -190,15 +198,33 @@ public class ScrollpicAction extends ActionSupport {
 	public String deScrollPic() throws IOException{
 		
 		PrintWriter pw=Tools.getPw();
+		
+		try {
 		pw.print(picService.delScrollPic(pic));
+		
+		} catch (RuntimeException e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			pw.print(false);
+			
+		}
 		return NONE;
 	}
 	
 	public String updateScroll() throws Exception
 	{
-		picService.updateScroll(pic);
 		PrintWriter pw=Tools.getPw();
-		pw.print("操作成功");
+	
+	try{
+		 pw.print(picService.updateScroll(pic));
+	}catch (RuntimeException e) {
+		// TODO: handle exception
+		pw.print(false);
+	}
+	
+	
+		
+	
 		return NONE;
 	}
 

@@ -1,65 +1,37 @@
 ﻿$(function(){
-	InitLeftMenu();
+
 	tabClose();
-	tabCloseEven();
+	
+
+    openPwd();
+    //
+    $('#editpass').click(function() {
+        $('#w').window('open');
+    });
+
+    $('#btnEp').click(function() {
+       // serverLogin();
+    })
+
+   
+
+    $('#loginOut').click(function() {
+        $.messager.confirm('系统提示', '您确定要退出本次登录吗?', function(r) {
+
+            if (r) {
+              $.post('loginOut',function(data){
+               location.href = 'homeLogin';
+              });
+               
+            }
+        });
+
+    })
+
 })
 
-//初始化左侧
-function InitLeftMenu() {
-
-	var m="";
-	$(function(){
-		
-		$("#tree").tree( {
-			url : "getAllMenu",
-			onClick : doMenuClick,
-			onLoadSuccess:function(){
-		
-				$("#tree").tree("collapseAll");
-				
-			}
-		
-	
-		      
-	
-		});
-
-		
-		
-		function doMenuClick(node) {
-			
-			  $(this).tree('toggle', node.target);  
-			if ($("#tree").tree("isLeaf", node.target) == false)
-				return;
-
-			var id = node.id;
-			var text = node.text;
-			if (!id) return;
-					
-			var elTab = parent.$('#tabs'); 
-			if (elTab.tabs('exists', text)) {
-				elTab.tabs('select', text);
-			} else {
-				// FIXME: iframe 必须包在 div 里, 否则会出现多余的滚动条
-				// 如果新tab页能够设置style, 就不必这个多余的div了
-				var url = id;
-				var content = '<div style="width:100%;height:100%;overflow:hidden;">'+
-						'<iframe src="' + url + '" scrolling="auto" style="width:100%;height:100%;border:0;" ></iframe></div>';
-
-				elTab.tabs('add', {
-					title : text,
-					content : content,
-					// href: url,
-					closable : true
-				});
-			}
-		}
-	});
-	
 
 
-
-}
 
 function addTab(subtitle,url){
 	if(!$('#tabs').tabs('exists',subtitle)){
@@ -87,9 +59,19 @@ function tabClose()
 	/*双击关闭TAB选项卡*/
 	$(".tabs-inner").dblclick(function(){
 		var subtitle = $(this).children("span").text();
-		$('#tabs').tabs('close',subtitle);
+		//alert(subtitle);
+	      $(".tabs li").each(function(index, obj) {
+	            //获取所有可关闭的选项卡
+	          var tab = $(".tabs-closable", this).text();
+	          $(".easyui-tabs").tabs('close', tab);
+	      });
+		
+		
+		
+	//	$('#tabs').tabs('close',subtitle);
 	})
 
+/**
 	$(".tabs-inner").bind('contextmenu',function(e){
 		$('#mm').menu('show', {
 			left: e.pageX,
@@ -98,9 +80,9 @@ function tabClose()
 		
 		var subtitle =$(this).children("span").text();
 		$('#mm').data("currtab",subtitle);
-		
+
 		return false;
-	});
+	});*/
 }
 //绑定右键菜单事件
 function tabCloseEven()
@@ -190,3 +172,66 @@ function clockon() {
 
     var timer = setTimeout("clockon()", 200);
 }
+
+//设置登录窗口
+function openPwd() {
+    $('#w').window({
+        title: '修改密码',
+        width: 300,
+        modal: true,
+        shadow: true,
+        closed: true,
+        height: 160,
+        resizable:false
+    });
+}
+//关闭登录窗口
+function close() {
+    $('#w').window('close');
+}
+
+
+
+//修改密码
+function changePass() {
+    var $newpass = $('#txtNewPass');
+    var $rePass = $('#txtRePass');
+
+    if ($newpass.val() == '') {
+        msgShow('系统提示', '请输入密码！', 'warning');
+        return false;
+    }
+    if ($rePass.val() == '') {
+        msgShow('系统提示', '请在一次输入密码！', 'warning');
+        return false;
+    }
+
+    if ($newpass.val() != $rePass.val()) {
+        msgShow('系统提示', '两次密码不一至！请重新输入', 'warning');
+        return false;
+    }
+
+    $.post('changPass?pass=' + $newpass.val(), function(msg) {
+    
+    if(msg==true||msg=='true')
+    {
+      msgShow('系统提示', '恭喜，密码修改成功！', 'info');
+    }
+    else
+    {  
+    $.messager.alert("消息", "操作失败！","error");
+    }
+       
+        $newpass.val('');
+        $rePass.val('');
+        close();
+    })
+  
+}
+
+
+
+
+
+
+

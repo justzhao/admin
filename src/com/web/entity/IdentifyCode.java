@@ -1,6 +1,8 @@
 package com.web.entity;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 
 
@@ -14,6 +16,8 @@ public class IdentifyCode {
 	private String owner;
     
 	private boolean packed;
+
+	private int searchFlag;
 
 	
 	public IdentifyCode() {
@@ -75,6 +79,15 @@ public class IdentifyCode {
 
 	public void setPacked(boolean packed) {
 		this.packed = packed;
+	}
+	
+
+	public int getSearchFlag() {
+		return searchFlag;
+	}
+
+	public void setSearchFlag(int searchFlag) {
+		this.searchFlag = searchFlag;
 	}
 
 	@Override
