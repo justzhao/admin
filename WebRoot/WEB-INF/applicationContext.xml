@@ -83,6 +83,9 @@
     <property name="sessionFactory"  ref="sessionFactory"></property>
     </bean>
   
+  <bean id="themeDao" class="com.web.dao.Impl.ThemeDao">
+  <property name="sessionFactory" ref="sessionFactory"></property>
+  </bean>
   
     <!-- Service -->
   <bean id="userService" class="com.web.service.Impl.UserServiceImpl">
@@ -103,6 +106,7 @@
   <property name="packetDao" ref="packetDao"></property>
   <property name="codeDao"  ref="codeDao"></property>
   <property name="modelDao" ref="modelDao"></property>
+  <property name="themeDao" ref="themeDao"></property>
   </bean>
   <bean id="mainService" class="com.web.service.Impl.MainServiceImpl">
   <property name="menuDao" ref="menuDao"></property>
@@ -111,6 +115,10 @@
  <property name="userDao" ref="userDao"></property>
   <property name="roleDao" ref="roleDao"></property>
   </bean>
+  <bean id="themeService" class="com.web.service.Impl.ThemeServiceImpl">
+  <property name="themeDao" ref="themeDao"></property>
+  </bean>
+  
   <!-- Action -->
   
   <bean id="mainAction" class="com.web.action.MainAction"  scope="prototype">
@@ -134,6 +142,9 @@
 <bean id="packetAction" class="com.web.action.PacketAction"  scope="prototype">
 <property name="packetService" ref="packetService"></property>
 <property name="modelService" ref="modelService"></property>
+</bean>
+<bean id="themeAction" class="com.web.action.ThemeAction">
+<property name="themeService" ref="themeService"></property>
 </bean>
 
 <!-- 事务 -->

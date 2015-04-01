@@ -13,6 +13,7 @@
 <property name="info" column="info" type="string"></property>
 <property name="url" column="url"  type="string"></property>
 <property name="effective" column="effective" type="boolean"></property>
+<property name="testPacket" column="testPacket" type="boolean"></property>
 <property name="xml" column="xml" type="string"></property>
 <property name="thumbPic" column="thumbPic" type="string"></property>
 <property name="thumbUp" column="thumbUp" type="string"></property>
@@ -30,7 +31,7 @@
 <many-to-many class="com.web.entity.Model" column="modelId"></many-to-many>
 </set>
 
-
+<many-to-one name="theme" unique="true" column="themeId"  lazy="false"></many-to-one>
 </class>
 
 

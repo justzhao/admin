@@ -18,10 +18,17 @@
 				            onSelect:function(data)
 				            {
 				 
-				            }
+				            }edittheme
                 }); */
             	
-       	
+			$('#theme').combobox({
+
+				
+				url:'getThemeList'
+	
+				});
+
+
             				
             				
             				
@@ -33,10 +40,7 @@
           
           //	  $("#tt").datagrid('hideColumn', 'urls'); 
           	  $("#tt").datagrid('hideColumn', 'xml'); 
-          	  $("#tt").datagrid('hideColumn', 'thumbPic'); 
-          	$("#tt").datagrid('hideColumn', 'thumbUp'); 
-          	$("#tt").datagrid('hideColumn', 'thumbFooter'); 
-          	$("#tt").datagrid('hideColumn', 'thumbWord'); 
+; 
           	  $("#tt").datagrid('hideColumn', 'descPic'); 
 			$('#editff').form({
 				url:'updatePacket',
@@ -59,12 +63,14 @@
 				},
 				success:function(data){
 					
+					
+					  $('#theme').combobox('reload');
 					 $.messager.progress('close');
 					 if(data==true||data=='true')
 						 {
 							$.messager.alert('消息', "操作成功", 'info',function(){
 								
-							
+							  
 								   $('#tt').datagrid('reload');
 								$(".panel-tool-close").click();
 							
@@ -72,6 +78,7 @@
 						 }else
 							 {
 							 $.messager.alert("消息", "操作失败！","error");
+							 $(".panel-tool-close").click();
 							 }
 					
 
@@ -101,10 +108,20 @@
 	      document.getElementById("editCreate").value=row.createDate;
 		  document.getElementById("editcount").value=row.count;
 		 document.getElementById("editdesc").value=row.descPic;
+		 /**
 		 document.getElementById("editthumb").value=row.thumbPic;
 		 document.getElementById("editthumbUp").value=row.thumbUp;
 		 document.getElementById("editthumbFooter").value=row.thumbFooter;
 		 document.getElementById("editthumbWord").value=row.thumbWord;
+		 */
+
+		 //getData
+		 
+		 var dd= $('#theme').combobox('getData');
+		 dd.push({ "name": row.theme.name, "id": row.theme.id });
+     // alert(dd.length);
+		 $("#theme").combobox("loadData", dd); 
+		 $("#theme").combobox("setValue",row.theme.id);
 		 if(row.device==0)
 		 {
 		 document.getElementById("all").checked=true;
@@ -124,6 +141,14 @@
 		 	 document.getElementById("editeff").checked=true;
 		 }
 		 
+		 if(row.testPacket==false)
+		 {
+		 document.getElementById("edittest").checked=false;
+		 }else
+		 {
+		 	 document.getElementById("edittest").checked=true;
+		 }
+		 
 	
 		  $('#edit').dialog('open');
 		 }else
@@ -133,7 +158,18 @@
 		
 		
 		}
-		
+		function formatTheme(value)
+		{
+			if(value !=undefined)
+		  {
+				if(value.name==undefined)
+					{
+					  return '无';
+					}
+				return value.name
+		  }
+				
+		}
 		function formatEffective(value)
 		{
 		 return value!=0?"是":"否";
@@ -205,18 +241,7 @@
 function doSearch()
 {
 
- var temp = document.getElementsByName("isTest");
-   var flag=2;
-  for(var i=0;i<temp.length;i++)
-  {
-     if(temp[i].checked)
-     {
-         flag = temp[i].value;
-           
-        }
-  }
 
-  //var ck= document.getElementById("isTest").checked;
 
 	$('#tt').datagrid('load',{
 				'packet.name': $('#name').val(),
@@ -225,7 +250,8 @@ function doSearch()
 				'packet.owner':$('#owner').val(),
 				'packet.count':($('#startcount').val()==''?0:$('#startcount').val()),
 				'packet.endcount':($('#endcount').val()==''?0:$('#endcount').val()),
-             	'packet.searchFlag': flag,
+             	'packet.searchFlag': $('#isTest').combobox('getValue'),
+             	'packet.effectiveFlag':$('#isEffective').combobox('getValue'),
              	'packet.device':$('#searchdevice').combobox('getValue')
 	});
 

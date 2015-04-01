@@ -251,7 +251,9 @@ public class PacketAction extends ActionSupport {
 		try {
 			
 			 String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
-		       //保存缩略图主题
+		
+			 /**
+			 //保存缩略图主题
 				 packet.setThumbPic(Tools.saveFile(thumb, thumbFileName, thumbContentType, realpath)) ;
 				 //保存缩略图上
 				 packet.setThumbUp(Tools.saveFile(thumbUp, thumbUpFileName, thumbUpContentType, realpath));
@@ -260,6 +262,9 @@ public class PacketAction extends ActionSupport {
 				 //保存缩略图文字
 				 packet.setThumbWord(Tools.saveFile(thumbWord,thumbWordFileName, thumbWordContentType, realpath));
 				 //保存人物
+				  * 
+				  * */
+				  
 				 packet.setCharacter(Tools.saveFile(character, characterFileName, characterContentType, realpath));
 				 //保存背景
 				 packet.setBackground(Tools.saveFile(background,backgroundFileName, backgroundContentType, realpath));
@@ -312,7 +317,8 @@ public class PacketAction extends ActionSupport {
          }
          JsonConfig jsonConfig = new JsonConfig();
     	  jsonConfig.registerJsonValueProcessor(Date.class , new JsonDateValueProcessor());
-    	  jsonConfig.setExcludes(new String[]{"models"});
+   
+    	  jsonConfig.setExcludes(new String[]{"models","packet"});
     	  packets= JSONObject.fromObject(jsonMap,jsonConfig);
          
     	 return SUCCESS;
@@ -340,7 +346,10 @@ public class PacketAction extends ActionSupport {
     	 
     	 try {
     		 String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
-        	 if(thumb!=null)
+        
+    		 
+    		 /**
+    		 if(thumb!=null)
         	 {
         		
         		 packet.setThumbPic(Tools.saveFile(thumb, thumbFileName, thumbContentType, realpath)) ;
@@ -358,7 +367,7 @@ public class PacketAction extends ActionSupport {
         	 {
         		 packet.setThumbWord(Tools.saveFile(thumbWord, thumbWordFileName, thumbWordContentType, realpath));
         	 }
-        	 
+        	 */
         	 
         	 
         	 
@@ -366,6 +375,7 @@ public class PacketAction extends ActionSupport {
         	 pw.print(packetService.updatePacket(packet));
 		} catch (RuntimeException e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			pw.print(false);
 		}
     	 

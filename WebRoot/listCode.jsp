@@ -87,13 +87,19 @@ width:30%
 			<span>上传用户</span>
 			<input id="owner"  type="text"  style="line-height:20px;border:1px solid #ccc">
 			<span>是否被打包</span>
+			<!--  
 			<input type="radio" name="packed" value="0" > 否
 			<input type="radio" name="packed" value="1"> 是
 			<input type="radio" name="packed" value="2" checked> 全部 
+-->
+       <select id="packed" class="easyui-combobox"   style="width:60px;">
+			    <option value="2">全部</option>
+		         <option value="0">否</option> 
+		         <option value="1">是</option>
 
-			<!--  
-			<input id="packed"  type="checkbox"  style="line-height:20px;border:1px solid #ccc">
-			-->
+      </select>
+
+
 			<a href="#" class="easyui-linkbutton" iconCls="icon-search" plain="true" onclick="doSearch()">搜索</a>
 			
 		</div>

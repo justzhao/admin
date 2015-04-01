@@ -35,7 +35,23 @@
 	                 data:data
 	       
 			
-				}); 
+				});
+				
+				//theme
+				
+				
+				$('#theme').combobox({
+					
+	                 url:'getThemeList',
+	                 required:true,
+				      onLoadSuccess: function (data) {
+				            if (data) {
+				               $('#theme').combobox('setValue',data[0].id);
+				            }
+				            }
+	       
+			
+				});
 		  		});
 
                
@@ -87,6 +103,53 @@
 
 			}
 			});
+			
+			//themeff
+			
+			$('#themeff').form({
+				url:'saveTheme',
+				onSubmit:function(){
+					 if($(this).form('validate'))
+					 {
+					 
+
+								 $.messager.progress({
+									 title: '稍等',
+									 msg: '正在操作中...',
+									text: '操作中'
+									 });
+					 return true;
+					 }else
+					 {
+					 
+					 return false;
+					 
+					 }
+				},
+				success:function(data){
+
+				     $.messager.progress('close');
+				     $('#theme').combobox('reload'); 
+				     
+				     if(data==true||data=='true')
+				     {
+					$.messager.alert('消息', "操作成功", 'info',function(){
+					
+			
+			
+						  $('#themediv').dialog('close');
+					$('#themeff').form('clear');
+					
+
+				  
+					});
+				}else{
+					  $.messager.alert("消息", "操作失败！","error");
+				}
+				     
+				}
+			});
+			
 			
 			
 			
@@ -146,6 +209,7 @@
 						  {
 							$('#packet').form('clear');
 							
+							$('#theme').combobox('reload'); 
 							$.messager.alert('消息', "操作成功", 'info',function(){
 							$('#tt').datagrid('reload'); 
 							
@@ -253,19 +317,8 @@
 
 function doSearch()
 {
- var temp = document.getElementsByName("packed");
-   var flag=2;
-  for(var i=0;i<temp.length;i++)
-  {
-     if(temp[i].checked)
-     {
-         flag = temp[i].value;
-           
-        }
-  }
-//  var ck= document.getElementById("packaged").checked;
-  //'model.packaged':ck  $('#editcode').combobox('setValue',row.code.id);
-  
+
+
 
   var codeid=$('#searchcode').combobox('getValue')!=''?$('#searchcode').combobox('getValue'):0;
   
@@ -274,13 +327,18 @@ function doSearch()
 				'model.createDate': $('#start').datebox('getValue'),
 				'model.endDate': $('#end').datebox('getValue'),
 				'model.owner':$('#owner').val(),
-				'model.searchFlag': flag,
+				'model.searchFlag':$('#packed').combobox('getValue'),
 				'model.code.id': codeid
 			
 			});
 
 }
+function addTheme()
+{
+	//alert('fasdfasdf');
+  $('#themediv').dialog('open');
 
+}
 function editRow()
 {
    var row = $('#tt').datagrid('getSelected');

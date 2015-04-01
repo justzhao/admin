@@ -6,12 +6,12 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 %>
 
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head id="Head1">
     <title>口袋家居后台管理系统</title>
 <META http-equiv="X-UA-Compatible" content="IE=8" > </META>
-    
+  <meta http-equiv="X-UA-Compatible" content="IE=EmulateIE8"/>
     
  <link rel="stylesheet" href="css/default.css" type="text/css"></link>
 <link rel="stylesheet" href="js/jquery-easyui-1.4.2/themes/default/easyui.css" type="text/css"></link>
@@ -53,6 +53,14 @@ height:30px;
 text-align: center;
 padding-top:13px;
 }
+.nav-item:HOVER {
+	background: url("images/btnon.jpg") no-repeat;
+width:200px;
+height:30px;
+text-align: center;
+padding-top:13px;
+}
+
 
 </style>
 </head>
@@ -92,7 +100,7 @@ padding-top:13px;
 			  	   	      
                         <a href="javascript:addTab('<s:property value="#vv.text" />','<s:property value="#vv.id" />')">
           
-                          <span style="font-size:16px"  ><s:property value="#vv.text" /></span>
+                          <span style="font-size:16px;font-weight:bold"  ><s:property value="#vv.text" /></span>
                         </a>
                   
                     </div>

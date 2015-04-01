@@ -11,6 +11,7 @@ import com.opensymphony.xwork2.ActionSupport;
 import com.web.dao.IDao;
 import com.web.entity.Model;
 import com.web.entity.Packet;
+import com.web.entity.Theme;
 import com.web.service.IPacketService;
 import com.web.util.Qiniu;
 import com.web.util.Tools;
@@ -20,6 +21,8 @@ public class PacketServiceImpl implements IPacketService {
 	private IDao packetDao;
 	private IDao modelDao;
 	private IDao codeDao;
+	
+	private IDao themeDao;
 
 	public IDao getModelDao() {
 		return modelDao;
@@ -44,6 +47,15 @@ public class PacketServiceImpl implements IPacketService {
 
 	public void setCodeDao(IDao codeDao) {
 		this.codeDao = codeDao;
+	}
+	
+
+	public IDao getThemeDao() {
+		return themeDao;
+	}
+
+	public void setThemeDao(IDao themeDao) {
+		this.themeDao = themeDao;
 	}
 
 	@Override
@@ -118,11 +130,16 @@ public class PacketServiceImpl implements IPacketService {
 				//把说明文件压缩到zip中
 				Tools.ZipFiles(paths,p.getUrl());
 				Qiniu.uploadFile(p.getUrl());
-		     
+				
+				//更新一下对应主题组的状态。
+				Theme t=(Theme) themeDao.get(p.getTheme().getId());
+		       t.setFlag(true);
+		       themeDao.saveOrUpdate(t);
+				 
 				packetDao.save(p);
 			} catch (Exception e) {
 				// TODO: handle exception
-				
+				e.printStackTrace();
 				return false;
 			}
 			  
@@ -163,16 +180,32 @@ public class PacketServiceImpl implements IPacketService {
 		    if(p.getSearchFlag()==0)
 		    {//否
 		    	
-				hql =hql +" and p.effective = ?";
+				hql =hql +" and p.testPacket = ?";
 				
 				paramList.add(false);
 		    }
 		    if(p.getSearchFlag()==1)
 		    {//是
+				hql =hql +" and  p.testPacket= ?";
+				
+				paramList.add(true);
+		    }
+		    
+		    
+		    if(p.getEffectiveFlag()==0)
+		    {//否
+		    	
+				hql =hql +" and p.effective = ?";
+				
+				paramList.add(false);
+		    }
+		    if(p.getEffectiveFlag()==1)
+		    {//是
 				hql =hql +" and  p.effective= ?";
 				
 				paramList.add(true);
 		    }
+		    
 		    
 		    if(p.getDevice()!=-1){
 		    	
@@ -220,11 +253,24 @@ public class PacketServiceImpl implements IPacketService {
 		  
 		    if(p.getSearchFlag()==0)
 		    {//否
-				hql =hql +" and p.effective = ?";
+				hql =hql +" and p.testPacket = ?";
 				paramList.add(false);
 		    } 
 		    
 		    if(p.getSearchFlag()==1)
+		    {//是
+				hql =hql +" and  p.testPacket= ?";
+				paramList.add(true);
+		    }
+		    
+		    
+		    if(p.getEffectiveFlag()==0)
+		    {//否
+				hql =hql +" and p.effective = ?";
+				paramList.add(false);
+		    } 
+		    
+		    if(p.getEffectiveFlag()==1)
 		    {//是
 				hql =hql +" and  p.effective= ?";
 				paramList.add(true);
@@ -278,43 +324,27 @@ public class PacketServiceImpl implements IPacketService {
 	@Override
 	public boolean updatePacket(Packet p) throws Exception {
 		// TODO Auto-generated method stub
-	
-		Packet pc=(Packet) packetDao.load(p.getId());
-		if(!pc.getThumbPic().equals(p.getThumbPic()))
-		{
-			Qiniu.deleteFile(pc.getThumbPic());
-
-	
-			Qiniu.uploadFile(p.getThumbPic());
+	//需要把原来的theme更新为未设置
+	//获取原来的packet.
+		
+		try {
+			Packet pp=(Packet) packetDao.get(p.getId());
+			Theme tt=pp.getTheme();
+			tt.setFlag(false);
+			themeDao.saveOrUpdate(tt);
+			
+			packetDao.evict(pp);
+	       Theme t=(Theme) themeDao.get(p.getTheme().getId());
+	        t.setFlag(true);
+	        themeDao.saveOrUpdate(t);
+			
+			packetDao.saveOrUpdate(p);
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return false;
 		}
-		
-		
-		if(!pc.getThumbUp().equals(p.getThumbUp()))
-		{
-			Qiniu.deleteFile(pc.getThumbUp());
 
-	
-			Qiniu.uploadFile(p.getThumbUp());
-		}
-		
-		if(!pc.getThumbFooter().equals(p.getThumbFooter()))
-		{
-			Qiniu.deleteFile(pc.getThumbFooter());
-
-	
-			Qiniu.uploadFile(p.getThumbFooter());
-		}
-		
-		if(!pc.getThumbWord().equals(p.getThumbWord()))
-		{
-			Qiniu.deleteFile(pc.getThumbWord());
-
-	
-			Qiniu.uploadFile(p.getThumbWord());
-		}
-		//packetDao.ge
-		
-		packetDao.merge(p);
 		
 		return true;
 	}

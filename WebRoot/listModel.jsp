@@ -80,9 +80,19 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <div style="margin-top: 10px;margin-bottom: 10px"">
 
           		<span>是否被打包</span>
+        <!--  
+        
         	<input type="radio" name="packed" value="0" > 否
 			<input type="radio" name="packed" value="1"> 是
-			<input type="radio" name="packed" value="2" checked> 全部 
+			<input type="radio" name="packed" value="2" checked> 全部 -->
+			
+<select id="packed" class="easyui-combobox"   style="width:60px;">
+	    <option value="2">全部</option>
+        <option value="0">否</option> 
+     <option value="1">是</option>
+
+  </select>	
+			
 
 
 <span>识别码</span>
@@ -311,23 +321,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   
 	
 	   	   
-	   	   	   	   <tr>
-
-
-	   	   
+	   <tr>
+   <td class="td1">
+	   是否有效
+	   </td>
+	   <td>
+      <s:checkbox name="packet.effective"></s:checkbox>
+       </td>
+	   </tr>
+	   
+	   
+	   	   <tr>
+   <td class="td1">
+	   是否测试数据包
+	   </td>
+	   <td>
+      <s:checkbox name="packet.testPacket"></s:checkbox>
+       </td>
+	   </tr>
+	   <tr>
 	   <td class="td1">
-	   是否测试版本
+	   主题组
 	   </td>
 	   <td>
 	   
-	   <s:checkbox name="packet.effective"></s:checkbox>
-
-
-	 
 	   
+	   <input id="theme" style="width:150px"  name =" packet.theme.id" valueField="id"  textField="name">
+	   
+	   
+	      <a href="#" class="easyui-linkbutton" iconCls="icon-add" plain="true" onclick="javascript:addTheme()">新建主题组</a>
 	   </td>
 	   </tr>
-
+	   
+<!--
 	    <tr>
       <td class="td1">
                   主题缩略图：
@@ -375,7 +401,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
       </a>
      </td>
      </tr>
-	   	 
+	   	    -->
 	   	      	    <tr>
       <td class="td1">
                 人物：
@@ -409,7 +435,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   
 	   	   	   	   <tr>
 	   <td class="td1">
-	  说明文件
+	  说明描述图片文件
 	   </td>
 	   <td> 
 	   
@@ -419,7 +445,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   
 	   </td>
 	   </tr>
-	   
+	
 	   <tr>
 	   <td style="text-align:right" colspan=2> 
 	   
@@ -430,7 +456,85 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   </table></form>
 </div>
 
-		   
+		
+		
+		
+		
+		
+<div id="themediv" class="easyui-dialog" style="top:100px;padding:5px;width:600px;height:300px;"
+			title="添加主题图片组" iconCls="icon-ok"
+			 closed="true" modal="true">
+			  <form id="themeff"    name="ff"  enctype= "multipart/form-data"  method="post">
+	   <table   style="width:100%; font-size: 12px;font-weight: normal">
+
+	   <tr>
+	   <td  class="td1" >
+	   名字:
+	   </td>
+	   <td style="width:70%"><input   class="easyui-validatebox textbox"  type="text"   name ="theme.name"  required="true"></td>
+	   </tr>
+	   	
+	   	   	           <tr>
+                        <td class="td1">
+                           主题缩略图上传：
+                        </td>
+                        <td>                            
+                           <a href="javascript:void(0)" class="a-upload">
+                                   	    <input type="file" name="thumb"  accept="image/gif, image/jpeg"  required="true" /> 点击这里上传文件
+                              </a>
+                 </td>
+                    </tr>
+                    
+                       	    <tr>
+      <td class="td1">
+                  主题大图分割图上半部：
+    </td>
+     <td>   
+     
+             <a href="javascript:void(0)" class="a-upload">
+      <input type="file" name="thumbUp"   id="thumbUp"  accept="image/gif, image/jpeg"  required="true" /> 点击这里上传文件 
+      
+      </a>
+     </td>
+     </tr>
+     
+     
+     	    <tr>
+      <td class="td1">
+                主题大图分割图下半部：
+    </td>
+     <td>    <a href="javascript:void(0)" class="a-upload">
+       <input type="file" name="thumbFooter"  id="thumbFooter" accept="image/gif, image/jpeg"  required="true"/> 
+        点击这里上传文件 
+      
+      </a>
+     </td>
+     </tr>
+     
+     	    <tr>
+      <td class="td1">
+                主题大图分割图文字部分：
+    </td>
+     <td>   
+      <a href="javascript:void(0)" class="a-upload">  
+      <input type="file" name="thumbWord"  id="thumbWord"  accept="image/gif, image/jpeg"  required="true" />  点击这里上传文件
+      </a>
+     </td>
+     </tr>
+		   <tr>
+	   <td style="text-align:right" colspan=2> 
+	   
+	      <input  type="button" onclick="cancelTheme()"  class="subbtn" value="取消">
+	   <input  type="submit"   class="subbtn"   value="提交">
+	   
+	   
+	   </td>
+	   </tr>
+	   </table>   
+	   
+	   
+	   </form>
+</div>   
 		   
 </body>
 </html>

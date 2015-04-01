@@ -143,27 +143,14 @@
 		    }); */
  var temp = document.getElementsByName("packed");
 
- var flag=2;
-  for(var i=0;i<temp.length;i++)
-  {
-     if(temp[i].checked)
-     {
-         flag = temp[i].value;
-           
-        }
-  }
-		    
-		//alert(flag);
-		//return;    
-		    
-		  //  var checked = document.getElementById('packed').checked;	'code.packed': checked
-		    //alert(checked); true false
+
+
 		    $('#tt').datagrid('load',{
 				'code.name': $('#name').val(),
 				'code.createDate': $('#start').datebox('getValue'),
 				'code.endDate': $('#end').datebox('getValue'),
 				'code.owner': $('#owner').val(),
-			   	'code.searchFlag': flag
+			   	'code.searchFlag': $('#packed').combobox('getValue')
 				
 			});
 	    }

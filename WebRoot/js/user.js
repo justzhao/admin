@@ -109,7 +109,7 @@
 					  		
 	  		$('#searchrole').combobox({
 
-           		data:data,
+           		data:data
 
 			}); 
 		  		

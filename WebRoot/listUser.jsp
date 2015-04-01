@@ -19,14 +19,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <script type="text/javascript" src="js/jquery-easyui-1.4.2/jquery.easyui.min.js"></script>
 <script type="text/javascript" src="js/jquery-easyui-1.4.2/locale/easyui-lang-zh_CN.js"></script>
 	<script type="text/javascript" src="js/user.js"></script>
-
-
-	
-
-	
-
-
-  </head>
+	</head>
   
   <body>
     <table id="tt" class="easyui-datagrid" style="width:100%;height:450px"
@@ -39,13 +32,13 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 		<tr>
 			<th field="id" width="50">编号</th>
 			
-			<th field="name" width="150">名字</th>
+			<th field="name" width="250">名字</th>
 			
 			
-			 <th field="pass" width="250">密码</th> 
+			 <th field="pass" width="350">密码</th> 
 			
 			
-			<th field="role" width="100" formatter="formatRole">角色</th>
+			<th field="role" width="200" formatter="formatRole">角色</th>
 			
 			<th field="createDate" width="100" >创建时间</th>
 		</tr>

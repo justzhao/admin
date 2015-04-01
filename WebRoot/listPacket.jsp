@@ -35,12 +35,11 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <th field="owner"  width="100">上传用户</th>
 <th field="url" width="100"  formatter="formatUrl">数据包</th>
 <th field="xml" width="200">描述文件路径</th>
+<th field="testPacket"   formatter="formatEffective"  width="100">是否测试包</th>
 <th field="effective"   formatter="formatEffective"  width="100">是否有效</th>
 <th field="createDate" width="100">上传日期</th>
-<th field="thumbUp" width="200">缩略图主题</th>
-<th field="thumbFooter" width="200">缩略图上</th>
-<th field="thumbWord" width="200">缩略图下</th>
-<th field="thumbPic" width="200">缩略图文字</th>
+<th field="theme" formatter="formatTheme"  width="100">主题组名字</th>
+
 <th field="version" width="100">版本</th>
 <th field="count" width="70">下载数量</th>
 <th field="descPic" width="200">说明文件</th>
@@ -86,11 +85,26 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
     </select>
   
   
-          		<span>是否有效</span>
+  
+          		<span style="margin-left:10px">是否测试数据包</span>
 
-	          	<input type="radio" name="isTest" value="0" > 否
-			<input type="radio" name="isTest" value="1"> 是
-			<input type="radio" name="isTest" value="2" checked> 全部 			   
+	  <select id="isTest" class="easyui-combobox"   style="width:60px;">
+	    <option value="2">全部</option>
+        <option value="0">否</option> 
+    <option value="1">是</option>
+
+  </select>   
+			
+			
+			        <span style="margin-left:50px">是否有效</span>
+
+ <select id="isEffective" class="easyui-combobox"   style="width:60px;">
+	    <option value="2">全部</option>
+        <option value="0">否</option> 
+    <option value="1">是</option>
+
+  </select>	
+			
 	  			   
 		<a href="#" class="easyui-linkbutton"  iconCls="icon-search" plain="true" onclick="doSearch()">搜索</a>
  
@@ -115,10 +129,14 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   <input id="editid"  name="packet.id"  type="hidden"/>
 	   <input id="editurl"  name="packet.url"  type="hidden"/>
 	   <input id="editowner"  name="packet.owner" type="hidden" />
+	   
+	   <!--  
 	     <input type="hidden"   id="editthumb"  name="packet.thumbPic"/>
 	      <input type="hidden"   id="editthumbUp"  name="packet.thumbUp"/>
 	       <input type="hidden"   id="editthumbFooter"  name="packet.thumbFooter"/>
 	        <input type="hidden"   id="editthumbWord"  name="packet.thumbWord"/>
+	        -->
+	        
 	     <input type="hidden"  id="editcount" name="packet.count"/>
 	       <input type="hidden"  id="editdesc" name="packet.descPic"/>
 	       
@@ -145,13 +163,39 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   </tr>
    	   	   <tr>
      <td class="td1">
-	   是否测试版本
+	   是否有效
 	   </td>
 	   <td>
       <s:checkbox  id="editeff" name="packet.effective"></s:checkbox>
     </td>
 	   </tr>
-
+	   
+	      	   	   <tr>
+     <td class="td1">
+	   是否测试
+	   </td>
+	   <td>
+      <s:checkbox  id="edittest" name="packet.testPacket"></s:checkbox>
+    </td>
+	   </tr>
+	   
+	   <tr>
+	   <td class="td1">
+	     主题组
+	    </td>
+	    
+	     <td>
+	      
+	 
+	  <input id="theme" style="width:150px"  name =" packet.theme.id" valueField="id"  textField="name">
+	 
+	   
+	    
+	    </td>
+	   </tr>
+	   
+	   
+<!-- 
 	           <tr>
                         <td class="td1">
                            主题缩略图上传：
@@ -200,7 +244,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
      </td>
      </tr>  
                     
-                    
+           -->          
                     
 	   	 	   	   	   <tr>
 	   <td class="td1">

@@ -10,7 +10,8 @@ public class Packet {
 	private String name;
 	private String url;
 	private String info;
-	private boolean  effective;
+	private boolean  effective; // «∑Ò”––ß
+	private boolean testPacket;
 	private String xml;
 	private  Date createDate;
 	private String thumbPic;
@@ -33,9 +34,11 @@ public class Packet {
 	private int  endcount;
 	
 	private int searchFlag;
-	
+	private int effectiveFlag;
 	private String owner;
 	private Set<Model> models=new HashSet<Model>();
+	
+	private Theme theme;
 	public int getId() {
 		return id;
 	}
@@ -170,6 +173,29 @@ public class Packet {
 	}
 	public void setBackground(String background) {
 		this.background = background;
+	}
+	
+	public int getEffectiveFlag() {
+		return effectiveFlag;
+	}
+	public void setEffectiveFlag(int effectiveFlag) {
+		this.effectiveFlag = effectiveFlag;
+	}
+	public boolean isTestPacket() {
+		return testPacket;
+	}
+	public void setTestPacket(boolean testPacket) {
+		this.testPacket = testPacket;
+	}
+	
+	
+
+
+	public Theme getTheme() {
+		return theme;
+	}
+	public void setTheme(Theme theme) {
+		this.theme = theme;
 	}
 	@Override
 	public String toString() {

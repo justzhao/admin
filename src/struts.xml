@@ -112,7 +112,16 @@
 
 <action name="updatePacket"  class="packetAction"  method="updatePacket"></action>
 </package>
+<package name="theme" extends="struts-default">
 
+
+<action name="saveTheme" class="themeAction" method="saveTheme"></action>
+
+
+<action name="delTheme" class="themeAction" method="delTheme"></action>
+
+<action name="updateTheme" class="themeAction" method="updateTheme"></action>
+</package>
 
 <package name="code"  extends="struts-default">
 		
@@ -207,10 +216,22 @@
 </result>
 </action>
 
+
+  <action name="getPageTheme" class="themeAction" method="getPageList">
+<result type="json">
+<param name="root"> themes</param>
+</result>
+</action>
+
 <action name="getRoleList" class="authorityAction" method="getRoleList">
     	<result type="json">
     	<param name="root">roles</param>
     	</result>
+</action>
+<action name="getThemeList"  class="themeAction" method="getThemeList">
+<result type="json">
+<param name="root"> themes.themes</param>
+</result>
 </action>
 </package>
 

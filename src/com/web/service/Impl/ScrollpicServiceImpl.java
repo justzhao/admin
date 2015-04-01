@@ -188,7 +188,7 @@ public void setSpicDao(IDao spicDao) {
 			{
 				
 		
-				List<ScrollPic> p=    spicDao.getListByHQL ("from ScrollPic where testPage=? ", true);
+				List<ScrollPic> p=  spicDao.getListByHQL ("from ScrollPic where testPage=? ", true);
 				if(p.size()>0)
 				{
 					for(int i=0;i<p.size();i++)

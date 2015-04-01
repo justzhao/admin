@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd" >
+<hibernate-mapping>
+
+<class name="com.web.entity.Theme" table="tbl_theme">
+
+<id name="id" column="id" type="integer">
+<generator class="increment"></generator>
+</id>
+<property name="name" column="name" type="string"></property>
+<property name="thumb" column="thumb" type="string"></property>
+ <property name="up" column="up" type="string"></property>
+<property name="footer"  column="footer" type="string"></property>
+<property name="word" column="word" type="string"></property>
+<property name="owner"  column="owner"  type="string"></property>
+<property name="flag" column="flag" type="boolean"></property>
+
+<one-to-one name="packet"  property-ref="theme"  lazy="false"></one-to-one>
+</class>
+
+
+</hibernate-mapping>

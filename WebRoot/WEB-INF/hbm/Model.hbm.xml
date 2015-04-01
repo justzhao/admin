@@ -25,6 +25,7 @@
 <many-to-many class="com.web.entity.Packet" column="packetId"></many-to-many>
 
 </set>
+
 <property name="owner" column="owner" type="string"></property>
 
 <property name="packaged" column="packaged" type="boolean"></property>
