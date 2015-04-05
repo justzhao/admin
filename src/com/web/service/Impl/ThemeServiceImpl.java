@@ -135,11 +135,12 @@ public class ThemeServiceImpl implements IThemeService {
 				Qiniu.uploadFile(t.getWord());
 				Qiniu.deleteFile(tt.getWord());
 			}
-			
-		  themeDao.merge(t);
+		  themeDao.evict(tt);
+		  themeDao.update(t);
 			
 		} catch (Exception e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			return false;
 		}
 		

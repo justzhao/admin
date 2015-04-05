@@ -40,7 +40,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <th field="code"  formatter="formatCode"  width="100">识别码</th>
 
 <th field="info" width="200">备注</th>
-<th field="url" width="200">文件</th>
+<th field="url" width="100"  formatter="formatUrls" >模型文件</th>
 <th field="animation"   formatter="formatAnimation"  width="100">是否有动画</th>
 <th field="size" width="100">模型尺寸</th>
 <th field="offset" width="100">模型位移</th>
@@ -236,6 +236,8 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	    <a href="javascript:void(0)" class="a-upload"> 
 	    <input id=editfile  type="file" name="file"  class="easyui-validatebox "   /> 点击这里上传文件
 	    </a>
+	    
+	    <a href=""   id="modelurl" target="_blank"> 点击查看模型文件</a>
 	   </td>
 	   </tr>
 	   	   	   <tr>

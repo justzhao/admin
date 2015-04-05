@@ -88,7 +88,7 @@ border:1px   solid   #C0C0C0;
 	
 
 
-		<div id="dd" class="easyui-dialog" style="top:100px;padding:5px;width:600px;height:300px;"
+		<div id="dd" class="easyui-dialog" style="top:40px;padding:5px;width:700px;height:450px;"
 			title="添加首页图" iconCls="icon-ok"
 			 closed="true" modal="true">
 			  <form id="ff"    name="ff"  enctype= "multipart/form-data"  method="post">
@@ -160,7 +160,7 @@ border:1px   solid   #C0C0C0;
                                       当前有图片 <label id="count" name="count" >0 </label>张
                                 <div id="fileQueue" class="fileQueue"></div>
                                     
-                              
+              
                               
                           
                                 <br />
@@ -183,7 +183,7 @@ border:1px   solid   #C0C0C0;
 
 
 
-		<div id="edit" class="easyui-dialog" style="top:100px;padding:5px;width:600px;height:300px;"
+		<div id="edit" class="easyui-dialog" style="top:40px;padding:5px;width:700px;height:450px;"
 			title="编辑首页图" iconCls="icon-ok"
 			 closed="true" modal="true">
 			  <form id="editff"    name="ff"  enctype= "multipart/form-data"  method="post">
@@ -258,10 +258,12 @@ border:1px   solid   #C0C0C0;
                                     onclick="javascript: $('#edit_file_upload').uploadify('cancel', '*')">取消</a>
                                 
                                       当前有图片 <label id="editcount">0 </label>张
+                                           <a href=""   id="picurl"  target="_blank">点击查看当前图片 </a>
                                 <div id="editfileQueue" class="fileQueue"></div>
                                     
-                              
-                              
+                 
+                                         
+            
                           
                                 <br />
                             </div>

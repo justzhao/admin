@@ -34,6 +34,9 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 <th field="device" width="70"  formatter="formatDevice">针对设备</th>
 <th field="owner"  width="100">上传用户</th>
 <th field="url" width="100"  formatter="formatUrl">数据包</th>
+<!-- 
+<th field="character" width="100"  formatter="formatUrl">人物角色形象图</th>
+<th field="background" width="100"  formatter="formatUrl">人物背景图</th> -->
 <th field="xml" width="200">描述文件路径</th>
 <th field="testPacket"   formatter="formatEffective"  width="100">是否测试包</th>
 <th field="effective"   formatter="formatEffective"  width="100">是否有效</th>
@@ -129,7 +132,7 @@ String basePath = request.getScheme()+"://"+request.getServerName()+":"+request.
 	   <input id="editid"  name="packet.id"  type="hidden"/>
 	   <input id="editurl"  name="packet.url"  type="hidden"/>
 	   <input id="editowner"  name="packet.owner" type="hidden" />
-	   
+
 	   <!--  
 	     <input type="hidden"   id="editthumb"  name="packet.thumbPic"/>
 	      <input type="hidden"   id="editthumbUp"  name="packet.thumbUp"/>

@@ -15,23 +15,26 @@
 <property name="effective" column="effective" type="boolean"></property>
 <property name="testPacket" column="testPacket" type="boolean"></property>
 <property name="xml" column="xml" type="string"></property>
-<property name="thumbPic" column="thumbPic" type="string"></property>
-<property name="thumbUp" column="thumbUp" type="string"></property>
-<property name="thumbFooter" column="thumbFooter" type="string"></property>
-<property name="thumbWord" column="thumbWord" type="string"></property>
+
 <property name="createDate" column="createDate" type="date"></property>
 <property name="version" column="version" type="string"></property>
 <property name="count" column="count" type="integer"></property>
 <property name="descPic" column="descPic" type="string"></property>
+
+<!--  
+<property name="character" column="people" type="string"></property>
+<property name="background" column="background" type="string"></property>
+-->
+
 <property name="owner" column="owner" type="string"></property>
 <property name="device" column="device"  type="int"></property>
-<set name="models" table="tbl_model_packet" lazy="false">
+<set name="models" table="tbl_model_packet" lazy="false"   cascade="save-update"   inverse="false">
 <key column="packetId"></key>
 
-<many-to-many class="com.web.entity.Model" column="modelId"></many-to-many>
+<many-to-many class="com.web.entity.Model" column="modelId" ></many-to-many>
 </set>
 
-<many-to-one name="theme" unique="true" column="themeId"  lazy="false"></many-to-one>
+<many-to-one name="theme" unique="true" column="themeId"  lazy="false" ></many-to-one>
 </class>
 
 

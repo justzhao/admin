@@ -66,6 +66,15 @@ public class Tools {
 		return fileName;
 	}
 	
+	
+	public static String renameFile(String path,String newName)
+	{
+		path=SAVEPATH+"\\"+path;
+		newName=SAVEPATH+"\\"+newName;
+		File file = new File(path);
+		file.renameTo(new File(newName));
+		return "";
+	}
 	/**
 	 * 输入文件名字删除文件
 	 * @param path
@@ -110,7 +119,7 @@ public class Tools {
 	 * @param fileName
 	 * @return
 	 */
-	 private static String getExtention(String fileName)  {   
+	public static String getExtention(String fileName)  {   
          int pos = fileName.lastIndexOf( "." );   
         return fileName.substring(pos);   
 } 
@@ -119,7 +128,7 @@ public class Tools {
 	  * @param fileName
 	  * @return
 	  */
-	 private static String getFileName(String fileName)  {   
+	 public static String getFileName(String fileName)  {   
          int pos = fileName.lastIndexOf( "." );   
        
         return fileName.substring(0, pos);   

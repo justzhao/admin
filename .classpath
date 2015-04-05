@@ -69,5 +69,7 @@
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/org.json.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/qiniu-java-sdk-6.1.9.jar"/>
 	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/ant.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/log4j-api-2.0.2.jar"/>
+	<classpathentry kind="lib" path="WebRoot/WEB-INF/lib/log4j-core-2.0.2.jar"/>
 	<classpathentry kind="output" path="WebRoot/WEB-INF/classes"/>
 </classpath>

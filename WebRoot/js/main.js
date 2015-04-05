@@ -27,6 +27,28 @@
         });
 
     })
+    
+    $.post('getAllMenu',function(data){
+    	
+    	//alert(data.length);
+    	for(var i=0;i<data.length;i++)
+    		{
+    		var ch1=data[0].children;
+    		
+    		addTab(ch1[0].text,ch1[0].id);
+    		
+    		/**
+    		alert(ch1.length);
+    		
+    		 for(var j=0;j<ch1.length;j++)
+    			 {
+    			   alert(ch1[i].id+'fasdf');
+    			 }
+    			 
+    			 */
+    		}
+    	
+    });
 
 })
 

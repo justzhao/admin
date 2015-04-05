@@ -3,7 +3,7 @@ package com.web.entity;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Menu {
+public class Menu  implements Comparable {
 	private int menuid;
 	private int pid;
 	private String id;
@@ -59,6 +59,18 @@ public class Menu {
 
 	public void setIconCls(String iconCls) {
 		this.iconCls = iconCls;
+	}
+
+	@Override
+	public int compareTo(Object o) {
+		// TODO Auto-generated method stub
+		
+        Menu m = (Menu) o;
+        int result = menuid > m.getMenuid() ? 1 : (menuid ==m.getMenuid()  ? 0 : -1);
+
+        return result;
+		
+
 	}
     
 

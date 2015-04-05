@@ -14,10 +14,7 @@ public class Packet {
 	private boolean testPacket;
 	private String xml;
 	private  Date createDate;
-	private String thumbPic;
-	private String thumbUp;
-	private String thumbFooter;
-	private String thumbWord;
+
 	private String character;
 	private String background;
 	
@@ -81,12 +78,7 @@ public class Packet {
 	public void setCreateDate(Date createDate) {
 		this.createDate = createDate;
 	}
-	public String getThumbPic() {
-		return thumbPic;
-	}
-	public void setThumbPic(String thumbPic) {
-		this.thumbPic = thumbPic;
-	}
+
 	public String getVersion() {
 		return version;
 	}
@@ -144,24 +136,7 @@ public class Packet {
 		this.searchFlag = searchFlag;
 	}
 	
-	public String getThumbUp() {
-		return thumbUp;
-	}
-	public void setThumbUp(String thumbUp) {
-		this.thumbUp = thumbUp;
-	}
-	public String getThumbFooter() {
-		return thumbFooter;
-	}
-	public void setThumbFooter(String thumbFooter) {
-		this.thumbFooter = thumbFooter;
-	}
-	public String getThumbWord() {
-		return thumbWord;
-	}
-	public void setThumbWord(String thumbWord) {
-		this.thumbWord = thumbWord;
-	}
+
 	public String getCharacter() {
 		return character;
 	}
@@ -200,12 +175,17 @@ public class Packet {
 	@Override
 	public String toString() {
 		return "Packet [id=" + id + ", name=" + name + ", url=" + url
-				+ ", info=" + info + ", effective=" + effective + ", xml="
-				+ xml + ", createDate=" + createDate + ", thumbPic=" + thumbPic
-				+ ", version=" + version + ", count=" + count + ", descPic="
-				+ descPic + ", device=" + device + ", endDate=" + endDate
-				+ ", endcount=" + endcount + ", owner=" + owner + "]";
+				+ ", info=" + info + ", effective=" + effective
+				+ ", testPacket=" + testPacket + ", xml=" + xml
+				+ ", createDate=" + createDate + ", character=" + character
+				+ ", background=" + background + ", version=" + version
+				+ ", count=" + count + ", descPic=" + descPic + ", device="
+				+ device + ", endDate=" + endDate + ", endcount=" + endcount
+				+ ", searchFlag=" + searchFlag + ", effectiveFlag="
+				+ effectiveFlag + ", owner=" + owner + "]";
 	}
+
+
 	
 	
 

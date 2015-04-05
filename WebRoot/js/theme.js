@@ -1,4 +1,5 @@
-		$(function(){
+var URL='http://7x00ae.com1.z0.glb.clouddn.com/';
+$(function(){
 
 			
 			
@@ -122,7 +123,7 @@
 		function formatUrls(value)
 		{
 		
-		var a='<a href=\"'+'http://7x00ae.com1.z0.glb.clouddn.com/'+value+ '\" target=\"_blank\">'+'点击查看'+'</a>';
+		var a='<a href=\"'+URL+value+ '\" target=\"_blank\">'+'点击查看'+'</a>';
 		return   a;
 		}
 
@@ -133,14 +134,23 @@
          var row = $('#tt').datagrid('getSelected');
            if (row){
           document.getElementById("editid").value=row.id;
+          
           document.getElementById("editth").value=row.thumb;
+          document.getElementById("thumburl").href=URL+row.thumb;
+          
           document.getElementById("editup").value=row.up;
+          document.getElementById("upurl").href=URL+row.up;
+          
           document.getElementById("editfo").value=row.footer;
+          document.getElementById("footerurl").href=URL+row.footer;
+          
             document.getElementById("editwo").value=row.word;
+            document.getElementById("wordurl").href=URL+row.word;
+            
             document.getElementById("editowner").value=row.owner;
             document.getElementById("editname").value=row.name;
             document.getElementById("editpacket").value=row.packet.id;
-
+         
           
 
 

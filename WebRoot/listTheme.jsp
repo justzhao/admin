@@ -196,6 +196,9 @@ border:1px   solid   #C0C0C0;
                            <a href="javascript:void(0)" class="a-upload">
                                    	    <input type="file" name="thumb"  accept="image/gif, image/jpeg" /> 点击这里上传文件
                               </a>
+                              
+                              <a href="" id="thumburl" target="_blank" > 点击查看当前图片</a>
+                              
                  </td>
                     </tr>
                     
@@ -209,6 +212,7 @@ border:1px   solid   #C0C0C0;
       <input type="file" name="thumbUp"   id="thumbUp"  accept="image/gif, image/jpeg"  /> 点击这里上传文件 
       
       </a>
+           <a href="" id="upurl"  target="_blank" > 点击查看当前图片</a>
      </td>
      </tr>
      
@@ -222,6 +226,8 @@ border:1px   solid   #C0C0C0;
         点击这里上传文件 
       
       </a>
+      
+           <a href="" id="footerurl" target="_blank" > 点击查看当前图片</a>
      </td>
      </tr>
      
@@ -233,6 +239,8 @@ border:1px   solid   #C0C0C0;
       <a href="javascript:void(0)" class="a-upload">  
       <input type="file" name="thumbWord"  id="thumbWord"  accept="image/gif, image/jpeg"  />  点击这里上传文件
       </a>
+      
+           <a href="" id="wordurl" target="_blank" > 点击查看当前图片</a>
      </td>
      </tr>
 	   

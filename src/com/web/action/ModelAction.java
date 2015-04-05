@@ -230,6 +230,7 @@ public class ModelAction extends ActionSupport {
 			 
 		} catch (RuntimeException e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			pw.print(false);
 		}
 

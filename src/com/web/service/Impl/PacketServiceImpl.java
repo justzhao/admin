@@ -96,7 +96,7 @@ public class PacketServiceImpl implements IPacketService {
 				  
 				  List<Model> modellist = new ArrayList<Model>(models);
 				  //把所有的模型的属性生成xml .
-				XmlTreeUtil.parseNodeToXML(modellist);
+				XmlTreeUtil.parseNodeToXML(modellist,p);
 				
 				//所有的文件都在upload目录下面，现在要做的就是把 xml，说明图，识别码，模型打成zip包。
 				
@@ -104,14 +104,7 @@ public class PacketServiceImpl implements IPacketService {
 				String realpath = ServletActionContext.getServletContext().getRealPath("/upload");
 
 
-				//上传缩略住到七牛云
-				Qiniu.uploadFile(p.getThumbPic());
-			   //上传缩略图上到七牛云
-				Qiniu.uploadFile(p.getThumbUp());
-				 //上传缩略图下到七牛云
-				Qiniu.uploadFile(p.getThumbFooter());
-				 //上传缩略图文字到七牛云
-				Qiniu.uploadFile(p.getThumbWord());
+
 				 //加入说明图路径
 				 paths.add(p.getDescPic());
 				 //加入人物
@@ -129,13 +122,13 @@ public class PacketServiceImpl implements IPacketService {
 		    
 				//把说明文件压缩到zip中
 				Tools.ZipFiles(paths,p.getUrl());
-				Qiniu.uploadFile(p.getUrl());
+			Qiniu.uploadFile(p.getUrl());
 				
 				//更新一下对应主题组的状态。
 				Theme t=(Theme) themeDao.get(p.getTheme().getId());
 		       t.setFlag(true);
 		       themeDao.saveOrUpdate(t);
-				 
+				 System.out.println(p.toString());
 				packetDao.save(p);
 			} catch (Exception e) {
 				// TODO: handle exception
@@ -313,9 +306,13 @@ public class PacketServiceImpl implements IPacketService {
 		//需要删除七牛云上的包，xml，缩略图，
 		Packet p=(Packet) packetDao.get(id);
 
-		Qiniu.deleteFile(p.getThumbPic());
+		//Qiniu.deleteFile(p.getThumbPic());
 
 		Qiniu.deleteFile(p.getUrl());
+		// 还需要更新对应的theme的状态
+		Theme t=p.getTheme();
+		t.setFlag(false);
+		themeDao.saveOrUpdate(t);
 		packetDao.delete(p);
 		
 	      
@@ -329,6 +326,7 @@ public class PacketServiceImpl implements IPacketService {
 		
 		try {
 			Packet pp=(Packet) packetDao.get(p.getId());
+			p.setModels(pp.getModels());
 			Theme tt=pp.getTheme();
 			tt.setFlag(false);
 			themeDao.saveOrUpdate(tt);

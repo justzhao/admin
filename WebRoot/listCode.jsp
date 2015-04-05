@@ -143,6 +143,9 @@ width:30%
                        onclick="javascript: $('#file_upload').uploadify('cancel', '*')">取消</a>
                    
                          当前有图片 <label id="count">0 </label>张
+                         
+                         
+                         
                    <div id="fileQueue" class="fileQueue"></div>
                        
                  
@@ -203,6 +206,9 @@ width:30%
                        onclick="javascript: $('#up_file_upload').uploadify('cancel', '*')">取消</a>
                    
                          当前有图片 <label id="up_count">0 </label>张
+                         
+                         
+                         <a id="codeurl"   href=""  target="_blank"> 点击查看当前识别码</a>
                    <div id="up_fileQueue" class="fileQueue"></div>
                        
                  

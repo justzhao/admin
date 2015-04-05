@@ -248,8 +248,42 @@ public Model getModelById(int id) {
   @Override
 public boolean updateModel(Model m) {
 	// TODO Auto-generated method stub
-	
-	  modelDao.saveOrUpdate (m);
+	//判断是否模型文件有更新的话，就需要删除原来的。
+	  
+	  
+	  
+	  try {
+		  //权宜之计，evit没有用了总是报两个实体的错误
+		  
+		  String oriurl=(String) modelDao.getBySQL("select url from tbl_model where id=?", m.getId());
+		  System.out.println("the url is "+oriurl);
+		  if(!m.getUrl().equals(oriurl))
+		  {
+			  Qiniu.deleteFile(oriurl);
+			  Qiniu.uploadFile(m.getUrl());
+		  }
+		  
+		  /**
+  Model mm=(Model) modelDao.get(m.getId());
+		 
+		  
+		  if(!mm.getUrl().equals(m.getUrl()))
+		  {
+			  Qiniu.deleteFile(mm.getUrl());
+			  Qiniu.uploadFile(m.getUrl());
+			 
+		  }
+		  modelDao.get
+		  modelDao.evict(mm);
+		  
+		//  modelDao.refresh(m);*/
+		  modelDao.update(m);
+	} catch (Exception e) {
+		// TODO: handle exception
+		
+		return false;
+	}
+
 	  return true;
 }
   

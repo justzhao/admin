@@ -25,7 +25,7 @@
 </interceptors>
 <default-interceptor-ref name="MyInterceptorStack"></default-interceptor-ref> 
 <global-results>
-<result name="homeLogin">/login.jsp</result>
+<result name="homeLogin">/log.jsp</result>
 </global-results>
 
 
@@ -33,17 +33,17 @@
 
 
 <action name="homeLogin" class="authorityAction" method="homeLogin" >
-<result name="success" >/login.jsp</result>
+<result name="success" >/log.jsp</result>
 </action>
 
 <action name="checkUser" class="authorityAction"  method="checkUser">
 <result name="success"  type="redirectAction">arone</result>
-<result name="error" type="redirect">/login.jsp</result>
+<result name="error" type="redirect">/log.jsp</result>
 </action>
 
 <action name="loginOut" class="authorityAction"  method="loginOut">
 
-<result name="success" type="redirect">/login.jsp</result>
+<result name="success" type="redirect">/log.jsp</result>
 </action>
 
 <action name="checkUserName" class="authorityAction"  method="checkUserName" >

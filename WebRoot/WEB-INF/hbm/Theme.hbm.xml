@@ -15,7 +15,7 @@
 <property name="owner"  column="owner"  type="string"></property>
 <property name="flag" column="flag" type="boolean"></property>
 
-<one-to-one name="packet"  property-ref="theme"  lazy="false"></one-to-one>
+<one-to-one name="packet"  property-ref="theme"  lazy="false" cascade="none" ></one-to-one>
 </class>
 
 

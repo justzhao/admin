@@ -1,4 +1,6 @@
-		$(function(){
+var URL='http://7x00ae.com1.z0.glb.clouddn.com/';
+
+$(function(){
        		 $("#tt").datagrid({
        		 
        		 	url:'getPageModel'
@@ -6,7 +8,7 @@
        
 		
 		 });
-		  $("#tt").datagrid('hideColumn', 'url'); 
+	//	  $("#tt").datagrid('hideColumn', 'url'); 
 		  
 		  
 		  		$.post("getCodeList",function(data){
@@ -228,7 +230,13 @@
 			
 		});
 		
-		
+function formatUrls(value)
+{
+
+var a='<a href=\"'+URL+value+ '\" target=\"_blank\">'+'点击查看'+'</a>';
+
+return   a;
+}
 	
       function formatCode(value)
       {
@@ -350,7 +358,7 @@ function editRow()
      document.getElementById("editurl").value=row.url;
      document.getElementById("editname").value=row.name;
      document.getElementById("editcreateDate").value=row.createDate;
-
+     document.getElementById("modelurl").href=URL+row.url;
 //	 $('#editcreateDate').datebox('setValue',row.createDate);
 	 $('#editsize').numberbox('setValue',row.size);
 	 document.getElementById("editinfo").value=row.info;

@@ -264,7 +264,8 @@ public class PacketAction extends ActionSupport {
 				 //保存人物
 				  * 
 				  * */
-				  
+
+				  //保存人物角色
 				 packet.setCharacter(Tools.saveFile(character, characterFileName, characterContentType, realpath));
 				 //保存背景
 				 packet.setBackground(Tools.saveFile(background,backgroundFileName, backgroundContentType, realpath));
@@ -288,6 +289,7 @@ public class PacketAction extends ActionSupport {
 			pw.print(packetService.savePacket(packet));
 		} catch (RuntimeException e) {
 			// TODO: handle exception
+			e.printStackTrace();
 			pw.print(false);
 		}
 		

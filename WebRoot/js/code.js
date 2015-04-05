@@ -1,4 +1,7 @@
-		$(function(){
+	
+var URL='http://7x00ae.com1.z0.glb.clouddn.com/';
+
+$(function(){
 			
 			$('#ff').form({
 				url:'saveCode',
@@ -137,10 +140,7 @@
   		
 		});
 	    function doSearch(){
-		   /*  $('#tt').datagrid('load',{
-		    itemid: $('#itemid').val(),
-		    productid: $('#productid').val()
-		    }); */
+
  var temp = document.getElementsByName("packed");
 
 
@@ -163,7 +163,7 @@
 		//http://7x00ae.com1.z0.glb.clouddn.com/code_20150323232449.png
 		function formatUrl	(value)
 		{
-		var a='<a href=\"'+'http://7x00ae.com1.z0.glb.clouddn.com/'+value+ '\" target=\"_blank\">'+'点击查看'+'</a>';
+		var a='<a href=\"'+URL+value+ '\" target=\"_blank\">'+'点击查看'+'</a>';
 		return   a;
 		}
 		
@@ -223,7 +223,7 @@
 		    if (row){
 			    $('#dU').dialog('open').dialog('setTitle','编辑识别码');
 			    $('#fU').form('load',row);
-
+                 document.getElementById("codeurl").href=URL+row.url;
 			   
 
 			    

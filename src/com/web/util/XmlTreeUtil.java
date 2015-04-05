@@ -26,6 +26,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import com.web.entity.Model;
+import com.web.entity.Packet;
 
 public class XmlTreeUtil {
 	
@@ -33,7 +34,7 @@ public class XmlTreeUtil {
 	private static Document document;
 	public static  String SAVEPATH = ServletActionContext.getServletContext().getRealPath("/upload")+"//armodels.xml";
 	public static String NAME="armodels.xml";
-	  public  static void parseNodeToXML(List<Model> treeNodes) throws IOException {
+	  public  static void parseNodeToXML(List<Model> treeNodes,Packet p) throws IOException {
 		
 	        try {
 	            DocumentBuilderFactory factory = DocumentBuilderFactory  .newInstance();
@@ -43,11 +44,29 @@ public class XmlTreeUtil {
 	            System.out.println(e.getMessage());
 	        }
 		  
-		  Element root =document.createElement("armodels");
-
+		  //Element root =document.createElement("armodels");
+		  Element root =document.createElement("packet");
+		  
 	        document.appendChild(root);
+	      //root  加说明文件，人物，人物背景。
+	        Element desc= document.createElement("packetDesc");
+	        desc.appendChild(document.createTextNode(p.getDescPic()));
+	        root.appendChild(desc);
+	        
+	        //人物
+	        Element character= document.createElement("character");
+	        character.appendChild(document.createTextNode(p.getCharacter()));
+	        root.appendChild(character);
+	        //背景
+	        
+	        Element background= document.createElement("background");
+	        background.appendChild(document.createTextNode(p.getBackground()));
+	        root.appendChild(background);
 	        
 	        
+	        
+	        Element armodels =document.createElement("armodels");
+	        root.appendChild(armodels);
 	        for(int i=0;i<treeNodes.size();i++)
 	        {
 	        Element model = document.createElement("armodel");
@@ -60,6 +79,10 @@ public class XmlTreeUtil {
 	        name.appendChild(document.createTextNode(treeNodes.get(i).getName()));
 	        model.appendChild(name);
 	        
+	        //modelurl
+	        Element url = document.createElement("modelUrl");
+	        url.appendChild(document.createTextNode(treeNodes.get(i).getUrl()));
+	        model.appendChild(url);
 	        
 	        //modelcode
 	        Element codeid = document.createElement("modelCodeId");
@@ -89,6 +112,9 @@ public class XmlTreeUtil {
 	        model.appendChild(translation);
 	        
 	        
+
+	        
+	        
 	        //modelIsAnimation
 	        
 	        Element animation = document.createElement("modelIsAnimation");
@@ -106,7 +132,7 @@ public class XmlTreeUtil {
 	        
 
 	        
-	        root.appendChild(model);
+	        armodels.appendChild(model);
 	        
 	        }
 	        TransformerFactory tf = TransformerFactory.newInstance();

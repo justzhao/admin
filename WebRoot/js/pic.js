@@ -1,4 +1,6 @@
-		$(function(){
+var URL='http://7x00ae.com1.z0.glb.clouddn.com/';
+
+$(function(){
 
 			
 			
@@ -182,7 +184,7 @@
 		function formatUrls(value)
 		{
 		
-		var a='<a href=\"'+'http://7x00ae.com1.z0.glb.clouddn.com/'+value+ '\" target=\"_blank\">'+'点击查看'+'</a>';
+		var a='<a href=\"'+URL+value+ '\" target=\"_blank\">'+'点击查看'+'</a>';
 		return   a;
 		}
 
@@ -198,6 +200,8 @@
           document.getElementById("editinfo").value=row.info;//
             document.getElementById("editdate").value=row.createDate;
             document.getElementById("editowner").value=row.owner;
+            
+            document.getElementById("picurl").href=URL+row.urls;
             
           if(row.effective==true)
           {

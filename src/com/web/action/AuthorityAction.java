@@ -8,23 +8,27 @@ import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.apache.struts2.ServletActionContext;
 
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 import net.sf.json.JsonConfig;
 
+
 import com.opensymphony.xwork2.ActionContext;
 import com.opensymphony.xwork2.ActionSupport;
 import com.web.entity.User;
 import com.web.service.IAuthorityService;
-import com.web.service.Impl.UserServiceImpl;
+
 import com.web.util.JsonDateValueProcessor;
-import com.web.util.MD5Util;
-import com.web.util.SecurityManager;
+
 import com.web.util.Tools;
 
 public class AuthorityAction extends ActionSupport {
+	
+	private static Logger logger = LogManager.getLogger(AuthorityAction.class.getName());
 	private User user;
 	private IAuthorityService authorityService;
 
@@ -230,5 +234,6 @@ public class AuthorityAction extends ActionSupport {
 
 		return NONE;
 	}
+
 
 }
